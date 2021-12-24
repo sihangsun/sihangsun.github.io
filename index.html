@@ -1,7 +1,217 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+
+<html lang="en">
+    <head>
+        <title>Immigration In Canada</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    
+    <body>
+
+        <div id="container">
+
+            <header id="header">
+                <h1>Observations on Immigration In Canada<br>1984-2013</h1>
+                <p>By Sihang Sun<span style="font-weight:normal"> | Oct 20, 2021</span></p>
+            </header>
+
+            <div id="box"></div>
+
+            <nav id="sidebar">
+                <ul>
+                    <li><a id="one" href="#header">Introduction</a></li>
+                    <li><a href="#overview">Overview of 30-Year Immigration to Canada</a></li>
+                    <li><a href="#continent">Observations About Immigrants by Continent</a></li>
+                    <ul class ="subtitle">
+                        <li><a href="#line-continent">Which continent saw an increase or decrease in immigrants over time?</a></li>
+                        <li><a href="#circular">Which continent was the largest source of immigrants?</a></li>
+                    </ul>
+                    <li><a href="#country">Observations About the Top 6 Source Countries</a></li>
+                    <ul class ="subtitle">
+                        <li><a href="#treemap">What is the number of immigrants from the top 6 countries?</a></li>
+                        <li><a href="#line-country">The 30-year trajectory of immigrants from the top 6 countries</a></li>
+                        <li><a href="#line-china">The short-term influx of Chinese immigrants</a></li>
+                    </ul>
+                    <li><a href="#next">Next Steps</a></li>
+                </ul>
+            </nav>
+
+            <main>
+                
+                <section id="intro">
+                    <h2>Introduction</h2>
+
+                    <p>Canada is one of the most popular countries in the world for immigrants. From 1984 to 2013, Canada welcomed more than 6 million immigrants from nearly 200 countries.</p>
+
+                    <p>In those 30 years, how has the number of people immigrating to Canada changed? Where are the countries and regions that send the most immigrants to Canada? Such topics are explored in this report.</p>
+
+                    <p>This report was conducted using a dataset from Kaggle. The data was collected by The Economic and Social Affairs Department of the United Nations. </p>
+
+                    <p>In the dataset, each row corresponds to an origin country of Canada's immigrants. For each country, we examine the following variables: </p>
+
+                    <ul>
+                        <li><b>Country:</b> the name of the origin country </li>
+                        <li><b>Continent:</b> the country's continent </li>
+                        <li><b>Region:</b> the country's region inside the continent</li>
+                        <li><b>DevName:</b> whether the country is a developed or developing country</li>
+                        <li><b>1984-2013:</b> total number of immigrants from the country in the given year</li>
+                        <li><b>Total:</b> accumulated total of immigrants from the country between 1984-2013</li>
+                    </ul>
+
+                    <p>In this report, we are going to analyze the data set from two topics. First, analyze Canada's immigrants from different continents over the 30-years period. Second, compare and analyze the top 6 source countries of Canada's immigrants.</p>
+
+                    <p>Throughout the report, we are going to propose some questions related to the topics. These questions set the stage for investigating the topics in more depth. We will attempt to answer these questions through visualization.</p>
+
+                </section>
+
+                <section id="overview">
+                    
+                    <h2>Overview of 30-Year Immigration to Canada</h2>
+                    
+                    <p>Between 1984 to 2013, Canada welcomed 6,019,632 immigrants, an average of about 200,000 a year. However, annual total of immigrants came to Canada has been different in those 30 years.</p>
+
+                    <p>To look at the the 30-year trajectory of Canada's immigrants, we need to firstly calculate the total number of immigrants for each year. The line chart below shows the annual total of immigrants came to Canada between 1984 to 2013.</p>
+                    
+                    <p class="img"><img src="./img/1.svg" alt='A line chart showing the annual total of immigrants came to Canada between 1984 to 2013.'></p>
+                    
+                    <p>As the chart above indicates, Canada's annual immigrants increased significantly over the 30-years period. Although there are fluctuations in the middle, it shows an overall upward trajectory.</p>
+                    
+                </section>
+
+                <section id="continent">
+
+                    <h2>Observations About Immigrants by Continent</h2>
+
+                    <p>In the first topic, we are going to analyze Canada's immigrants from different continents over the 30-years period.</p>
+                    
+                    <p>The number of immigrants from different continents has been different in those 30 years. To further analyze the data, we will attempt to find answers to the following questions:</p>   
+                    
+                    <ul>
+                        <li>Which continent had the annual number of immigrants <span style="text-decoration: underline;">increased</span> over time?</li>
+                        <li>Which continent had the annual number of immigrants <span style="text-decoration: underline;">decreased</span> over time?</li>
+                        <li>How was the total number of immigrants divided by continents in the 30 years?</li>
+                    </ul>
+
+                    <p>We will explore the above observations through visualization.</p>
+
+                    <div id="line-continent" class="vis">
+
+                        <h3>Which continent saw an increase or decrease in immigrants over time?</h3>
+    
+                        <p>The line chart below shows trajectories of total number of immigrants from different continents over the 30-years period. Each line represents a continent.</p>
+
+                        <p class="img"><img src="./img/3.svg"  alt='A line chart showing total number of immigrants from different continents over time.'></p>
+
+                        <p>From the chart, we can see that the number of immigrants from Asia each year had continued to increase significantly during those 30 years. While the annual number of European immigrants had decreased. Meanwhile, the annual number of African immigrants was slowly increasing each year.</p>
+                        
+                    </div>
+
+                    <div id="circular" class="vis">
+                        
+                        <h3>Which continent was the largest source of immigrants?</h3>
+    
+                        <p>The circular packing below shows the breakdown of Canada's new immigrants over the time period by continent. Each bigger cricle represents a continent. The smaller circles inside represent different countires in the continent. The number of immigrants was encoded by area. The larger the circle, the more immigrants came to Canada from the continent or the country.</p>
+
+                        <p>We can clearly see that, as the number of Asian immigrants continued to increase in those years, Asia became the biggest source continent for new immigrants to Canada between 1984 to 2013.</p>
+
+                        <p class="img">
+                            <img src="./img/4.svg"  alt='A circular packing showing the distribution of immigrants by continents and countires over time.'>
+                        </p>
+                            
+                        <p>The following are the biggest source country in each continent:</p>
+                            
+                        <ul>
+                            <li><b>Asia:</b> India</li>
+                            <li><b>Africa:</b> Morocco</li>
+                            <li><b>Europe:</b> UK</li>
+                            <li><b>South America:</b> Jamaica</li>
+                            <li><b>North America:</b> USA</li>
+                            <li><b>Oceania:</b> Australia</li>
+                        </ul>
+    
+                    </div>
+
+                </section>
+            
+
+                <section id="country">
+
+                    <h2>Observations About the Top 6 Source Countries </h2>
+                    
+                    <p>Only six countries have sent more than 200,000 immigrants to Canada over this 30-years period. The countries are India, China, Pakistan, Philippines, The United Kingdom, and The United States of America. In the second topic, we are going to focus on the top 6 source countires of Canada's immigrants.</p>
+
+                    <p>In the top 6 source countries, Which country's immigrants increased and which country's immigrants decreased over the 30 years? At what point did the number of new immigrants from a certain country change significantly? What might be the reasons behind it? </p>
+
+                    <p>In this section, we will take a closer look about these questions through visualization.</p>
+
+                    <div id="treemap" class="vis">
+
+                        <h3>What is the number of immigrants from the top 6 countries?</h3>
+
+                        <p>We begin this topic by calculating the total number of immigrants from each of the 6 countries over the 30 years and compared them to the rest. As the treemap below indicates, immigrants from the top 6 countries accounted for nearly 45% of the total number of immigrants over this time period.</p>
+
+                        <p class="img"><img src="./img/treemap.svg"  alt='A treemap showing the number of immigrants from the top 6 source countries over time.'></p>
+
+                        <p>The number one source country, India, sent a total of 658,869 new immigrants to Canada during this time period, accounting for 10.9% of the total. Immigrants from China were the second-largest group, with a total of 642,986 immigrants accounting for 10.7% of the total.</p>
+
+                    </div>
+
+                    <div id="line-country" class="vis">
+
+                        <h3>The 30-year trajectory of immigrants from the top 6 countries</h3>
+
+                        <p>The line chart below shows the trajectories of annual total of immigrants from the top 6 source countries over the 30-years period. Each line represents a country.</p>
+
+
+                        <div class="img" id="collage">
+                        
+                            <div id="top"><img src="./img/5.svg"  alt='A line chart showing annual total of immigrants from the top 6 source countires over time.'></div>
+
+                            <div id="left"><img src="./img/6.svg"  alt='A line chart highlighting annual total of immigrants from China and India over time.'></div>
+                        
+                            <div id="right"><img src="./img/7.svg"  alt='A line chart highlighting annual total of immigrants from USA and UK over time.'></div>
+                    
+                        </div>
+
+                        <p>It is clear that the number of immigrants from China and India each year has increased significantly over those 30 years. The annual number of British immigrants experienced a huge plunge after 1994, while the number of American immigrants remained stable. The two small line charts above reaffirms the trends visually.</p>
+
+                    </div>
+
+                    <div id="line-china" class="vis">
+
+                        <h3>The short-term influx of Chinese immigrants</h3>
+
+                        <p>If we closely investigate the trajectory of each country, we can find some significant changes were related to some historical events. </p>
+
+                        <p class="img"><img src="./img/8.svg"  alt='China'></p>
+
+                        <p>For example, we can see that, the annual number of Chinese immigrants experienced a short-term surge between 1989 and 1991. That was mostly due to the failure of 1989 Tiananmen Square protests. Canadian government relaxed requirements for Chinese immigrants after a crackdown of the democratic movement.</p>  
+                        
+                    </div>
+
+                </section>
+
+                <section id="next">
+                    <h2>Next Steps</h2>
+                    
+                    <p>The above analyses and visualizations opened an opportunity to further explore the topics about Canada's immigrants between 1984 to 2013. </p>
+
+                    <p>Several questions remained unanswered. One of them is why the annual number of British immigrants experienced a huge plunge after 1994? Was it a decrease? or was it just a return to normal?</p>
+
+                    <p>Further analyses will be required to answer more questions like this.</p>
+
+                </section>
+
+            </main>
+
+            <footer id="footer">
+                <p>Source:<a href="https://www.kaggle.com/ammaraahmad/immigration-to-canada?select=canadian_immegration_data.csv" target="_blank" >Kaggle</a></p>
+            </footer>
+
+            <div id="boxdown"></div>
+        
+        </div>
+
+    </body>
+
 </html>
