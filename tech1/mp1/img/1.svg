@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 650 503.1" style="enable-background:new 0 0 650 503.1;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;}
+	.st1{font-family:'Helvetica';}
+	.st2{font-size:10px;}
+	.st3{fill:#A7A7A7;}
+	.st4{font-family:'Arial-BoldMT';}
+	.st5{font-size:18.5746px;}
+	.st6{font-size:17.7612px;}
+	.st7{fill:none;stroke:#1C4E80;stroke-width:1.5;}
+	.st8{fill:#1C4E80;}
+	.st9{fill:#1C4E80;stroke:#1C4E80;stroke-miterlimit:10;}
+	.st10{fill:none;stroke:#CCCCCC;}
+	.st11{fill:none;}
+	.st12{font-family:'Georgia-Bold';}
+	.st13{font-size:13px;}
+	.st14{fill:#3E3D3D;}
+	.st15{font-size:16px;}
+	.st16{font-family:'Georgia';}
+	.st17{font-size:14px;}
+	.st18{font-size:18px;}
+	.st19{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:0.75;stroke-miterlimit:10;}
+</style>
+<g id="viz_00000169520830402181730540000004313220529821034893_">
+	<g transform="translate(0,0)">
+		<g>
+			<g transform="translate(50,5)">
+				<g id="axis">
+					<g transform="translate(0,425)">
+						<path class="st0" d="M0.5,59.1v-5.5h595v5.5"/>
+						<g transform="translate(20.333333333333332,0)">
+							<line class="st0" x1="0" y1="53.1" x2="0" y2="59.1"/>
+							<text transform="matrix(1 0 0 1 -11.5122 69.2002)" class="st1 st2">1985</text>
+							<text transform="matrix(1 0 0 1 -40.5816 69.1995)" class="st1 st2">1984</text>
+						</g>
+						<g transform="translate(119.5,0)">
+							<line class="st0" x1="0" y1="53.1" x2="0" y2="59.1"/>
+							<text transform="matrix(1 0 0 1 -11.5122 69.2002)" class="st1 st2">1990</text>
+						</g>
+						<g transform="translate(218.66666666666666,0)">
+							<line class="st0" x1="0" y1="53.1" x2="0" y2="59.1"/>
+							<text transform="matrix(1 0 0 1 -11.5123 69.2002)" class="st1 st2">1995</text>
+						</g>
+						<g transform="translate(317.8333333333333,0)">
+							<line class="st0" x1="0" y1="53.1" x2="0" y2="59.1"/>
+							<text transform="matrix(1 0 0 1 -11.5122 69.2002)" class="st1 st2">2000</text>
+						</g>
+						<g transform="translate(417,0)">
+							<line class="st0" x1="0" y1="53.1" x2="0" y2="59.1"/>
+							<text transform="matrix(1 0 0 1 -11.5122 69.2002)" class="st1 st2">2005</text>
+						</g>
+						<g transform="translate(516.1666666666666,0)">
+							<line class="st0" x1="0" y1="53.1" x2="0" y2="59.1"/>
+							<text transform="matrix(1 0 0 1 -11.5121 69.2002)" class="st1 st2">2010</text>
+						</g>
+						<g transform="translate(0.5,0)">
+							<line class="st0" x1="0" y1="53.1" x2="0" y2="59.1"/>
+						</g>
+						<g transform="translate(595.5,0)">
+							<path class="st0" d="M0,59.1"/>
+							<path class="st0" d="M0,53.1"/>
+							<text transform="matrix(1 0 0 1 -31.1775 69.1999)" class="st1 st2">2013</text>
+						</g>
+						<text transform="matrix(1 0 0 1 556.1989 41.4517)" class="st3 st4 st5">Year</text>
+					</g>
+					<g transform="translate(0,0)">
+						<path class="st0" d="M0.5,478.6v-425"/>
+						<g transform="translate(0,425.5)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+						</g>
+						<g transform="translate(0,386.8636363636364)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -39.5859 56.3002)" class="st1 st2">80,000</text>
+						</g>
+						<g transform="translate(0,348.2272727272727)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3002)" class="st1 st2">100,000</text>
+						</g>
+						<g transform="translate(0,309.5909090909091)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3002)" class="st1 st2">120,000</text>
+						</g>
+						<g transform="translate(0,270.95454545454544)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3002)" class="st1 st2">140,000</text>
+						</g>
+						<g transform="translate(0,232.3181818181818)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3002)" class="st1 st2">160,000</text>
+						</g>
+						<g transform="translate(0,193.6818181818182)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3002)" class="st1 st2">180,000</text>
+						</g>
+						<g transform="translate(0,155.04545454545456)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3002)" class="st1 st2">200,000</text>
+						</g>
+						<g transform="translate(0,116.4090909090909)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3002)" class="st1 st2">220,000</text>
+						</g>
+						<g transform="translate(0,77.77272727272725)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3002)" class="st1 st2">240,000</text>
+						</g>
+						<g transform="translate(0,39.13636363636365)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3001)" class="st1 st2">260,000</text>
+						</g>
+						<g transform="translate(0,0.5)">
+							<line class="st0" x1="0" y1="53.1" x2="-6" y2="53.1"/>
+							<text transform="matrix(1 0 0 1 -45.1475 56.3001)" class="st1 st2">280,000</text>
+						</g>
+						<text transform="matrix(1 0 0 1 7 68.338)" class="st3 st4 st6">Total</text>
+					</g>
+				</g>
+				<g id="viz">
+					<g>
+						<path class="st7" d="M0,452.2l19.8,6.6l19.8-31l19.8-94.1l19.8-8.8L99,276.4l19.8-45.6l19.8-37.6l19.8-27.4l19.8-0.7
+							l19.8,54.8l19.8,11.5l19.8-23.9l19.8,13.9l19.8,62.1l19.8-36.9l19.8-71.3l19.8-50.1L357,163l19.8,11.2l19.8-28.6l19.8-49
+							l19.8,20.1L456,145l19.8-20.6l19.8-11.1L515.7,59l19.8,59.4L555.3,99l19.8-2.5"/>
+						<g>
+							<circle class="st8" cx="0" cy="452.2" r="4"/>
+							<circle class="st8" cx="19.8" cy="458.8" r="4"/>
+							<circle class="st8" cx="39.7" cy="427.8" r="4"/>
+							<circle class="st8" cx="59.5" cy="333.7" r="4"/>
+							<circle class="st8" cx="79.3" cy="324.9" r="4"/>
+							<circle class="st8" cx="99.2" cy="276.4" r="4"/>
+							<circle class="st8" cx="119" cy="230.7" r="4"/>
+							<circle class="st8" cx="138.8" cy="193.1" r="4"/>
+							<circle class="st8" cx="158.7" cy="165.8" r="4"/>
+							<circle class="st8" cx="178.5" cy="165.1" r="4"/>
+							<circle class="st8" cx="198.3" cy="219.9" r="4"/>
+							<circle class="st9" cx="218.2" cy="231.4" r="4"/>
+							<circle class="st8" cx="238" cy="207.5" r="4"/>
+							<circle class="st8" cx="257.8" cy="221.4" r="4"/>
+							<circle class="st8" cx="277.7" cy="283.5" r="4"/>
+							<circle class="st8" cx="297.5" cy="246.6" r="4"/>
+							<circle class="st8" cx="317.3" cy="175.4" r="4"/>
+							<circle class="st8" cx="337.2" cy="125.3" r="4"/>
+							<circle class="st8" cx="357" cy="163" r="4"/>
+							<circle class="st8" cx="376.8" cy="174.2" r="4"/>
+							<circle class="st8" cx="396.7" cy="145.7" r="4"/>
+							<circle class="st8" cx="416.5" cy="96.6" r="4"/>
+							<circle class="st8" cx="436.3" cy="116.7" r="4"/>
+							<circle class="st8" cx="456.2" cy="145" r="4"/>
+							<circle class="st8" cx="476" cy="124.5" r="4"/>
+							<circle class="st8" cx="495.8" cy="113.4" r="4"/>
+							<circle class="st8" cx="515.7" cy="59" r="4"/>
+							<circle class="st8" cx="535.5" cy="118.4" r="4"/>
+							<circle class="st8" cx="555.3" cy="99" r="4"/>
+							<circle class="st8" cx="575.2" cy="96.5" r="4"/>
+						</g>
+					</g>
+				</g>
+			</g>
+		</g>
+	</g>
+	<g id="grid">
+		<path class="st10" d="M650,53.1"/>
+		<path class="st10" d="M0,53.1"/>
+		<path class="st10" d="M0,503.1"/>
+		<path class="st10" d="M650,503.1"/>
+	</g>
+</g>
+<rect x="204.7" y="148.8" class="st11" width="66.3" height="26.9"/>
+<text transform="matrix(1 0 0 1 201.6664 158.6536)" class="st8 st12 st13">222,049</text>
+<rect x="304.3" y="296.9" class="st11" width="80.8" height="42"/>
+<text transform="matrix(1 0 0 1 302.3335 306.6941)" class="st8 st12 st13">160,727</text>
+<rect x="361.8" y="110.9" class="st11" width="50.6" height="23.6"/>
+<text transform="matrix(1 0 0 1 359.833 120.713)" class="st8 st12 st13">242,643</text>
+<rect x="405.1" y="187.6" class="st11" width="49" height="19.7"/>
+<text transform="matrix(1 0 0 1 402.1389 197.4179)" class="st8 st12 st13">217,297</text>
+<rect x="442.8" y="80.5" class="st11" width="61" height="13.3"/>
+<text transform="matrix(1 0 0 1 440.8329 90.3482)" class="st8 st12 st13">257,457</text>
+<rect x="481.5" y="158.5" class="st11" width="54" height="17.7"/>
+<text transform="matrix(1 0 0 1 479.4551 168.3292)" class="st8 st12 st13">232,405</text>
+<rect x="540.5" y="43.5" class="st11" width="59.5" height="13.6"/>
+<text transform="matrix(1 0 0 1 539.5 53.3726)" class="st8 st12 st13">276,956</text>
+<rect x="4" y="4.3" class="st11" width="401.4" height="43.8"/>
+<text transform="matrix(1 0 0 1 6.0282 13.0934)" class="st14 st12 st15">Annual total of immigrants to Canada</text>
+<line class="st0" x1="625.4" y1="483.6" x2="625.4" y2="489.1"/>
+<text transform="matrix(1 0 0 1 5.5967 30.3905)" class="st14 st16 st17">(1984 - 2013)</text>
+<text transform="matrix(1 0 0 1 93.2501 38.2)" class="st8 st16 st18"> </text>
+<line class="st19" x1="645.8" y1="484.1" x2="645.8" y2="490.3"/>
+<line class="st19" x1="645.1" y1="484.1" x2="645.1" y2="490.3"/>
+</svg>
