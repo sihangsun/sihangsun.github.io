@@ -364,7 +364,7 @@ d3.csv("./billionaires.csv").then(function(data) {
             <div id="person">
             
             <div id="photo">
-            <img class="profile" src="/img/${d.img}">
+            <img class="profile" src="./img/${d.img}">
             </div>
     
             <div id="info">
@@ -472,7 +472,7 @@ d3.csv("./billionaires.csv").then(function(data) {
             <div id="person">
         
             <div id="photo">
-            <img class="profile" src="/img/${d.img}">
+            <img class="profile" src="./img/${d.img}">
             </div>
 
             <div id="info">
