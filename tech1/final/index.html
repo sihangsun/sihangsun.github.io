@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Billionaires by industry</title>
+        <link rel="stylesheet" href="./style.css">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+    <body>
+        <div id="container">
+
+            <div id="smalltitle">
+                <div id="smallTitleBox">
+                    <div id="smallTitleText">
+                        <h2>Billionaires</h2>
+                        <h2>in 2021</h2>
+                    </div>
+                    <div id="smallTitleBelow"></div>
+                </div>
+                <p>by industry</p>
+            </div>
+
+            <div id="rmb"><img id="rmbimg" src="./img/rmb.jpg" alt="rmb"></div>
+                
+            <div id="headerright">
+                <h1 id="americanTtile">American billionaires</h1>
+                <h1 id="vs">VS</h1>
+                <h1 id="chineseTitle">Chinese billionaires</h1>
+            </div>
+
+            <div id="usd"><img id="usdimg" src="./img/usd.jpg" alt="rmb"></div>
+            <div id="text">
+                <div id="realtext">
+                    <p>The 2021 Forbes list of the world's billionaires included 2,755 billionaires spread over 18 industries. Just under half of all the billionaires are citizens of the U.S. or China, making them the top two countries with the most billionaires in the world.</p>
+
+                    <p>Explore how American billionaires and Chinese billionaires dominate the list across all industries in the visualization below.</p>
+                        
+                    <p>See how billionaires in China and the U.S. are distributed in different industries in the countries' charts. Also, learn more about the country's richest person in each industry by hovering over the bar.</p>
+
+                    <p>China's count does not include Hong Kong and Macao, which Forbes lists separately.</p>
+
+                    <p>Forbes' list of the World's Billionaires is calculated based on stock prices and exchange rates from March 5, 2021. To make the list, one's net worth must be at least one billion dollars. See the data and rankings <a href="https://www.forbes.com/billionaires/" target="_blank" id="link">here</a>.</p>
+
+                    <div id="header--bottom"><a href="#chart"><img src="./img/arrow.jpg" ></a></div>
+
+                </div>
+            </div>
+
+            <div id=sidebar>
+                <h3>Total number of billionaires in 2021</h3>
+                <p id="total">2,755</p>
+                <div id="numbers">
+                    <div id="usaNumber">
+                        <h4>United States</h4>
+                        <p>724</p>
+                    </div>
+                    <div id="chinaNumber">
+                        <h4>China</h4>
+                        <p>626</p>
+                    </div>
+                </div>
+
+                <h3 id="pietitle">Distribution of billionaires by country</h3>
+                <div id="pieBox"><img src="./img/pie.jpg" alt="piechart"></div>
+            </div>
+
+            <figure id="chart" class="reload">
+                <button id="usaButton" class="button">USA</button>
+                <button id="chinaButton" class="button">CHINA</button>
+                <button id="worldButton" class="button">Return</button>
+            </figure>
+
+            <section id="tooltipHTML" class="tooltipholder"></section>
+            
+        </div>
+        <div id="footer">
+            <div id="author">By Sihang Sun | sun.siha@northeastern.edu</div>
+            <div id="credit"><a href="./credit.html" target="_blank">Photo Credits >></a></div>
+        </div>
+        <script src="./script.js"></script>
+    </body>
+</html>

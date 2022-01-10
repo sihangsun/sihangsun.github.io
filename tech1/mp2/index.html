@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>The Richer, the Happier?</title>
+        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="https://use.typekit.net/rze0jyz.css">
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+    </head>
+    
+    <body>
+        
+        <div id="container">
+            
+            <!-- Place your page contents inside of this element;
+            this element's height in the CSS is constrained to
+            200vh -->
+
+            <!-- The following element can be used to insert your
+            visualization; in the CSS, its height is constrained
+            to 100vh -->
+
+            <div id="up">
+                <button id="all" >View All</button>
+                <figure id="chart">
+                    <button id="ph" >Low Income<br>High Score</button>
+                    <button id="ru">High Income<br>Low Score</button>
+                </figure>
+
+                <div id="intro">
+                    <h1>The Richer,<br>the Happier?</h1>
+
+                    <p>Can money buy you happiness? Maybe. In this article we are going to explore the relationships between happiness and income from a "state level".</p>
+
+                    <p>This data analysis was conducted using two sets of newly released data. First, data collected from WalletHub's latest report on the Happiest States in America. Data include happiness score and an overall ranking for all 50 states. Second, median household income data in 2020 for 50 states published by FRED.</p>
+
+                    <p>A scatter plot was created to visualize the data. Each circle represent a state; each circle's horizontal position indicates the state's household income and the vertical position indicates the state's happiness score.</p>
+
+                    <p>Hover over each circle to view the detail information and see where your state ranks on the 2021 Happiest States in America List. </p>
+
+                    <p>Now let's take a look at some interesting observations from the visualization. </p>
+
+                    <a id="more" href="#down">READ MORE ></a>
+                </div>
+            </div>
+
+            <div id="down">
+
+                <div class="column" id="left">
+
+                    <div id="left-title">
+                        <h2>Trend Line</h2>
+
+                        <p>By calculating the linear regression of the paired data, we were able to draw a regression line. <a class="link" href="#chart">The red regression line</a> shows an overall relationship between the two variables in our data set.</p>
+                    
+                        <p>As the red line above indicates, there is a strong and positive correlational relationships between income and happiness in our data set.</p>
+
+                        <p>This overall trend in our scatter plot is very obvious. If you look at the circles in the scatter plot, you might realize that the richer states tend to have higher happiness scores.</p>
+
+                        <p>Actually, many studies have suggested that more money makes people happier, but it isn't just it. </p>
+
+                    </div>
+
+                    <div class="expert" id="left-expert">
+
+                        <h3>What expert says</h3>
+                        <h4>Wendy Johnny</h4>
+
+                        <p class="title">Assistant Professor, City University of New York </p>
+
+                        <p class="quote">" Money is an essential factor that can help promote happiness in people's lives. For instance, with money, people have the financial security which enables them to live healthier lifestyles. "</p>
+
+                    </div>
+                
+                </div>
+
+
+                <div class="column" id="center">
+
+                    <div id="center-title">
+                        <h2>Quadrant Analysis</h2>
+                    
+                        <p>Based on the median happiness scores and income of all 50 states, we were able to divide up the scatter plot into four quadrants. Due to the positive correlation, most states with higher incomes fall into the higher score section and vice versa.</p>
+
+                        <p>Despite this correlational relationship, 10 out of 50 states fall outside of it. Either they have higher incomes but lower happiness scores or they have lower incomes but higher happiness scores.</p>
+
+                        <p>The state of Alaska has a median income of $74,476, but the happiness score is only 44.24.</p>
+
+                        <p>Play with <a class="link" href="#chart">the buttons above</a> to find out which states are in these two special groups.</p>
+                    </div>
+
+                    <div class="expert" id="center-expert">
+                        
+                        <h3>What expert says</h3>
+                        <h4>Lizette Ojeda</h4>
+
+                        <p class="title">Licensed Psychologist, Texas A&M University </p>
+
+                        <p class="quote">" How many billionaires have we heard of that still do not have a happy marriage or even life? It is true, there are some things money cannot buy. Happiness starts from within oneself, not in one's wallet. "</p>
+                    </div>
+
+                </div>
+
+
+                <div class="column" id="right">
+
+                    <div id="right-title">
+                        <h2>Happiest Utah</h2>
+
+                        <p>Utah became the happiest state in the year of 2021. As <a class="link" href="#chart">the scatter plot</a> above shows, Utah did not have the highest median household income in the U.S. in 2020, but it did have the highest happiness score.</p>
+                    
+                        <p>Maryland has a median household income of $94,384 in 2020, but its happiness score is 62.21 and only ranks No. 8 on the list.</p>
+
+                        <p>It is true that income and happiness are positively correlated in our data set. It is also true that the richest will not always be the happiest, and the happiest will not necessarily be the richest. </p>
+
+                        <p>The richer, the happier? What are your thoughts on that?</p>
+
+                    </div>
+                
+                    <div class="expert" id="right-expert">
+                        
+                        <h3>What expert says</h3>
+                        <h4>Frank T. McAndrew</h4>
+                        <p class="title">Ph.D. - Professor of Psychology, Knox College</p>
+                        
+                        <p class="quote">"Surveys show middle class folks are just as happy as rich folks, perhaps because all of them have enough to put together those basic components of their happiness recipe."</p>
+
+                    </div>
+                
+                </div>
+
+                    
+            </div>
+
+            <div id="footer">
+
+                <p><span id="credit"> By Sihang Sun | Nov 23, 2021</span> Source:<a href="https://wallethub.com/edu/happiest-states/6959" target="_blank" > WalletHub</a>;<a href="https://fred.stlouisfed.org/release/tables?eid=259515&rid=249" target="_blank" > Federal Reserve Economic Data</a></p>
+
+            </div>
+            
+        </div>
+
+        <script src="./script.js"></script>
+    </body>
+</html>

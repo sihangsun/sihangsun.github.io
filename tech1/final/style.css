@@ -1,0 +1,542 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+    background-color:black;
+    scroll-behavior: smooth;
+}
+
+p {
+    font-family: Arial, Helvetica, sans-serif;
+    color: white;
+}
+
+body {
+    margin-top: 0;
+    margin-bottom: 0;
+    /* height: 200vh; */
+}
+
+div#container {
+    height: 200vh;
+    max-height: 200vh;
+    /* overflow: hidden; */
+    position: relative;
+    display: grid;
+    grid-template-columns: 18.5% 18.5% 38% 25%;
+    grid-template-rows: 15.405% 34.595% 32% 18%; 
+    grid-template-areas: 
+    "smalltitle rmb headerright headerright"
+    "usd text text sidebar"
+    "chart chart chart sidebar"
+    "chart chart chart tooltipHTML";
+    margin-left: 2%;
+    margin-right: 2%;
+    background-color: #1a1a1a;
+}
+
+.axisx text {
+    fill:rgb(100, 100, 100);
+    font-size: 1.09vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.axisx line {
+    stroke:none;
+}
+
+.axisx path {
+    stroke:none;
+}
+
+.axisy text {
+    fill:white;
+    font-size: 13.1px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.axisy line {
+    stroke:none;
+}
+
+.axisy path {
+    stroke:none;
+}
+
+#smalltitle {
+    grid-area: smalltitle;
+    background-color:black;
+    padding: 12%;
+    padding-left: 5%;
+    padding-bottom: 10%;
+}
+
+#smalltitle > p {
+    margin: 0;
+    padding: 0;
+    color:rgb(183, 183, 183);
+    font-size: 2vw;
+    font-style: italic;
+    font-weight:lighter;
+    margin-top: 5%;
+    margin-left: 31%;
+}
+
+#smallTitleBox {
+    height: 80%;
+    border-left: 2px solid #b3b3b3;
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 50% 50%;
+    grid-template-areas: 
+    "smallTitleText"
+    "smallTitleBelow";
+}
+
+#smallTitleText {
+    grid-area: smallTitleText;
+}
+
+#smallTitleText > h2 {
+    margin: 0;
+    color: white;
+    margin-left: 3%;
+    font-size: 2.2vw;
+    margin-bottom: -5px;
+    letter-spacing: 0.1vw;
+}
+
+#smallTitleBelow {
+    grid-area: smallTitleBelow;
+    margin-left: 5px;
+    border-top: 1px solid #b3b3b3;
+}
+
+#rmb {
+    grid-area: rmb;
+    background-color:black;
+}
+
+#rmbimg {
+    height: 100%;
+    opacity: 85%;
+}
+
+#headerright {
+    grid-area: headerright;
+    padding: 1%;
+    padding-top: 2.6%;
+    padding-left: 3%;
+    padding-right: 3%;
+    background-color:black;
+}
+
+#headerright,h1 {
+    margin: 0;
+    font-size: 7.5vh;
+}
+
+#americanTtile {
+    color: #339bc1;
+    letter-spacing: -0.05vw;
+}
+
+#chineseTitle {
+    color: #c82721;
+    text-align: right;
+    letter-spacing: -0.05vw;
+}
+
+#vs {
+    color: white;
+    font-size: 6vh;
+    text-align: center;
+    font-weight: normal;
+}
+
+#usd {
+    grid-area: usd;
+    background-color:black;
+}
+
+#usdimg {
+    width: 100%;
+    height: auto;
+    opacity: 85%;
+}
+
+#text {
+    grid-area: text;
+    padding: 15%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    background-color:black;
+}
+
+#realtext > p {
+    font-size: 2.2vh;
+    text-indent: 0px;
+    line-height: 1.25;
+    color: rgb(228, 228, 228);
+}
+
+#link {
+    color: white;
+    text-decoration: none;
+}
+
+#link:hover {
+    color:rgb(183, 183, 183);
+}
+
+#sidebar {
+    background-color: #1a1a1a;
+    grid-area: sidebar;
+    position: sticky;
+    top:0;
+    align-self: start;
+    padding: 1.2vw;
+    padding-top: 4vh;
+    padding-bottom: 0;
+}
+
+#siderbar, h3 {
+    color: white;
+    margin-top: 0;
+    margin-bottom: 2%;
+    padding-bottom: 2%;
+    font-weight: normal;
+    font-size: 2.1vh;
+    border-bottom: 1px solid white;
+}
+
+#numbers {
+    display: flex;
+    flex-direction:row;
+    margin-top: 5%;
+}
+
+#numbers p {
+    margin: 0;
+    font-size: 2.8vw;
+}
+
+#total {
+    font-weight: bold;
+    font-size: 3vw;
+    margin: 0;
+}
+
+#chinaNumber {
+    flex-basis: 50%;
+    font-weight: bold;
+    margin-left: 10%;
+}
+
+#usaNumber {
+    flex-basis: 50%;
+    font-weight: bold;
+    margin-right: 10%;
+}
+
+#chinaNumber p {
+    color:#c82721;
+}
+
+#usaNumber p {
+    color:#339bc1;
+}
+
+h4 {
+    font-weight: normal;
+    color: white;
+    margin: 0;
+    margin-bottom: 3%;
+    border-bottom: 1px solid white;
+    font-size: 2.1vh;
+}
+
+#pietitle {
+    margin-top: 4vh;
+}
+
+#pieBox {
+    margin-top: 3.5%;
+}
+
+#pieBox > img {
+    width:100%;
+    height: auto;
+}
+
+figure#chart {
+    background-color: black; 
+    height: 100vh;
+    max-height: 100vh;
+    /* overflow: hidden; */
+    padding: 0px;
+    margin: 0px;
+    position: relative; 
+    grid-area: chart;
+}
+
+.button {
+    position: absolute;
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1.8vh;
+} 
+
+.button:hover {
+    background-color: white;
+    color:black;
+}
+
+.highlightUsa {
+    background-color: #339bc1;
+}
+
+.highlightChina {
+    background-color: #c82721;
+}
+
+#usaButton {
+    right:16%;
+    top:1%;
+}
+
+#chinaButton {
+    right:8.9%;
+    top:1%;
+}
+
+#worldButton {
+    right:2%;
+    top:1%;
+}
+
+#tooltipHTML {
+    background-color: #1a1a1a;
+    grid-area: tooltipHTML;
+    position: relative;
+}
+
+.tooltip {
+    height: 100%;
+    width:100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    visibility: hidden;
+    pointer-events: none;
+    padding-left: 1.2vw;
+    padding-right: 1.2vw;
+    color: white;
+}
+
+.tooltip > h3 {
+    margin-top: 2.4vh;
+    font-size: 2.1vh;
+}
+
+#person {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: auto; 
+    grid-template-areas: 
+    "photo info"; 
+    margin-top: 3%;
+}
+
+#info {
+    grid-area: info;
+    padding-left: 10%;
+}
+
+#photo {
+    grid-area: photo;
+    width:96.2%;
+    height:97.8%;
+}
+
+.profile {
+    width: 100%;
+}
+
+h6 {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 2.3vh;
+    margin-top: 3%;
+}
+
+.infoTitle {
+    font-size: 2vh;
+    font-weight: normal;
+    margin-top: 10%;
+    margin-bottom: 5%;
+    color: #c2c2c2;
+}
+
+.infoNumber {
+    font-size: 2.2vh;
+    margin: 0;
+}
+
+.tooltipWorld {
+    background-color:#1a1a1a;
+    height: 100%;
+    width:100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    visibility: hidden;
+    pointer-events: none;
+    padding-left: 1.2vw;
+    padding-right: 1.2vw;
+}
+
+.tooltipWorld > h3 {
+    font-size: 2.5vh;
+    border: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 15vh;
+    border-bottom: 1px solid white;
+    margin-bottom: 8%;
+}
+
+.value {
+    fill:white;
+    font-size:14px;
+}
+
+.vis-title {
+    fill: white;
+    font-size: 3vh;
+    font-weight: bold;
+}
+
+.vis-title-country {
+    fill: white;
+    font-size: 2.7vh;
+    font-weight: bold;
+}
+
+.legend {
+    font-size:1.8vh;
+    fill: #B7B7B7;
+    margin-top: 20%;
+}
+
+h5 {
+    font-weight: normal;
+    color: rgb(183, 183, 183);
+    margin: 0;
+    margin-bottom: 2%;
+    font-size: 2.1vh;
+}
+
+#industryNumber {
+    display: flex;
+    flex-direction:row;
+    margin-top: 5%;
+}
+
+#iNumberRight {
+    flex-basis: 50%;
+    font-weight: bold;
+    margin-left: 10%;
+}
+
+#iNumberLeft {
+    flex-basis: 50%;
+    font-weight: bold;
+    margin-right: 10%;
+}
+
+#industryNumber p {
+    margin: 0;
+    font-size: 2.8vw;
+}
+
+#header--bottom {
+    text-align: center;
+    height: 1.5vh;
+    margin-top: 5%;
+}
+
+#header--bottom img {
+    height: 100%;
+    width: auto;
+}
+
+#footer {
+    margin-left: 2%;
+    margin-right: 2%;
+    font-size: 1.9vh;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    /* padding-top: 0.5%; */
+    display: flex;
+    flex-direction: row;
+}
+
+#footer p {
+    color:#b7b7b7;
+}
+
+#author {
+    flex-basis: 75%;
+    padding-bottom: 0.5%;
+    color: rgb(100, 100, 100);
+    text-align: left;
+}
+
+#credit {
+    background-color: #1a1a1a;
+    flex-basis: 25%;
+    padding-left: 1.2vw;
+    padding-right: 1.2vw;
+    text-align: left;
+    padding-bottom: 0.5%;
+}
+
+#credit a {
+    text-decoration: none;
+    color: rgb(100, 100, 100);
+}
+
+h1 {
+    color: white;
+    font-size: 4.5vh;
+    text-align: center;
+    margin-top: 1%;
+}
+
+#credit_div {
+    margin-left: 40%;
+    margin-right: 40%;
+    font-size: 2vh;
+    color: #b7b7b7;
+}
+
+#credit_div a {
+    color: #b7b7b7;
+}
+
+#credit_div img {
+    width: 100%;
+    margin-top: 8%;
+    margin-bottom: 3%;
+}

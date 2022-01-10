@@ -1,0 +1,55 @@
+industry,region,number,rest,start,Name,NetWorth,Country,Source,Rank,Age,img,data,display,total
+Finance & Investments,world,371,172,199,,,,,,,,172,Other ,371
+Finance & Investments,usa,189,,,Warren Buffett,$96 B,American,Berkshire Hathaway,6,90,warren.jpg,189,United States,371
+Finance & Investments,china,10,,189,Li Hua,$7.1 B,Chinese,financial services,358,43,no.jpg ,10,China,371
+Technology,world,365,114,251,,,,,,,,114,Other ,365
+Technology,usa,140,,,Jeff Bezos,$177 B,American,Amazon,1,57,jeff.jpg,140,United States,365
+Technology,china,111,,140,Ma Huateng,$65.8 B,Chinese,internet media,15,49,ma.jpg,111,China,365
+Manufacturing,world,331,152,179,,,,,,,,152,Other ,331
+Manufacturing,usa,28,,,"Herbert Kohler, Jr. & family",$9.8 B,American,plumbing fixtures,232,82,no.jpg ,28,United States,331
+Manufacturing,china,151,,28,He Xiangjian,$37.7 B,Chinese,home appliances,37,78,no.jpg ,151,China,331
+Fashion & Retail,world,273,186,87,,,,,,,,186,Other ,273
+Fashion & Retail,usa,54,,,Alice Walton,$61.8 B,American,Walmart,17,71,alice.jpg,54,United States,273
+Fashion & Retail,china,33,,54,Ma Jianrong & family,$12.5 B,Chinese,"textiles, apparel",173,57,no.jpg ,33,China,273
+Healthcare,world,221,107,114,,,,,,,,107,Other ,221
+Healthcare,usa,35,,,"Thomas Frist, Jr. & family",$15.7 B,American,hospitals,126,82,thomas.jpg,35,United States,221
+Healthcare,china,79,,35,Jiang Rensheng & family,$24.4 B,Chinese,vaccines,69,67,no.jpg ,79,China,221
+Food & Beverage,world,219,104,115,,,,,,,,104,Other ,219
+Food & Beverage,usa,65,,,Jacqueline Mars,$31.3 B,American,"candy, pet food",48,81,no.jpg ,65,United States,219
+Food & Beverage,china,50,,65,Zhong Shanshan,$68.9 B,Chinese,"beverages, pharmaceuticals",13,66,zhong.jpg,50,China,219
+Real Estate,world,215,111,104,,,,,,,,111,Other ,215
+Real Estate,usa,49,,,Donald Bren,$15.3 B,American,real estate,132,88,no.jpg ,49,United States,215
+Real Estate,china,55,,49,Yang Huiyan & family,$29.6 B,Chinese,real estate,50,39,no.jpg ,55,China,215
+Diversified,world,188,152,36,,,,,,,,152,Other ,188
+Diversified,usa,11,,,Charles Koch,$46.4 B,American,Koch Industries,27,85,charles.jpg,11,United States,188
+Diversified,china,25,,11,Zhao Yan,$7.6 B,Chinese,biotech,327,54,zhao.jpg,25,China,188
+Energy,world,100,46,54,,,,,,,,46,Other ,100
+Energy,usa,33,,,Harold Hamm & family,$9.4 B,American,oil & gas,247,75,harold.jpg,33,United States,100
+Energy,china,21,,33,Fan Hongwei & family,$18.2 B,Chinese,petrochemicals,102,54,no.jpg ,21,China,100
+Media & Entertainment,world,95,42,53,,,,,,,,42,Other ,95
+Media & Entertainment,usa,38,,,Michael Bloomberg,$59 B,American,Bloomberg LP,20,79,michael.jpg,38,United States,95
+Media & Entertainment,china,15,,38,Su Hua,$17.8 B,Chinese,video streaming,107,39,no.jpg ,15,China,95
+Service,world,75,28,47,,,,,,,,28,Other ,75
+Service,usa,20,,,Micky Arison,$6.7 B,American,Carnival Cruises,391,71,no.jpg ,20,United States,75
+Service,china,27,,20,Wang Wei,$39 B,Chinese,package delivery,35,50,no.jpg ,27,China,75
+Metals & Mining,world,74,56,18,,,,,,,,56,Other ,74
+Metals & Mining,usa,2,,,Tor Peterson,$1.8 B,American,commodities,1750,56,no.jpg ,2,United States,74
+Metals & Mining,china,16,,2,Wang Wenyin,$13.2 B,Chinese,"mining, copper products",161,53,no.jpg ,16,China,74
+Automotive,world,68,33,35,,,,,,,,33,Other ,68
+Automotive,usa,18,,,Elon Musk,$151 B,American,"Tesla, SpaceX",2,49,elon.jpg,18,United States,68
+Automotive,china,17,,18,Li Shufu,$19.7 B,Chinese,automobiles,89,57,no.jpg ,17,China,68
+Construction & Engineering,world,44,38,6,,,,,,,,38,Other ,44
+Construction & Engineering,usa,3,,,Diane Hendricks,$8 B,American,roofing,308,74,no.jpg ,3,United States,44
+Construction & Engineering,china,3,,3,Wang Linpeng,$3.9 B,Chinese,furniture retailing,752,52,no.jpg ,3,China,44
+Logistics,world,35,20,15,,,,,,,,20,Other ,35
+Logistics,usa,6,,,Dennis Washington,$6.4 B,American,"construction, mining",418,86,no.jpg ,6,United States,35
+Logistics,china,9,,6,Lai Meisong,$7.3 B,Chinese,package delivery,344,50,no.jpg ,9,China,35
+Telecom,world,32,24,8,,,,,,,,24,Other ,32
+Telecom,usa,4,,,Rocco Commisso,$7.2 B,American,telecom,352,71,rocco.jpg,4,United States,32
+Telecom,china,4,,4,Lv Dalong,$1.8 B,Chinese,telecom services,1750,59,no.jpg ,4,China,32
+Gambling & Casinos,world,25,19,6,,,,,,,,19,Other ,25
+Gambling & Casinos,usa,6,,,Miriam Adelson,$38.2 B,American,casinos,36,75,miriam.jpg,6,United States,25
+Gambling & Casinos,china,0,,6,,,Chinese,,,,,0,China,25
+Sports,world,24,1,23,,,,,,,,1,Other ,24
+Sports,usa,23,,,Jerry Jones,$8.9 B,American,Dallas Cowboys,264,78,jerry.jpg,23,United States,24
+Sports,china,0,,23,,,Chinese,,,,,0,China,24
