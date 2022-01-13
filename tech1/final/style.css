@@ -517,7 +517,7 @@ h5 {
     color: rgb(100, 100, 100);
 }
 
-h1 {
+#credit-title {
     color: white;
     font-size: 4.5vh;
     text-align: center;
