@@ -864,7 +864,7 @@ d3.csv("./data.csv", function(data) {
     .attr("text-anchor", "start")
     .attr("class", "web_title")
     .attr("opacity", 0)
-    .text("More opaque companies");
+    .text("More transparent companies");
 
   var withoutweb = svg.append("text")
     .attr("x", width / 1.6)
@@ -872,7 +872,7 @@ d3.csv("./data.csv", function(data) {
     .attr("text-anchor", "start")
     .attr("class", "web_title")
     .attr("opacity", 0)
-    .text("Less opaque companies");
+    .text("More opaque companies");
 
   // Initialize the circle: all located at the center of the svg area
   var node = svg.append("g")
