@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Data and Methods</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+    <main>
+
+        <section id="about">
+
+            <div class="about-text">
+                <h1 class="method-title">Data</h1>
+                
+                <p><a href="https://www.fec.gov/data/disbursements/?committee_id=C00580100&two_year_transaction_period=2020&two_year_transaction_period=2018&line_number=F3P-23&data_type=processed" target="blank">Data</a> used in this project was collected and released by the Federal Election Commission.</p>
+
+                <p>Among different types of disbursement data, "Operating Expenditure" data was selected for analysis and visualization since this records "A committee's day-to-day expenditures".</p>
+
+                <p>At the time of the project, the data obtained in March 2022 was the latest processed data available on the FEC's website.</p>
+
+                <p>The data set contains 64320 rows, each of which describes a single disbursement of the Trump 2020 campaign between January 1st 2017 and December 31st 2020.</p>
+
+                <p>It's important to note that due to the FEC's multi-step process could cause delays, the data we obtained at the time of the project might not be 100% accurate to reflect the total spending of the committee.</p>
+
+            </div>
+
+            <div class="about-text">
+                <h1 class="method-title">Methods</h1>
+
+                <p>As defined by <a href="https://tacticaltech.org/" target="blank">Tactical Tech</a>, the Influence Industry is the private sector built around the acquisition and use of personal data for political elections.</p>
+
+                <p>Defining the Influence Industry sector is difficult since it is dynamically made up of a variety of actors from various fields like advertising, consulting, and technology.</p>
+
+                <p>In our view, however, by following where political campaigns' data-driven spending goes, we believe that we can uncover the companies involved in the Influence Industry by connecting the dots between data-driven activities and political campaigns.</p>
+
+                <p>In this project, we consider three types of spending are most relevant to data-driven activities. They are Data, Digital Advertising, and Consulting. </p>
+
+                <p>A glossary of all three types of expenditures was developed from the data set's "disbursement description" column. As a result of the glossary, all Influence Industry related spending in the 2020 Trump campaign was found.</p>
+
+                <div class="about-img">
+                    <figure>
+                        <img src="./img/glossary.jpg" alt="glossary" style="width:100%">
+                        <figcaption>Part of the glossary that used to filter related spending</figcaption>
+                    </figure>
+                </div>
+
+                <p>Below are the details about the three types:</p>
+
+                <h2>Data:</h2>
+                <p>We first found all transactions with the keyword "DATA" in the data set. By further investigate them, we filtered out the ones irrelevant to the industry. </p>
+
+                <p>As an example, Red Curve Solutions received several transactions from the Trump campaign for "COMPLIANCE CONSULTING & DATA PROCESSING SERVICE" and "DATA PROCESSING SERVICES". The services were to keep the committee's data in FEC compliance. Although it deals with data, it has nothing to do with voting influence. These types of irrelevant spendings were excluded from the data set.</p>
+
+                <div class="about-img">
+                    <figure>
+                        <img src="./img/red.jpg" alt="red curve solution" style="width:100%">
+                        <figcaption>Transactions to Red Curve Solutions were excluded</figcaption>
+                    </figure>
+                </div>
+
+                <h2>Digital Advertising:</h2>
+
+                <p>Spending on digital advertising can also be tied to the Influence Industry. In order to refine the selected transactions in this category, we excluded those that were described as production services because we believe the most part of this kind of expenditure was spent on producing ad, as opposed to using voter data to influence voters.</p>
+
+                <p>In the case of the description with different types of advertising services like "DIGITAL/SMS/PRINT MEDIA ADVERTISING", we decided to exclude them from the glossary as we tried to minimize incorrect defined expenditure.</p>
+
+                <h2>Consulting:</h2> 
+                
+                <p>After the Cambridge Analytica scandal, we began to believe that consulting services could be a more opaque option for using data to influence voters.</p>
+
+                <p>We carefully reviewed all consulting descriptions and only included those that were most likely to involve the use of voter data. Descriptions like "LEGAL CONSULTING", "COMPLIANCE CONSULTING", and "ADMINISTRATIVE CONSULTING" were excluded from the glossary.</p>
+
+                <br>
+                <hr>
+                <br>
+
+                <p>While we were aware that our methods are not perfect, some parts are based on judgment and presumption. In the diagram below, we illustrate the scope of our analysis by the three types of expenditures, which could include some expenditures that did not involve personal data, while others did but were not included.</p>    
+
+                <div id="diagram">
+                        <img id="diagram-img" src="./img/diagram.jpg" alt="diagram shows analysis scope">
+                </div>
+
+                <p>Despite its limitations, we hoped this project could provide a basic way to map the Influence Industry and may be of use in studying other political campaigns.</p>
+
+            </div>
+
+            <footer>
+                <hr>
+                <p id="footer-credit">By Sihang Sun | sun.siha@northeastern.edu</p>
+            </footer>
+
+        </section>
+
+
+    </main>
+
+
+
+</body>
+
+</html>
