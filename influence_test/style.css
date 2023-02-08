@@ -414,8 +414,8 @@ footer hr {
 }
 
 .phone {
-  height: 100px;
-  width: 200px;
+  height: 200px;
+  width: 400px;
   border: 3px solid white;
   border-radius: 10px;
   animation: rotate 1.5s ease-in-out infinite alternate;
@@ -426,7 +426,7 @@ footer hr {
 
 .message {
   color: white;
-  font-size: 2em;
+  font-size: 4em;
   margin-top: 40px;
   display: none;
   padding-top: 10%;
