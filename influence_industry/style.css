@@ -414,8 +414,8 @@ footer hr {
 }
 
 .phone {
-  height: 100px;
-  width: 200px;
+  height: 200px;
+  width: 400px;
   border: 3px solid white;
   border-radius: 10px;
   animation: rotate 1.5s ease-in-out infinite alternate;
@@ -426,7 +426,7 @@ footer hr {
 
 .message {
   color: white;
-  font-size: 1.2em;
+  font-size: 2.5em;
   margin-top: 40px;
   display: none;
   padding-top: 10%;
@@ -456,7 +456,7 @@ main {
 	}
 }
 
-@media only screen and (max-device-width: 768px) , only screen and (orientation: portrait) {
+@media only screen and (max-device-width: 768px) and (orientation: portrait) {
   .phone, .message, #mobile {
     display: block;
   }
