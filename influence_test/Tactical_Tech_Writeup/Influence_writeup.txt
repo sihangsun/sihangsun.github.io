@@ -1,0 +1,67 @@
+A short piece of the key findings and method 
+around 500 words
+
+
+they will be people who are 
+
+1) interested in the findings
+2) interested how they might check them or go about it themselves, so that's why the method is a nice bit to focus on in the short write up.
+
+
+Key findings (narrowly apply to Trump?)
+
+1, influence spending more than half. 
+
+2, Influence industry spending is hard to define, the most explicit one (data)appear to be the smallest in the public record. #### More money tend to be in more vague area like consulting and  digital ad. 
+
+3, Digital ad is the largest, and the Trump campaign worked very exclusively with only 4 companies.
+
+4, 24 of the 52 influence companies do not have official websites, they are more opaque and invisible
+
+
+Method
+
+1, Dig in FEC data to find influence industry spending
+2, Quick thumb of rules, Define three area and develop glossary
+
+
+summary 
+method
+findings 
+future 
+
+-------------
+
+In spite of having the potential power to shape our societies' governance, the Influence Industry is opaque, and the companies remain largely unknown to citizens.
+
+During the 2020 US presidential election, Donald J. Trump campaign spent about 65% of the overall spending on services that are considered to be related to the influence industry. Most of the money was spent through more opaque channels such as consulting and digital adverting services. 
+
+These services were provided by 52 different companies. Almost half of those companies lack sufficient public information online for full transparency and accountability, and most of those are largely unknown to citizens. 
+
+(Opening intro, summary of key findings)
+
+In this visual essay, we use the Donald Trump 2020 presidential campaign as a case study to attempt to define a basic scope of the influence industry by looking into all the data related service spending. As we follow the money, we also hope to uncover all the 52 companies that played a role in that election.  
+
+When looking at a company at first glance, it is difficult to place it under the "influence industry" umbrella. In our view, however, by following where political campaigns' data-driven spending goes, we believe that we can uncover the influence industry companies by linking their data-driven services to political campaigns.  
+
+We used Trump committee's expenditure data from the Federal Election Commission to discover such companies worked for Trump's campaign. In the data, we identified all "influence industry" related spending using three types of spending that are most relevant to data-driven activities. They are “Data”, “Digital Advertising”, and “Consulting”. To learn more about this method in the "Data and Methods" page of the project. 
+
+(Methods)
+
+Using this method, we were able to identify more than 800 considered to be data related transactions made to 52 different companies by Trump's 2020 campaign. The total amount of these services is $503,477,192 and account for about 65% of the overall campaign spending.  
+
+Most of Trump's spending on "influence industry" companies seems to go through less straightforward and more opaque channels.
+
+The most explicit channel "Data", that is the transactions with the keyword "DATA", only represents a very small percentage of all the spending. However, more money was spent through "Consulting" and "Digital Advertising" channels. There were only 4 exclusive companies that received money from the Trump 2020 campaign committee for services related to digital advertising". 
+
+In addition to the opaqueness of the spending channels. Some of the companies are less transparent and even stay invisible to the public. 
+
+For example, one company we identified in the "Digital Advertising" channel called American Made Media Consultants LLC, received almost 500 million dollars from the Trump campaign for digital adverting related services. But one can find very little information about the company on the internet.
+
+In fact, 24 of the 52 influence companies we identified from Trump's 2020 campaign spending do not have official websites, they are more opaque and invisible compared to other companies and hard to be held accountable.
+
+(Key findings： 1, high percentage 2, opaque channels 3,opaque companies) 
+
+Use the interactive visualization tool in the last part of the project to learn more about those companies that played a role in Trump's 2020 campaign and further research and investigate the influence industry through those companies. 
+
+(Ending and encourage to go about it)
