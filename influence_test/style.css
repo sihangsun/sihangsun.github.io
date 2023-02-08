@@ -402,7 +402,7 @@ footer hr {
   background-color: #363636;
   height: 100vh;
   width: auto;
-  margin-top: 60px;
+  padding-top: 40%;
 }
 
 #mobile {
@@ -414,8 +414,8 @@ footer hr {
 }
 
 .phone {
-  height: 30%;
-  width: 22%;
+  height: 100px;
+  width: 200px;
   border: 3px solid white;
   border-radius: 10px;
   animation: rotate 1.5s ease-in-out infinite alternate;
