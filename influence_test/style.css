@@ -440,6 +440,10 @@ footer hr {
   text-align: center;
 }
 
+main {
+  background-color: #363636;
+}
+
 @keyframes rotate {
   0% {
 		transform: rotate(0deg)
@@ -452,7 +456,7 @@ footer hr {
 	}
 }
 
-@media only screen and (max-device-width: 768px) , only screen and (orientation: portrait) {
+@media only screen and (max-device-width: 768px) and (orientation: portrait) {
   .phone, .message, #mobile {
     display: block;
   }
