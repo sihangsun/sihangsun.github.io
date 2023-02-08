@@ -16,8 +16,8 @@ html {
   width: auto;
 }
 
-  #intro h1 {
-  position: absolute;
+#intro h1 {
+  position: relative;
   top: 9%;
   left: 5%;
   font-size: 12vh;
@@ -34,9 +34,9 @@ html {
 }
 
 #intro h3 {
-  position: absolute;
+  position: relative;
   left: 5%;
-  top: 39%;
+  top: 11%;
   color: #cccccc;
   font-weight:300;
   letter-spacing: 0.15vh;
@@ -44,16 +44,16 @@ html {
 }
 
 #design {
-  position: absolute;
+  position: relative;
   left: 5%;
-  bottom: 3%;
+  top: 47.5%;
   color: #707070;
 }
 
 #intro button {
-  position: absolute;
+  position: relative;
   left: 5%;
-  top: 50%;
+  top: 16%;
   background-color: transparent;
   color: white;
   border: 1px solid white;
@@ -397,3 +397,70 @@ footer hr {
   height: auto;
 }
 
+
+#mobile {
+  background-color: #363636;
+  height: 100vh;
+  width: auto;
+  padding-top: 40%;
+}
+
+#mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  display: none;
+}
+
+.phone {
+  height: 100px;
+  width: 200px;
+  border: 3px solid white;
+  border-radius: 10px;
+  animation: rotate 1.5s ease-in-out infinite alternate;
+  margin-left: auto;
+  margin-right: auto;
+  display: none;
+}
+
+.message {
+  color: white;
+  font-size: 1.2em;
+  margin-top: 40px;
+  display: none;
+  padding-top: 10%;
+}
+
+.message p {
+  text-align: center;
+}
+
+.mobile p {
+  text-align: center;
+}
+
+main {
+  background-color: #363636;
+}
+
+@keyframes rotate {
+  0% {
+		transform: rotate(0deg)
+	}
+	50% {
+		transform: rotate(-90deg)
+	}
+	100% {
+		transform: rotate(-90deg)
+	}
+}
+
+@media only screen and (max-device-width: 768px) , only screen and (orientation: portrait) {
+  .phone, .message, #mobile {
+    display: block;
+  }
+  #viz {
+    display: none;
+  }
+}
