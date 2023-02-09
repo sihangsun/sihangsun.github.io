@@ -403,6 +403,7 @@ footer hr {
   height: 100vh;
   width: auto;
   padding-top: 40%;
+  border-color:  #363636;
 }
 
 #mobile {
@@ -414,8 +415,8 @@ footer hr {
 }
 
 .phone {
-  height: 200px;
-  width: 400px;
+  height: 100px;
+  width: 200px;
   border: 3px solid white;
   border-radius: 10px;
   animation: rotate 1.5s ease-in-out infinite alternate;
@@ -426,7 +427,7 @@ footer hr {
 
 .message {
   color: white;
-  font-size: 4em;
+  font-size: 1.1em;
   margin-top: 40px;
   display: none;
   padding-top: 10%;
