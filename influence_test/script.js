@@ -35,9 +35,11 @@ var imgV25 = d3.select('#imgV25');
 var myScrollama = scrollama();
 
 // @TODO: Set the stepH, figureHeight, and figureMarginTop constants
-const stepH = Math.floor(window.innerHeight * 2);
-const figureHeight = window.innerHeight * 1
-const figureMarginTop = (window.innerHeight - figureHeight) / 2
+var stepH = Math.floor(window.innerHeight * 2);
+var figureHeight = window.innerHeight * 1
+var figureMarginTop = (window.innerHeight - figureHeight) / 2
+
+console.log(figureHeight);
 
 // generic window resize listener event
 function handleResize() {
@@ -54,6 +56,34 @@ function handleResize() {
   myScrollama.resize();
 
 }
+
+// Orientation change resize 
+
+window.addEventListener('orientationchange', function() {
+  // After orientationchange, add a one-time resize event
+  var afterOrientationChange = function() {
+      // YOUR POST-ORIENTATION CODE HERE
+
+      stepH = Math.floor(window.innerHeight * 2);
+      figureHeight = window.innerHeight * 1
+      figureMarginTop = (window.innerHeight - figureHeight) / 2
+
+      console.log(figureHeight);
+
+      // @TODO: Use `d3.json` to update height of step elements
+      steps.style('height', stepH + 'px');
+      // @TODO: Update the height, and top figure elements
+      figure
+        .style('height', figureHeight + 'px')
+        .style('top', figureMarginTop + 'px');
+      // Tell scrollama to update new element dimensions
+      myScrollama.resize();
+
+      // Remove the resize event listener after it has executed
+      window.removeEventListener('resize', afterOrientationChange);
+  };
+  window.addEventListener('resize', afterOrientationChange);
+});
 
 // scrollama event handler
 function handleStepChange(response) {
