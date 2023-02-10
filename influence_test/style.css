@@ -471,3 +471,11 @@ main {
   display: none;
   }
 }
+
+@media only screen and (max-device-width: 1024px)  {
+
+  #intro button {
+    display: none;
+    }
+
+}
