@@ -20,13 +20,13 @@ html {
   position: relative;
   top: 9%;
   left: 5%;
-  font-size: 12vh;
+  font-size: 5.22em;
   filter: blur(8px);
   color: #fbb03b;
   transition: 0.5s all;
   cursor: pointer;
-  letter-spacing: 0.5vh;
-  line-height: 13vh;
+  letter-spacing: 0.04em;
+  line-height: 1.08em;
 }
 
   #intro h1:hover {
@@ -39,8 +39,8 @@ html {
   top: 11%;
   color: #cccccc;
   font-weight:300;
-  letter-spacing: 0.15vh;
-  font-size: 3.8vh;
+  letter-spacing: 0.04em;
+  font-size: 1.65em;
 }
 
 #design {
