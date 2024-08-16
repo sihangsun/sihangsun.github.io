@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://d3js.org/d3.v6.min.js"></script>
+        <script src="js/lib/popup-v1.1.1.min.js"></script>
+
+    </head>
+    <body>
+
+        <div class="scroll-container">
+            <section id="landing">
+            <h1>Exploring the Price of Living <br>Across Major U.S. Cities</h1>
+            <div id="landing-body">
+                <div class="body-child" id="text">
+                    <p>Considering moving from one big city to another in the U.S.? One of the most important factors to consider is how the cost of living compares to your current location.</p>
+                    <p>How much does a pack of Marlboro typically cost in Boston, MA? Which city has the most expensive McMeal? As the most expensive city in the U.S., is everything in New York City overpriced compared to other cities?
+                    </p>
+                    <p>This interactive tool allows you to look up and compare the prices of 31 goods and services across 30 different U.S. cities. These cities are the top 30 in the economy, measured by their gross domestic product (GDP).
+                    </p>
+                    <p>The tool provides two ways to compare the cost of living in different cities. While the overall Cost of Living Index offers a quick, aggregated city comparison, the tool's primary focus is on the prices of specific goods and services. This feature allows you to compare items most relevant to your lifestyle, offering a personalized insight into the cost differences between cities.
+                    </p>
+                    <p>The data used in this project comes from Numbeo, a crowd-sourced global database of cost of living information.
+                    </p>
+                    <p>Keep reading on the right to learn how to use the tool, and explore the data visualization tool below.
+                    </p>
+                    <a href="#viz">
+                    <button class="btn-landing">Explore the visualization below &#x2193</button>
+                    </a>
+                </div>
+                <div class="body-child" id="how-to">
+                    <div class="legend">
+                        <div class="legend-text"><p>The prices of 31 goods and services, organized into 8 distinct categories, each representing a type of spending typically encountered in city living. Use the button menu at the top to explore the different categories.
+                        </p></div>
+                        <div class="legend-viz" id="button-legend">
+                            <div><button class="btn-landing" id="btn-legend">Category</button></div>
+                        </div>
+                    </div>
+                    <div class="legend">
+                        <div class="legend-text"><p>Each circle represents a different city, with its position on the scale indicating the cost of a specific good or service in that city. Mouse over any circle to display the city name and the corresponding price in USD.
+                        </p></div>
+                        <div class="legend-viz" id="circle-legend"></div>
+                    </div>
+                    <div class="legend">
+                        <div class="legend-text"><p>The bar chart at the bottom visualizes the Cost of Living Index for the 25 cities. Mouse over any bar to highlight the corresponding circle representing that city on the plot above. The bars are ordered alphabetically to help you locate specific cities quickly.</p>
+                        
+                        <p>Click on a bar to filter and compare cities. When a bar is clicked, its corresponding circle and the bar's small windows will light up in the same color. Click the bar again to deselect the city. A maximum of two cities can be selected at a time.
+                        </p></div>
+                        <div class="legend-viz" id="bar-legend"></div>
+                    </div>
+                </div>
+            </div>
+            </section>
+
+            <section id="viz">
+
+            <div id="buttons">
+                <button class="btn Gro pressed">Grocery</button>
+                <button class="btn Mon">Monthly Cost</button>
+                <button class="btn Mea">Meat & Cheese</button>
+                <button class="btn Alc">Alcohol & Cigarette</button>
+                <button class="btn Clo">Clothing</button>
+                <button class="btn Own">Own Property</button>
+                <button class="btn Ren">Rent</button>
+                <button class="btn Din">Dining Out</button>
+            </div>
+
+            
+            <div id="dot-plot"></div>
+
+            <div id="bar-chart-container"></div>
+
+            </section>
+        </div>
+
+        <script src="js/legend.js"></script>
+        <script src="js/dot-plot.js" async defer></script>
+        <script src="js/bar-chart.js" async defer></script>
+        <script src="js/tooltip.js"></script>
+    </body>
+</html>

@@ -1,0 +1,931 @@
+city,measure,price,category
+New York,Inexpensive Restaurant Meal,30,Dining Out
+New York,Mid-range Restaurant Meal for 2,130,Dining Out
+New York,McMeal at McDonalds,12,Dining Out
+New York,Regular Cappuccino,5.72,Dining Out
+New York,Milk (1 gallon),5.65,Grocery
+New York,Eggs (12),5.22,Grocery
+New York,Local Cheese (1 lb),7.64,Meat & Cheese
+New York,Chicken Fillets (1 lb),6.93,Meat & Cheese
+New York,Beef Round (1 lb),8.99,Meat & Cheese
+New York,Mid-Range Wine,20,Alcohol & Cigarette
+New York,Domestic Beer (0.5 L),2.53,Alcohol & Cigarette
+New York,Imported Beer (12 oz),3.86,Alcohol & Cigarette
+New York,Marlboro (20 Pack),17,Alcohol & Cigarette
+New York,Monthly Transit Pass,132,Monthly Cost
+New York,Gasoline (13.2 gallons),50.82,Monthly Cost
+New York,Volkswagen Golf 1.4,35000,Own Property
+New York,Toyota Corolla Sedan,28356.86,Own Property
+New York,Internet (60 Mbps or More),71.82,Monthly Cost
+New York,Monthly Gym Fee (1 Adult),147.95,Monthly Cost
+New York,Levis 501 Jeans,72.17,Clothing
+New York,Summer Dress in a Chain Store,48.24,Clothing
+New York,Nike Running Shoes,101.23,Clothing
+New York,Men Leather Business Shoes,169.09,Clothing
+New York,1B Apt in City Centre,4379.49,Rent
+New York,1B Apt Outside of Centre,2939.81,Rent
+New York,3B Apt in City Centre,9009.44,Rent
+New York,3B Apt in Outside of Centre,4710,Rent
+New York,750 sq ft Apt in City Centre,1327177.5,Own Property
+New York,750 sq ft Apt Outside of Centre,916672.5,Own Property
+Los Angeles,Inexpensive Restaurant Meal,25,Dining Out
+Los Angeles,Mid-range Restaurant Meal for 2,120,Dining Out
+Los Angeles,McMeal at McDonalds,12,Dining Out
+Los Angeles,Regular Cappuccino,5.33,Dining Out
+Los Angeles,Milk (1 gallon),4.68,Grocery
+Los Angeles,Eggs (12),4.99,Grocery
+Los Angeles,Local Cheese (1 lb),6.23,Meat & Cheese
+Los Angeles,Chicken Fillets (1 lb),7.54,Meat & Cheese
+Los Angeles,Beef Round (1 lb),8.4,Meat & Cheese
+Los Angeles,Mid-Range Wine,14.99,Alcohol & Cigarette
+Los Angeles,Domestic Beer (0.5 L),2.6,Alcohol & Cigarette
+Los Angeles,Imported Beer (12 oz),3.88,Alcohol & Cigarette
+Los Angeles,Marlboro (20 Pack),12,Alcohol & Cigarette
+Los Angeles,Monthly Transit Pass,83.48,Monthly Cost
+Los Angeles,Gasoline (13.2 gallons),70.22,Monthly Cost
+Los Angeles,Volkswagen Golf 1.4,30000,Own Property
+Los Angeles,Toyota Corolla Sedan,26886.65,Own Property
+Los Angeles,Internet (60 Mbps or More),74.84,Monthly Cost
+Los Angeles,Monthly Gym Fee (1 Adult),60,Monthly Cost
+Los Angeles,Levis 501 Jeans,62.96,Clothing
+Los Angeles,Summer Dress in a Chain Store,45.29,Clothing
+Los Angeles,Nike Running Shoes,107.4,Clothing
+Los Angeles,Men Leather Business Shoes,145.95,Clothing
+Los Angeles,1B Apt in City Centre,2507.21,Rent
+Los Angeles,1B Apt Outside of Centre,2119.38,Rent
+Los Angeles,3B Apt in City Centre,4798.97,Rent
+Los Angeles,3B Apt in Outside of Centre,3791.96,Rent
+Los Angeles,750 sq ft Apt in City Centre,630360,Own Property
+Los Angeles,750 sq ft Apt Outside of Centre,541335,Own Property
+Chicago,Inexpensive Restaurant Meal,25,Dining Out
+Chicago,Mid-range Restaurant Meal for 2,100,Dining Out
+Chicago,McMeal at McDonalds,12,Dining Out
+Chicago,Regular Cappuccino,5.24,Dining Out
+Chicago,Milk (1 gallon),4.06,Grocery
+Chicago,Eggs (12),4.07,Grocery
+Chicago,Local Cheese (1 lb),7.52,Meat & Cheese
+Chicago,Chicken Fillets (1 lb),6.78,Meat & Cheese
+Chicago,Beef Round (1 lb),9.46,Meat & Cheese
+Chicago,Mid-Range Wine,15,Alcohol & Cigarette
+Chicago,Domestic Beer (0.5 L),2.43,Alcohol & Cigarette
+Chicago,Imported Beer (12 oz),4.31,Alcohol & Cigarette
+Chicago,Marlboro (20 Pack),16,Alcohol & Cigarette
+Chicago,Monthly Transit Pass,80,Monthly Cost
+Chicago,Gasoline (13.2 gallons),56.1,Monthly Cost
+Chicago,Volkswagen Golf 1.4,37383.69,Own Property
+Chicago,Toyota Corolla Sedan,27211.87,Own Property
+Chicago,Internet (60 Mbps or More),58.43,Monthly Cost
+Chicago,Monthly Gym Fee (1 Adult),76.63,Monthly Cost
+Chicago,Levis 501 Jeans,61.69,Clothing
+Chicago,Summer Dress in a Chain Store,56.46,Clothing
+Chicago,Nike Running Shoes,98.04,Clothing
+Chicago,Men Leather Business Shoes,134.41,Clothing
+Chicago,1B Apt in City Centre,2493.4,Rent
+Chicago,1B Apt Outside of Centre,1577,Rent
+Chicago,3B Apt in City Centre,4760,Rent
+Chicago,3B Apt in Outside of Centre,3096.15,Rent
+Chicago,750 sq ft Apt in City Centre,299167.5,Own Property
+Chicago,750 sq ft Apt Outside of Centre,253395,Own Property
+San Francisco,Inexpensive Restaurant Meal,25,Dining Out
+San Francisco,Mid-range Restaurant Meal for 2,100,Dining Out
+San Francisco,McMeal at McDonalds,12,Dining Out
+San Francisco,Regular Cappuccino,5.67,Dining Out
+San Francisco,Milk (1 gallon),6,Grocery
+San Francisco,Eggs (12),5.34,Grocery
+San Francisco,Local Cheese (1 lb),9.17,Meat & Cheese
+San Francisco,Chicken Fillets (1 lb),7.29,Meat & Cheese
+San Francisco,Beef Round (1 lb),9.34,Meat & Cheese
+San Francisco,Mid-Range Wine,17.5,Alcohol & Cigarette
+San Francisco,Domestic Beer (0.5 L),2.33,Alcohol & Cigarette
+San Francisco,Imported Beer (12 oz),3.1,Alcohol & Cigarette
+San Francisco,Marlboro (20 Pack),13.25,Alcohol & Cigarette
+San Francisco,Monthly Transit Pass,98,Monthly Cost
+San Francisco,Gasoline (13.2 gallons),68.51,Monthly Cost
+San Francisco,Volkswagen Golf 1.4,32000,Own Property
+San Francisco,Toyota Corolla Sedan,27336.48,Own Property
+San Francisco,Internet (60 Mbps or More),67.91,Monthly Cost
+San Francisco,Monthly Gym Fee (1 Adult),109.67,Monthly Cost
+San Francisco,Levis 501 Jeans,64.04,Clothing
+San Francisco,Summer Dress in a Chain Store,50.83,Clothing
+San Francisco,Nike Running Shoes,111.4,Clothing
+San Francisco,Men Leather Business Shoes,150.16,Clothing
+San Francisco,1B Apt in City Centre,3363.62,Rent
+San Francisco,1B Apt Outside of Centre,2851.72,Rent
+San Francisco,3B Apt in City Centre,6160.93,Rent
+San Francisco,3B Apt in Outside of Centre,5258,Rent
+San Francisco,750 sq ft Apt in City Centre,1061242.5,Own Property
+San Francisco,750 sq ft Apt Outside of Centre,900930,Own Property
+Dallas,Inexpensive Restaurant Meal,20,Dining Out
+Dallas,Mid-range Restaurant Meal for 2,80,Dining Out
+Dallas,McMeal at McDonalds,10,Dining Out
+Dallas,Regular Cappuccino,5.38,Dining Out
+Dallas,Milk (1 gallon),3.61,Grocery
+Dallas,Eggs (12),2.6,Grocery
+Dallas,Local Cheese (1 lb),5.06,Meat & Cheese
+Dallas,Chicken Fillets (1 lb),5.99,Meat & Cheese
+Dallas,Beef Round (1 lb),7.35,Meat & Cheese
+Dallas,Mid-Range Wine,15,Alcohol & Cigarette
+Dallas,Domestic Beer (0.5 L),2.17,Alcohol & Cigarette
+Dallas,Imported Beer (12 oz),4.71,Alcohol & Cigarette
+Dallas,Marlboro (20 Pack),9.98,Alcohol & Cigarette
+Dallas,Monthly Transit Pass,95,Monthly Cost
+Dallas,Gasoline (13.2 gallons),40.39,Monthly Cost
+Dallas,Volkswagen Golf 1.4,32000,Own Property
+Dallas,Toyota Corolla Sedan,26692.4,Own Property
+Dallas,Internet (60 Mbps or More),72,Monthly Cost
+Dallas,Monthly Gym Fee (1 Adult),36.22,Monthly Cost
+Dallas,Levis 501 Jeans,61.41,Clothing
+Dallas,Summer Dress in a Chain Store,50.71,Clothing
+Dallas,Nike Running Shoes,104.63,Clothing
+Dallas,Men Leather Business Shoes,142.6,Clothing
+Dallas,1B Apt in City Centre,1977,Rent
+Dallas,1B Apt Outside of Centre,1593.8,Rent
+Dallas,3B Apt in City Centre,4210.58,Rent
+Dallas,3B Apt in Outside of Centre,3001.09,Rent
+Dallas,750 sq ft Apt in City Centre,429997.5,Own Property
+Dallas,750 sq ft Apt Outside of Centre,311062.5,Own Property
+Washington DC,Inexpensive Restaurant Meal,25,Dining Out
+Washington DC,Mid-range Restaurant Meal for 2,100,Dining Out
+Washington DC,McMeal at McDonalds,12,Dining Out
+Washington DC,Regular Cappuccino,5.46,Dining Out
+Washington DC,Milk (1 gallon),4.26,Grocery
+Washington DC,Eggs (12),3.88,Grocery
+Washington DC,Local Cheese (1 lb),6.83,Meat & Cheese
+Washington DC,Chicken Fillets (1 lb),5.74,Meat & Cheese
+Washington DC,Beef Round (1 lb),7.97,Meat & Cheese
+Washington DC,Mid-Range Wine,16,Alcohol & Cigarette
+Washington DC,Domestic Beer (0.5 L),2.3,Alcohol & Cigarette
+Washington DC,Imported Beer (12 oz),4.51,Alcohol & Cigarette
+Washington DC,Marlboro (20 Pack),12.11,Alcohol & Cigarette
+Washington DC,Monthly Transit Pass,80,Monthly Cost
+Washington DC,Gasoline (13.2 gallons),48.44,Monthly Cost
+Washington DC,Volkswagen Golf 1.4,35699.74,Own Property
+Washington DC,Toyota Corolla Sedan,26275.78,Own Property
+Washington DC,Internet (60 Mbps or More),62.5,Monthly Cost
+Washington DC,Monthly Gym Fee (1 Adult),104.29,Monthly Cost
+Washington DC,Levis 501 Jeans,73.41,Clothing
+Washington DC,Summer Dress in a Chain Store,50.96,Clothing
+Washington DC,Nike Running Shoes,115.93,Clothing
+Washington DC,Men Leather Business Shoes,173.48,Clothing
+Washington DC,1B Apt in City Centre,2560.23,Rent
+Washington DC,1B Apt Outside of Centre,2084.16,Rent
+Washington DC,3B Apt in City Centre,5492.5,Rent
+Washington DC,3B Apt in Outside of Centre,3832.89,Rent
+Washington DC,750 sq ft Apt in City Centre,683130,Own Property
+Washington DC,750 sq ft Apt Outside of Centre,484920,Own Property
+Houston,Inexpensive Restaurant Meal,17.25,Dining Out
+Houston,Mid-range Restaurant Meal for 2,77.5,Dining Out
+Houston,McMeal at McDonalds,9.12,Dining Out
+Houston,Regular Cappuccino,5.13,Dining Out
+Houston,Milk (1 gallon),3.64,Grocery
+Houston,Eggs (12),3.72,Grocery
+Houston,Local Cheese (1 lb),5.7,Meat & Cheese
+Houston,Chicken Fillets (1 lb),4.95,Meat & Cheese
+Houston,Beef Round (1 lb),7.28,Meat & Cheese
+Houston,Mid-Range Wine,15,Alcohol & Cigarette
+Houston,Domestic Beer (0.5 L),1.88,Alcohol & Cigarette
+Houston,Imported Beer (12 oz),3.34,Alcohol & Cigarette
+Houston,Marlboro (20 Pack),8.75,Alcohol & Cigarette
+Houston,Monthly Transit Pass,75,Monthly Cost
+Houston,Gasoline (13.2 gallons),41.05,Monthly Cost
+Houston,Volkswagen Golf 1.4,33139.19,Own Property
+Houston,Toyota Corolla Sedan,26105.84,Own Property
+Houston,Internet (60 Mbps or More),69.26,Monthly Cost
+Houston,Monthly Gym Fee (1 Adult),39.66,Monthly Cost
+Houston,Levis 501 Jeans,49,Clothing
+Houston,Summer Dress in a Chain Store,43.4,Clothing
+Houston,Nike Running Shoes,101.64,Clothing
+Houston,Men Leather Business Shoes,134.56,Clothing
+Houston,1B Apt in City Centre,1687.77,Rent
+Houston,1B Apt Outside of Centre,1299.04,Rent
+Houston,3B Apt in City Centre,3605.92,Rent
+Houston,3B Apt in Outside of Centre,2396.63,Rent
+Houston,750 sq ft Apt in City Centre,352965,Own Property
+Houston,750 sq ft Apt Outside of Centre,233790,Own Property
+Boston,Inexpensive Restaurant Meal,22.5,Dining Out
+Boston,Mid-range Restaurant Meal for 2,100,Dining Out
+Boston,McMeal at McDonalds,12,Dining Out
+Boston,Regular Cappuccino,5.62,Dining Out
+Boston,Milk (1 gallon),4.84,Grocery
+Boston,Eggs (12),4.79,Grocery
+Boston,Local Cheese (1 lb),9.5,Meat & Cheese
+Boston,Chicken Fillets (1 lb),6.42,Meat & Cheese
+Boston,Beef Round (1 lb),9.43,Meat & Cheese
+Boston,Mid-Range Wine,15,Alcohol & Cigarette
+Boston,Domestic Beer (0.5 L),1.9,Alcohol & Cigarette
+Boston,Imported Beer (12 oz),5.25,Alcohol & Cigarette
+Boston,Marlboro (20 Pack),13.66,Alcohol & Cigarette
+Boston,Monthly Transit Pass,90,Monthly Cost
+Boston,Gasoline (13.2 gallons),47.26,Monthly Cost
+Boston,Volkswagen Golf 1.4,30000,Own Property
+Boston,Toyota Corolla Sedan,24095.29,Own Property
+Boston,Internet (60 Mbps or More),69.92,Monthly Cost
+Boston,Monthly Gym Fee (1 Adult),95.56,Monthly Cost
+Boston,Levis 501 Jeans,58.78,Clothing
+Boston,Summer Dress in a Chain Store,44.64,Clothing
+Boston,Nike Running Shoes,92.89,Clothing
+Boston,Men Leather Business Shoes,155.69,Clothing
+Boston,1B Apt in City Centre,3145.77,Rent
+Boston,1B Apt Outside of Centre,2256.09,Rent
+Boston,3B Apt in City Centre,5183.91,Rent
+Boston,3B Apt in Outside of Centre,3561.36,Rent
+Boston,750 sq ft Apt in City Centre,634897.5,Own Property
+Boston,750 sq ft Apt Outside of Centre,348810,Own Property
+Atlanta,Inexpensive Restaurant Meal,23.5,Dining Out
+Atlanta,Mid-range Restaurant Meal for 2,100,Dining Out
+Atlanta,McMeal at McDonalds,12,Dining Out
+Atlanta,Regular Cappuccino,5.33,Dining Out
+Atlanta,Milk (1 gallon),4.14,Grocery
+Atlanta,Eggs (12),4.13,Grocery
+Atlanta,Local Cheese (1 lb),7.22,Meat & Cheese
+Atlanta,Chicken Fillets (1 lb),7.3,Meat & Cheese
+Atlanta,Beef Round (1 lb),8.51,Meat & Cheese
+Atlanta,Mid-Range Wine,12.5,Alcohol & Cigarette
+Atlanta,Domestic Beer (0.5 L),3.28,Alcohol & Cigarette
+Atlanta,Imported Beer (12 oz),4.9,Alcohol & Cigarette
+Atlanta,Marlboro (20 Pack),8,Alcohol & Cigarette
+Atlanta,Monthly Transit Pass,95,Monthly Cost
+Atlanta,Gasoline (13.2 gallons),45.54,Monthly Cost
+Atlanta,Volkswagen Golf 1.4,35000,Own Property
+Atlanta,Toyota Corolla Sedan,25058.62,Own Property
+Atlanta,Internet (60 Mbps or More),66.79,Monthly Cost
+Atlanta,Monthly Gym Fee (1 Adult),63.5,Monthly Cost
+Atlanta,Levis 501 Jeans,55.46,Clothing
+Atlanta,Summer Dress in a Chain Store,48.5,Clothing
+Atlanta,Nike Running Shoes,97.31,Clothing
+Atlanta,Men Leather Business Shoes,125.18,Clothing
+Atlanta,1B Apt in City Centre,2034.2,Rent
+Atlanta,1B Apt Outside of Centre,1592.84,Rent
+Atlanta,3B Apt in City Centre,3700.53,Rent
+Atlanta,3B Apt in Outside of Centre,2635.91,Rent
+Atlanta,750 sq ft Apt in City Centre,420007.5,Own Property
+Atlanta,750 sq ft Apt Outside of Centre,245535,Own Property
+Philadelphia,Inexpensive Restaurant Meal,20,Dining Out
+Philadelphia,Mid-range Restaurant Meal for 2,75,Dining Out
+Philadelphia,McMeal at McDonalds,10.25,Dining Out
+Philadelphia,Regular Cappuccino,4.76,Dining Out
+Philadelphia,Milk (1 gallon),4.83,Grocery
+Philadelphia,Eggs (12),4.23,Grocery
+Philadelphia,Local Cheese (1 lb),7.84,Meat & Cheese
+Philadelphia,Chicken Fillets (1 lb),6.11,Meat & Cheese
+Philadelphia,Beef Round (1 lb),8.64,Meat & Cheese
+Philadelphia,Mid-Range Wine,17,Alcohol & Cigarette
+Philadelphia,Domestic Beer (0.5 L),1.73,Alcohol & Cigarette
+Philadelphia,Imported Beer (12 oz),3.6,Alcohol & Cigarette
+Philadelphia,Marlboro (20 Pack),13,Alcohol & Cigarette
+Philadelphia,Monthly Transit Pass,96,Monthly Cost
+Philadelphia,Gasoline (13.2 gallons),50.56,Monthly Cost
+Philadelphia,Volkswagen Golf 1.4,34000,Own Property
+Philadelphia,Toyota Corolla Sedan,25402.02,Own Property
+Philadelphia,Internet (60 Mbps or More),63.18,Monthly Cost
+Philadelphia,Monthly Gym Fee (1 Adult),43.75,Monthly Cost
+Philadelphia,Levis 501 Jeans,54.92,Clothing
+Philadelphia,Summer Dress in a Chain Store,35.83,Clothing
+Philadelphia,Nike Running Shoes,94.23,Clothing
+Philadelphia,Men Leather Business Shoes,120.56,Clothing
+Philadelphia,1B Apt in City Centre,1759.09,Rent
+Philadelphia,1B Apt Outside of Centre,1307.85,Rent
+Philadelphia,3B Apt in City Centre,3115.69,Rent
+Philadelphia,3B Apt in Outside of Centre,2086.42,Rent
+Philadelphia,750 sq ft Apt in City Centre,264435,Own Property
+Philadelphia,750 sq ft Apt Outside of Centre,181485,Own Property
+Seattle,Inexpensive Restaurant Meal,20,Dining Out
+Seattle,Mid-range Restaurant Meal for 2,100,Dining Out
+Seattle,McMeal at McDonalds,12.5,Dining Out
+Seattle,Regular Cappuccino,6.2,Dining Out
+Seattle,Milk (1 gallon),4.76,Grocery
+Seattle,Eggs (12),4.8,Grocery
+Seattle,Local Cheese (1 lb),6.33,Meat & Cheese
+Seattle,Chicken Fillets (1 lb),7.2,Meat & Cheese
+Seattle,Beef Round (1 lb),9.43,Meat & Cheese
+Seattle,Mid-Range Wine,15,Alcohol & Cigarette
+Seattle,Domestic Beer (0.5 L),3.01,Alcohol & Cigarette
+Seattle,Imported Beer (12 oz),3.78,Alcohol & Cigarette
+Seattle,Marlboro (20 Pack),12,Alcohol & Cigarette
+Seattle,Monthly Transit Pass,99,Monthly Cost
+Seattle,Gasoline (13.2 gallons),65.74,Monthly Cost
+Seattle,Volkswagen Golf 1.4,36656.56,Own Property
+Seattle,Toyota Corolla Sedan,26661.54,Own Property
+Seattle,Internet (60 Mbps or More),71.54,Monthly Cost
+Seattle,Monthly Gym Fee (1 Adult),63.56,Monthly Cost
+Seattle,Levis 501 Jeans,68.48,Clothing
+Seattle,Summer Dress in a Chain Store,60.26,Clothing
+Seattle,Nike Running Shoes,101.85,Clothing
+Seattle,Men Leather Business Shoes,143.05,Clothing
+Seattle,1B Apt in City Centre,2500.68,Rent
+Seattle,1B Apt Outside of Centre,1995,Rent
+Seattle,3B Apt in City Centre,4688,Rent
+Seattle,3B Apt in Outside of Centre,3567.31,Rent
+Seattle,750 sq ft Apt in City Centre,725902.5,Own Property
+Seattle,750 sq ft Apt Outside of Centre,452002.5,Own Property
+Miami,Inexpensive Restaurant Meal,25,Dining Out
+Miami,Mid-range Restaurant Meal for 2,100,Dining Out
+Miami,McMeal at McDonalds,12,Dining Out
+Miami,Regular Cappuccino,4.89,Dining Out
+Miami,Milk (1 gallon),4.33,Grocery
+Miami,Eggs (12),4.09,Grocery
+Miami,Local Cheese (1 lb),6.07,Meat & Cheese
+Miami,Chicken Fillets (1 lb),5.3,Meat & Cheese
+Miami,Beef Round (1 lb),7.25,Meat & Cheese
+Miami,Mid-Range Wine,13,Alcohol & Cigarette
+Miami,Domestic Beer (0.5 L),2.03,Alcohol & Cigarette
+Miami,Imported Beer (12 oz),2.53,Alcohol & Cigarette
+Miami,Marlboro (20 Pack),9.45,Alcohol & Cigarette
+Miami,Monthly Transit Pass,113.75,Monthly Cost
+Miami,Gasoline (13.2 gallons),46.07,Monthly Cost
+Miami,Volkswagen Golf 1.4,35000,Own Property
+Miami,Toyota Corolla Sedan,24955.19,Own Property
+Miami,Internet (60 Mbps or More),62.46,Monthly Cost
+Miami,Monthly Gym Fee (1 Adult),75.53,Monthly Cost
+Miami,Levis 501 Jeans,48.29,Clothing
+Miami,Summer Dress in a Chain Store,51,Clothing
+Miami,Nike Running Shoes,80.75,Clothing
+Miami,Men Leather Business Shoes,98.33,Clothing
+Miami,1B Apt in City Centre,2773.75,Rent
+Miami,1B Apt Outside of Centre,2113.76,Rent
+Miami,3B Apt in City Centre,5358.34,Rent
+Miami,3B Apt in Outside of Centre,3765.09,Rent
+Miami,750 sq ft Apt in City Centre,443535,Own Property
+Miami,750 sq ft Apt Outside of Centre,272700,Own Property
+San Jose,Inexpensive Restaurant Meal,20,Dining Out
+San Jose,Mid-range Restaurant Meal for 2,100,Dining Out
+San Jose,McMeal at McDonalds,12,Dining Out
+San Jose,Regular Cappuccino,5.95,Dining Out
+San Jose,Milk (1 gallon),5.07,Grocery
+San Jose,Eggs (12),5.17,Grocery
+San Jose,Local Cheese (1 lb),6.9,Meat & Cheese
+San Jose,Chicken Fillets (1 lb),6.12,Meat & Cheese
+San Jose,Beef Round (1 lb),8.08,Meat & Cheese
+San Jose,Mid-Range Wine,15,Alcohol & Cigarette
+San Jose,Domestic Beer (0.5 L),1.95,Alcohol & Cigarette
+San Jose,Imported Beer (12 oz),2.99,Alcohol & Cigarette
+San Jose,Marlboro (20 Pack),11,Alcohol & Cigarette
+San Jose,Monthly Transit Pass,90,Monthly Cost
+San Jose,Gasoline (13.2 gallons),64.02,Monthly Cost
+San Jose,Volkswagen Golf 1.4,30000,Own Property
+San Jose,Toyota Corolla Sedan,26743.53,Own Property
+San Jose,Internet (60 Mbps or More),81.84,Monthly Cost
+San Jose,Monthly Gym Fee (1 Adult),99.83,Monthly Cost
+San Jose,Levis 501 Jeans,51.98,Clothing
+San Jose,Summer Dress in a Chain Store,42.64,Clothing
+San Jose,Nike Running Shoes,83.19,Clothing
+San Jose,Men Leather Business Shoes,118.75,Clothing
+San Jose,1B Apt in City Centre,2923.95,Rent
+San Jose,1B Apt Outside of Centre,2555.26,Rent
+San Jose,3B Apt in City Centre,5200,Rent
+San Jose,3B Apt in Outside of Centre,4142.22,Rent
+San Jose,750 sq ft Apt in City Centre,1102845,Own Property
+San Jose,750 sq ft Apt Outside of Centre,802027.5,Own Property
+Phoenix,Inexpensive Restaurant Meal,19.99,Dining Out
+Phoenix,Mid-range Restaurant Meal for 2,80,Dining Out
+Phoenix,McMeal at McDonalds,11,Dining Out
+Phoenix,Regular Cappuccino,5.3,Dining Out
+Phoenix,Milk (1 gallon),3.43,Grocery
+Phoenix,Eggs (12),3.62,Grocery
+Phoenix,Local Cheese (1 lb),4.91,Meat & Cheese
+Phoenix,Chicken Fillets (1 lb),4.47,Meat & Cheese
+Phoenix,Beef Round (1 lb),6.43,Meat & Cheese
+Phoenix,Mid-Range Wine,15,Alcohol & Cigarette
+Phoenix,Domestic Beer (0.5 L),2.09,Alcohol & Cigarette
+Phoenix,Imported Beer (12 oz),4.51,Alcohol & Cigarette
+Phoenix,Marlboro (20 Pack),9,Alcohol & Cigarette
+Phoenix,Monthly Transit Pass,55,Monthly Cost
+Phoenix,Gasoline (13.2 gallons),53.46,Monthly Cost
+Phoenix,Volkswagen Golf 1.4,30000,Own Property
+Phoenix,Toyota Corolla Sedan,27595.23,Own Property
+Phoenix,Internet (60 Mbps or More),68.91,Monthly Cost
+Phoenix,Monthly Gym Fee (1 Adult),26.62,Monthly Cost
+Phoenix,Levis 501 Jeans,46.67,Clothing
+Phoenix,Summer Dress in a Chain Store,39.44,Clothing
+Phoenix,Nike Running Shoes,86.32,Clothing
+Phoenix,Men Leather Business Shoes,109.63,Clothing
+Phoenix,1B Apt in City Centre,1569.22,Rent
+Phoenix,1B Apt Outside of Centre,1391.93,Rent
+Phoenix,3B Apt in City Centre,2677.23,Rent
+Phoenix,3B Apt in Outside of Centre,2335.29,Rent
+Phoenix,750 sq ft Apt in City Centre,239610,Own Property
+Phoenix,750 sq ft Apt Outside of Centre,201382.5,Own Property
+Detroit,Inexpensive Restaurant Meal,15.5,Dining Out
+Detroit,Mid-range Restaurant Meal for 2,70,Dining Out
+Detroit,McMeal at McDonalds,9.93,Dining Out
+Detroit,Regular Cappuccino,4.75,Dining Out
+Detroit,Milk (1 gallon),3.48,Grocery
+Detroit,Eggs (12),3.18,Grocery
+Detroit,Local Cheese (1 lb),6.14,Meat & Cheese
+Detroit,Chicken Fillets (1 lb),6.14,Meat & Cheese
+Detroit,Beef Round (1 lb),10.5,Meat & Cheese
+Detroit,Mid-Range Wine,10,Alcohol & Cigarette
+Detroit,Domestic Beer (0.5 L),1.86,Alcohol & Cigarette
+Detroit,Imported Beer (12 oz),2.5,Alcohol & Cigarette
+Detroit,Marlboro (20 Pack),9,Alcohol & Cigarette
+Detroit,Monthly Transit Pass,66,Monthly Cost
+Detroit,Gasoline (13.2 gallons),45.54,Monthly Cost
+Detroit,Volkswagen Golf 1.4,35699.74,Own Property
+Detroit,Toyota Corolla Sedan,24119.94,Own Property
+Detroit,Internet (60 Mbps or More),59,Monthly Cost
+Detroit,Monthly Gym Fee (1 Adult),55,Monthly Cost
+Detroit,Levis 501 Jeans,47.5,Clothing
+Detroit,Summer Dress in a Chain Store,38.75,Clothing
+Detroit,Nike Running Shoes,77.5,Clothing
+Detroit,Men Leather Business Shoes,95,Clothing
+Detroit,1B Apt in City Centre,1414.29,Rent
+Detroit,1B Apt Outside of Centre,1026.33,Rent
+Detroit,3B Apt in City Centre,3333.33,Rent
+Detroit,3B Apt in Outside of Centre,1658.33,Rent
+Detroit,750 sq ft Apt in City Centre,74377.5,Own Property
+Detroit,750 sq ft Apt Outside of Centre,68122.5,Own Property
+San Diego,Inexpensive Restaurant Meal,21.5,Dining Out
+San Diego,Mid-range Restaurant Meal for 2,80,Dining Out
+San Diego,McMeal at McDonalds,12,Dining Out
+San Diego,Regular Cappuccino,5.51,Dining Out
+San Diego,Milk (1 gallon),4.54,Grocery
+San Diego,Eggs (12),4.19,Grocery
+San Diego,Local Cheese (1 lb),6.33,Meat & Cheese
+San Diego,Chicken Fillets (1 lb),6.63,Meat & Cheese
+San Diego,Beef Round (1 lb),8.64,Meat & Cheese
+San Diego,Mid-Range Wine,15,Alcohol & Cigarette
+San Diego,Domestic Beer (0.5 L),1.99,Alcohol & Cigarette
+San Diego,Imported Beer (12 oz),3,Alcohol & Cigarette
+San Diego,Marlboro (20 Pack),10.53,Alcohol & Cigarette
+San Diego,Monthly Transit Pass,72,Monthly Cost
+San Diego,Gasoline (13.2 gallons),67.85,Monthly Cost
+San Diego,Volkswagen Golf 1.4,30000,Own Property
+San Diego,Toyota Corolla Sedan,26461.48,Own Property
+San Diego,Internet (60 Mbps or More),73.26,Monthly Cost
+San Diego,Monthly Gym Fee (1 Adult),89.62,Monthly Cost
+San Diego,Levis 501 Jeans,55.93,Clothing
+San Diego,Summer Dress in a Chain Store,54.11,Clothing
+San Diego,Nike Running Shoes,88.05,Clothing
+San Diego,Men Leather Business Shoes,119.17,Clothing
+San Diego,1B Apt in City Centre,2790.52,Rent
+San Diego,1B Apt Outside of Centre,2391.41,Rent
+San Diego,3B Apt in City Centre,4876.47,Rent
+San Diego,3B Apt in Outside of Centre,4200,Rent
+San Diego,750 sq ft Apt in City Centre,576772.5,Own Property
+San Diego,750 sq ft Apt Outside of Centre,453187.5,Own Property
+Denver,Inexpensive Restaurant Meal,20,Dining Out
+Denver,Mid-range Restaurant Meal for 2,80,Dining Out
+Denver,McMeal at McDonalds,11.25,Dining Out
+Denver,Regular Cappuccino,5.72,Dining Out
+Denver,Milk (1 gallon),4.18,Grocery
+Denver,Eggs (12),4.27,Grocery
+Denver,Local Cheese (1 lb),6.02,Meat & Cheese
+Denver,Chicken Fillets (1 lb),6.12,Meat & Cheese
+Denver,Beef Round (1 lb),7.86,Meat & Cheese
+Denver,Mid-Range Wine,16,Alcohol & Cigarette
+Denver,Domestic Beer (0.5 L),2.06,Alcohol & Cigarette
+Denver,Imported Beer (12 oz),3.88,Alcohol & Cigarette
+Denver,Marlboro (20 Pack),10,Alcohol & Cigarette
+Denver,Monthly Transit Pass,100,Monthly Cost
+Denver,Gasoline (13.2 gallons),45.01,Monthly Cost
+Denver,Volkswagen Golf 1.4,36029.12,Own Property
+Denver,Toyota Corolla Sedan,27734.72,Own Property
+Denver,Internet (60 Mbps or More),72.42,Monthly Cost
+Denver,Monthly Gym Fee (1 Adult),67,Monthly Cost
+Denver,Levis 501 Jeans,52.86,Clothing
+Denver,Summer Dress in a Chain Store,47.78,Clothing
+Denver,Nike Running Shoes,86.46,Clothing
+Denver,Men Leather Business Shoes,106.47,Clothing
+Denver,1B Apt in City Centre,2127.73,Rent
+Denver,1B Apt Outside of Centre,1708.1,Rent
+Denver,3B Apt in City Centre,3629.92,Rent
+Denver,3B Apt in Outside of Centre,3013.4,Rent
+Denver,750 sq ft Apt in City Centre,315802.5,Own Property
+Denver,750 sq ft Apt Outside of Centre,273555,Own Property
+Minneapolis,Inexpensive Restaurant Meal,20,Dining Out
+Minneapolis,Mid-range Restaurant Meal for 2,77.5,Dining Out
+Minneapolis,McMeal at McDonalds,10,Dining Out
+Minneapolis,Regular Cappuccino,5.68,Dining Out
+Minneapolis,Milk (1 gallon),3.7,Grocery
+Minneapolis,Eggs (12),3.62,Grocery
+Minneapolis,Local Cheese (1 lb),5.33,Meat & Cheese
+Minneapolis,Chicken Fillets (1 lb),6.4,Meat & Cheese
+Minneapolis,Beef Round (1 lb),7.58,Meat & Cheese
+Minneapolis,Mid-Range Wine,15,Alcohol & Cigarette
+Minneapolis,Domestic Beer (0.5 L),2.13,Alcohol & Cigarette
+Minneapolis,Imported Beer (12 oz),3.91,Alcohol & Cigarette
+Minneapolis,Marlboro (20 Pack),10,Alcohol & Cigarette
+Minneapolis,Monthly Transit Pass,90,Monthly Cost
+Minneapolis,Gasoline (13.2 gallons),45.54,Monthly Cost
+Minneapolis,Volkswagen Golf 1.4,32946,Own Property
+Minneapolis,Toyota Corolla Sedan,25926.47,Own Property
+Minneapolis,Internet (60 Mbps or More),65.32,Monthly Cost
+Minneapolis,Monthly Gym Fee (1 Adult),30,Monthly Cost
+Minneapolis,Levis 501 Jeans,60.58,Clothing
+Minneapolis,Summer Dress in a Chain Store,45,Clothing
+Minneapolis,Nike Running Shoes,91,Clothing
+Minneapolis,Men Leather Business Shoes,121.25,Clothing
+Minneapolis,1B Apt in City Centre,1629.62,Rent
+Minneapolis,1B Apt Outside of Centre,1197.69,Rent
+Minneapolis,3B Apt in City Centre,2657.73,Rent
+Minneapolis,3B Apt in Outside of Centre,1858.89,Rent
+Minneapolis,750 sq ft Apt in City Centre,228067.5,Own Property
+Minneapolis,750 sq ft Apt Outside of Centre,175312.5,Own Property
+Baltimore,Inexpensive Restaurant Meal,17,Dining Out
+Baltimore,Mid-range Restaurant Meal for 2,77.5,Dining Out
+Baltimore,McMeal at McDonalds,9,Dining Out
+Baltimore,Regular Cappuccino,4.72,Dining Out
+Baltimore,Milk (1 gallon),3.4,Grocery
+Baltimore,Eggs (12),4.56,Grocery
+Baltimore,Local Cheese (1 lb),4.13,Meat & Cheese
+Baltimore,Chicken Fillets (1 lb),3.9,Meat & Cheese
+Baltimore,Beef Round (1 lb),6.1,Meat & Cheese
+Baltimore,Mid-Range Wine,11.87,Alcohol & Cigarette
+Baltimore,Domestic Beer (0.5 L),1.73,Alcohol & Cigarette
+Baltimore,Imported Beer (12 oz),4.21,Alcohol & Cigarette
+Baltimore,Marlboro (20 Pack),12,Alcohol & Cigarette
+Baltimore,Monthly Transit Pass,77,Monthly Cost
+Baltimore,Gasoline (13.2 gallons),45.54,Monthly Cost
+Baltimore,Volkswagen Golf 1.4,25300,Own Property
+Baltimore,Toyota Corolla Sedan,29083.88,Own Property
+Baltimore,Internet (60 Mbps or More),79.08,Monthly Cost
+Baltimore,Monthly Gym Fee (1 Adult),74.67,Monthly Cost
+Baltimore,Levis 501 Jeans,40.12,Clothing
+Baltimore,Summer Dress in a Chain Store,29,Clothing
+Baltimore,Nike Running Shoes,74.99,Clothing
+Baltimore,Men Leather Business Shoes,96.67,Clothing
+Baltimore,1B Apt in City Centre,1736.36,Rent
+Baltimore,1B Apt Outside of Centre,1399.38,Rent
+Baltimore,3B Apt in City Centre,3333.33,Rent
+Baltimore,3B Apt in Outside of Centre,2383.33,Rent
+Baltimore,750 sq ft Apt in City Centre,145710,Own Property
+Baltimore,750 sq ft Apt Outside of Centre,125617.5,Own Property
+Riverside,Inexpensive Restaurant Meal,18,Dining Out
+Riverside,Mid-range Restaurant Meal for 2,80,Dining Out
+Riverside,McMeal at McDonalds,12,Dining Out
+Riverside,Regular Cappuccino,5.2,Dining Out
+Riverside,Milk (1 gallon),3.8,Grocery
+Riverside,Eggs (12),4,Grocery
+Riverside,Local Cheese (1 lb),5.04,Meat & Cheese
+Riverside,Chicken Fillets (1 lb),5.7,Meat & Cheese
+Riverside,Beef Round (1 lb),5.66,Meat & Cheese
+Riverside,Mid-Range Wine,9,Alcohol & Cigarette
+Riverside,Domestic Beer (0.5 L),1.73,Alcohol & Cigarette
+Riverside,Imported Beer (12 oz),3,Alcohol & Cigarette
+Riverside,Marlboro (20 Pack),10.53,Alcohol & Cigarette
+Riverside,Monthly Transit Pass,60,Monthly Cost
+Riverside,Gasoline (13.2 gallons),63.49,Monthly Cost
+Riverside,Volkswagen Golf 1.4,30000,Own Property
+Riverside,Toyota Corolla Sedan,25099.32,Own Property
+Riverside,Internet (60 Mbps or More),63.86,Monthly Cost
+Riverside,Monthly Gym Fee (1 Adult),30,Monthly Cost
+Riverside,Levis 501 Jeans,46.67,Clothing
+Riverside,Summer Dress in a Chain Store,32.5,Clothing
+Riverside,Nike Running Shoes,74,Clothing
+Riverside,Men Leather Business Shoes,85,Clothing
+Riverside,1B Apt in City Centre,1885.71,Rent
+Riverside,1B Apt Outside of Centre,1640,Rent
+Riverside,3B Apt in City Centre,3041.67,Rent
+Riverside,3B Apt in Outside of Centre,2560,Rent
+Riverside,750 sq ft Apt in City Centre,290002.5,Own Property
+Riverside,750 sq ft Apt Outside of Centre,290002.5,Own Property
+Charlotte,Inexpensive Restaurant Meal,18,Dining Out
+Charlotte,Mid-range Restaurant Meal for 2,80,Dining Out
+Charlotte,McMeal at McDonalds,11,Dining Out
+Charlotte,Regular Cappuccino,4.98,Dining Out
+Charlotte,Milk (1 gallon),3.98,Grocery
+Charlotte,Eggs (12),3.94,Grocery
+Charlotte,Local Cheese (1 lb),5.68,Meat & Cheese
+Charlotte,Chicken Fillets (1 lb),6.38,Meat & Cheese
+Charlotte,Beef Round (1 lb),10.05,Meat & Cheese
+Charlotte,Mid-Range Wine,15,Alcohol & Cigarette
+Charlotte,Domestic Beer (0.5 L),1.73,Alcohol & Cigarette
+Charlotte,Imported Beer (12 oz),3.88,Alcohol & Cigarette
+Charlotte,Marlboro (20 Pack),8,Alcohol & Cigarette
+Charlotte,Monthly Transit Pass,120,Monthly Cost
+Charlotte,Gasoline (13.2 gallons),42.5,Monthly Cost
+Charlotte,Volkswagen Golf 1.4,34000,Own Property
+Charlotte,Toyota Corolla Sedan,24893.65,Own Property
+Charlotte,Internet (60 Mbps or More),72.78,Monthly Cost
+Charlotte,Monthly Gym Fee (1 Adult),29.8,Monthly Cost
+Charlotte,Levis 501 Jeans,59.81,Clothing
+Charlotte,Summer Dress in a Chain Store,46.8,Clothing
+Charlotte,Nike Running Shoes,107.3,Clothing
+Charlotte,Men Leather Business Shoes,129.87,Clothing
+Charlotte,1B Apt in City Centre,1983.33,Rent
+Charlotte,1B Apt Outside of Centre,1756.31,Rent
+Charlotte,3B Apt in City Centre,4328.33,Rent
+Charlotte,3B Apt in Outside of Centre,2728.08,Rent
+Charlotte,750 sq ft Apt in City Centre,306885,Own Property
+Charlotte,750 sq ft Apt Outside of Centre,192945,Own Property
+Austin,Inexpensive Restaurant Meal,19,Dining Out
+Austin,Mid-range Restaurant Meal for 2,87,Dining Out
+Austin,McMeal at McDonalds,10,Dining Out
+Austin,Regular Cappuccino,5.42,Dining Out
+Austin,Milk (1 gallon),4.02,Grocery
+Austin,Eggs (12),3.48,Grocery
+Austin,Local Cheese (1 lb),6.32,Meat & Cheese
+Austin,Chicken Fillets (1 lb),5.42,Meat & Cheese
+Austin,Beef Round (1 lb),6.83,Meat & Cheese
+Austin,Mid-Range Wine,15,Alcohol & Cigarette
+Austin,Domestic Beer (0.5 L),2.07,Alcohol & Cigarette
+Austin,Imported Beer (12 oz),3.68,Alcohol & Cigarette
+Austin,Marlboro (20 Pack),8,Alcohol & Cigarette
+Austin,Monthly Transit Pass,46.96,Monthly Cost
+Austin,Gasoline (13.2 gallons),40.52,Monthly Cost
+Austin,Volkswagen Golf 1.4,35639.19,Own Property
+Austin,Toyota Corolla Sedan,26102.62,Own Property
+Austin,Internet (60 Mbps or More),66.94,Monthly Cost
+Austin,Monthly Gym Fee (1 Adult),57.67,Monthly Cost
+Austin,Levis 501 Jeans,63.57,Clothing
+Austin,Summer Dress in a Chain Store,56.76,Clothing
+Austin,Nike Running Shoes,100.11,Clothing
+Austin,Men Leather Business Shoes,137.84,Clothing
+Austin,1B Apt in City Centre,2422.59,Rent
+Austin,1B Apt Outside of Centre,1583.87,Rent
+Austin,3B Apt in City Centre,4980.34,Rent
+Austin,3B Apt in Outside of Centre,2730.77,Rent
+Austin,750 sq ft Apt in City Centre,558480,Own Property
+Austin,750 sq ft Apt Outside of Centre,268372.5,Own Property
+Tampa,Inexpensive Restaurant Meal,20,Dining Out
+Tampa,Mid-range Restaurant Meal for 2,95,Dining Out
+Tampa,McMeal at McDonalds,11.1,Dining Out
+Tampa,Regular Cappuccino,5.07,Dining Out
+Tampa,Milk (1 gallon),4.35,Grocery
+Tampa,Eggs (12),4.55,Grocery
+Tampa,Local Cheese (1 lb),9.43,Meat & Cheese
+Tampa,Chicken Fillets (1 lb),5.14,Meat & Cheese
+Tampa,Beef Round (1 lb),8.14,Meat & Cheese
+Tampa,Mid-Range Wine,15,Alcohol & Cigarette
+Tampa,Domestic Beer (0.5 L),2.29,Alcohol & Cigarette
+Tampa,Imported Beer (12 oz),3.56,Alcohol & Cigarette
+Tampa,Marlboro (20 Pack),8.85,Alcohol & Cigarette
+Tampa,Monthly Transit Pass,70.5,Monthly Cost
+Tampa,Gasoline (13.2 gallons),46.46,Monthly Cost
+Tampa,Volkswagen Golf 1.4,36050,Own Property
+Tampa,Toyota Corolla Sedan,27359.68,Own Property
+Tampa,Internet (60 Mbps or More),73.95,Monthly Cost
+Tampa,Monthly Gym Fee (1 Adult),30.83,Monthly Cost
+Tampa,Levis 501 Jeans,55,Clothing
+Tampa,Summer Dress in a Chain Store,44.9,Clothing
+Tampa,Nike Running Shoes,104.59,Clothing
+Tampa,Men Leather Business Shoes,154.54,Clothing
+Tampa,1B Apt in City Centre,2006.14,Rent
+Tampa,1B Apt Outside of Centre,1622.38,Rent
+Tampa,3B Apt in City Centre,3561.9,Rent
+Tampa,3B Apt in Outside of Centre,2630.95,Rent
+Tampa,750 sq ft Apt in City Centre,248310,Own Property
+Tampa,750 sq ft Apt Outside of Centre,164430,Own Property
+St. Louis,Inexpensive Restaurant Meal,20,Dining Out
+St. Louis,Mid-range Restaurant Meal for 2,60,Dining Out
+St. Louis,McMeal at McDonalds,10,Dining Out
+St. Louis,Regular Cappuccino,4.59,Dining Out
+St. Louis,Milk (1 gallon),3.38,Grocery
+St. Louis,Eggs (12),2.52,Grocery
+St. Louis,Local Cheese (1 lb),6.3,Meat & Cheese
+St. Louis,Chicken Fillets (1 lb),4.89,Meat & Cheese
+St. Louis,Beef Round (1 lb),7.13,Meat & Cheese
+St. Louis,Mid-Range Wine,15,Alcohol & Cigarette
+St. Louis,Domestic Beer (0.5 L),2.13,Alcohol & Cigarette
+St. Louis,Imported Beer (12 oz),3.99,Alcohol & Cigarette
+St. Louis,Marlboro (20 Pack),7,Alcohol & Cigarette
+St. Louis,Monthly Transit Pass,78,Monthly Cost
+St. Louis,Gasoline (13.2 gallons),42.24,Monthly Cost
+St. Louis,Volkswagen Golf 1.4,35000,Own Property
+St. Louis,Toyota Corolla Sedan,24763.66,Own Property
+St. Louis,Internet (60 Mbps or More),63.29,Monthly Cost
+St. Louis,Monthly Gym Fee (1 Adult),28.33,Monthly Cost
+St. Louis,Levis 501 Jeans,52.73,Clothing
+St. Louis,Summer Dress in a Chain Store,46.67,Clothing
+St. Louis,Nike Running Shoes,79.18,Clothing
+St. Louis,Men Leather Business Shoes,111.12,Clothing
+St. Louis,1B Apt in City Centre,1341.1,Rent
+St. Louis,1B Apt Outside of Centre,1150.25,Rent
+St. Louis,3B Apt in City Centre,2600,Rent
+St. Louis,3B Apt in Outside of Centre,2105.56,Rent
+St. Louis,750 sq ft Apt in City Centre,246247.5,Own Property
+St. Louis,750 sq ft Apt Outside of Centre,203122.5,Own Property
+Portland,Inexpensive Restaurant Meal,16.5,Dining Out
+Portland,Mid-range Restaurant Meal for 2,95,Dining Out
+Portland,McMeal at McDonalds,10,Dining Out
+Portland,Regular Cappuccino,5.23,Dining Out
+Portland,Milk (1 gallon),4.04,Grocery
+Portland,Eggs (12),4.19,Grocery
+Portland,Local Cheese (1 lb),6.91,Meat & Cheese
+Portland,Chicken Fillets (1 lb),6.2,Meat & Cheese
+Portland,Beef Round (1 lb),8.7,Meat & Cheese
+Portland,Mid-Range Wine,15,Alcohol & Cigarette
+Portland,Domestic Beer (0.5 L),2.11,Alcohol & Cigarette
+Portland,Imported Beer (12 oz),3.62,Alcohol & Cigarette
+Portland,Marlboro (20 Pack),11,Alcohol & Cigarette
+Portland,Monthly Transit Pass,100,Monthly Cost
+Portland,Gasoline (13.2 gallons),56.23,Monthly Cost
+Portland,Volkswagen Golf 1.4,31000,Own Property
+Portland,Toyota Corolla Sedan,26867.4,Own Property
+Portland,Internet (60 Mbps or More),73.5,Monthly Cost
+Portland,Monthly Gym Fee (1 Adult),43.5,Monthly Cost
+Portland,Levis 501 Jeans,58.6,Clothing
+Portland,Summer Dress in a Chain Store,48.91,Clothing
+Portland,Nike Running Shoes,103.67,Clothing
+Portland,Men Leather Business Shoes,117.67,Clothing
+Portland,1B Apt in City Centre,1786.54,Rent
+Portland,1B Apt Outside of Centre,1476.92,Rent
+Portland,3B Apt in City Centre,3242.27,Rent
+Portland,3B Apt in Outside of Centre,2538.1,Rent
+Portland,750 sq ft Apt in City Centre,292275,Own Property
+Portland,750 sq ft Apt Outside of Centre,246217.5,Own Property
+Orlando,Inexpensive Restaurant Meal,25,Dining Out
+Orlando,Mid-range Restaurant Meal for 2,85,Dining Out
+Orlando,McMeal at McDonalds,10,Dining Out
+Orlando,Regular Cappuccino,4.91,Dining Out
+Orlando,Milk (1 gallon),4.45,Grocery
+Orlando,Eggs (12),3.92,Grocery
+Orlando,Local Cheese (1 lb),5.13,Meat & Cheese
+Orlando,Chicken Fillets (1 lb),5.25,Meat & Cheese
+Orlando,Beef Round (1 lb),6.65,Meat & Cheese
+Orlando,Mid-Range Wine,15,Alcohol & Cigarette
+Orlando,Domestic Beer (0.5 L),1.8,Alcohol & Cigarette
+Orlando,Imported Beer (12 oz),3.06,Alcohol & Cigarette
+Orlando,Marlboro (20 Pack),8,Alcohol & Cigarette
+Orlando,Monthly Transit Pass,50,Monthly Cost
+Orlando,Gasoline (13.2 gallons),45.41,Monthly Cost
+Orlando,Volkswagen Golf 1.4,26763,Own Property
+Orlando,Toyota Corolla Sedan,25182.79,Own Property
+Orlando,Internet (60 Mbps or More),74.42,Monthly Cost
+Orlando,Monthly Gym Fee (1 Adult),35,Monthly Cost
+Orlando,Levis 501 Jeans,46.71,Clothing
+Orlando,Summer Dress in a Chain Store,39.83,Clothing
+Orlando,Nike Running Shoes,80.41,Clothing
+Orlando,Men Leather Business Shoes,113.67,Clothing
+Orlando,1B Apt in City Centre,1901,Rent
+Orlando,1B Apt Outside of Centre,1740,Rent
+Orlando,3B Apt in City Centre,3126.25,Rent
+Orlando,3B Apt in Outside of Centre,2602.95,Rent
+Orlando,750 sq ft Apt in City Centre,213172.5,Own Property
+Orlando,750 sq ft Apt Outside of Centre,164010,Own Property
+Nashville,Inexpensive Restaurant Meal,18,Dining Out
+Nashville,Mid-range Restaurant Meal for 2,80,Dining Out
+Nashville,McMeal at McDonalds,10.25,Dining Out
+Nashville,Regular Cappuccino,5.16,Dining Out
+Nashville,Milk (1 gallon),4.28,Grocery
+Nashville,Eggs (12),2.95,Grocery
+Nashville,Local Cheese (1 lb),6.52,Meat & Cheese
+Nashville,Chicken Fillets (1 lb),6.64,Meat & Cheese
+Nashville,Beef Round (1 lb),7.62,Meat & Cheese
+Nashville,Mid-Range Wine,15,Alcohol & Cigarette
+Nashville,Domestic Beer (0.5 L),1.86,Alcohol & Cigarette
+Nashville,Imported Beer (12 oz),4.47,Alcohol & Cigarette
+Nashville,Marlboro (20 Pack),8,Alcohol & Cigarette
+Nashville,Monthly Transit Pass,70,Monthly Cost
+Nashville,Gasoline (13.2 gallons),43.43,Monthly Cost
+Nashville,Volkswagen Golf 1.4,30000,Own Property
+Nashville,Toyota Corolla Sedan,26347.89,Own Property
+Nashville,Internet (60 Mbps or More),76.06,Monthly Cost
+Nashville,Monthly Gym Fee (1 Adult),34.17,Monthly Cost
+Nashville,Levis 501 Jeans,54.18,Clothing
+Nashville,Summer Dress in a Chain Store,49.12,Clothing
+Nashville,Nike Running Shoes,94.27,Clothing
+Nashville,Men Leather Business Shoes,129.5,Clothing
+Nashville,1B Apt in City Centre,2065,Rent
+Nashville,1B Apt Outside of Centre,1582.19,Rent
+Nashville,3B Apt in City Centre,3773.53,Rent
+Nashville,3B Apt in Outside of Centre,2548.61,Rent
+Nashville,750 sq ft Apt in City Centre,250710,Own Property
+Nashville,750 sq ft Apt Outside of Centre,225000,Own Property
+Cincinnati,Inexpensive Restaurant Meal,13,Dining Out
+Cincinnati,Mid-range Restaurant Meal for 2,60,Dining Out
+Cincinnati,McMeal at McDonalds,8,Dining Out
+Cincinnati,Regular Cappuccino,4.54,Dining Out
+Cincinnati,Milk (1 gallon),3.02,Grocery
+Cincinnati,Eggs (12),2.69,Grocery
+Cincinnati,Local Cheese (1 lb),5.01,Meat & Cheese
+Cincinnati,Chicken Fillets (1 lb),5,Meat & Cheese
+Cincinnati,Beef Round (1 lb),6.81,Meat & Cheese
+Cincinnati,Mid-Range Wine,13.99,Alcohol & Cigarette
+Cincinnati,Domestic Beer (0.5 L),2.04,Alcohol & Cigarette
+Cincinnati,Imported Beer (12 oz),2.44,Alcohol & Cigarette
+Cincinnati,Marlboro (20 Pack),8.79,Alcohol & Cigarette
+Cincinnati,Monthly Transit Pass,80,Monthly Cost
+Cincinnati,Gasoline (13.2 gallons),45.01,Monthly Cost
+Cincinnati,Volkswagen Golf 1.4,35555.82,Own Property
+Cincinnati,Toyota Corolla Sedan,24484.08,Own Property
+Cincinnati,Internet (60 Mbps or More),61.73,Monthly Cost
+Cincinnati,Monthly Gym Fee (1 Adult),28.14,Monthly Cost
+Cincinnati,Levis 501 Jeans,44.08,Clothing
+Cincinnati,Summer Dress in a Chain Store,48.75,Clothing
+Cincinnati,Nike Running Shoes,96.11,Clothing
+Cincinnati,Men Leather Business Shoes,108.12,Clothing
+Cincinnati,1B Apt in City Centre,1393.33,Rent
+Cincinnati,1B Apt Outside of Centre,963.17,Rent
+Cincinnati,3B Apt in City Centre,2846.43,Rent
+Cincinnati,3B Apt in Outside of Centre,1439.3,Rent
+Cincinnati,750 sq ft Apt in City Centre,262740,Own Property
+Cincinnati,750 sq ft Apt Outside of Centre,201502.5,Own Property
+Indianapolis,Inexpensive Restaurant Meal,25,Dining Out
+Indianapolis,Mid-range Restaurant Meal for 2,80,Dining Out
+Indianapolis,McMeal at McDonalds,11,Dining Out
+Indianapolis,Regular Cappuccino,5.03,Dining Out
+Indianapolis,Milk (1 gallon),3.32,Grocery
+Indianapolis,Eggs (12),2.44,Grocery
+Indianapolis,Local Cheese (1 lb),5,Meat & Cheese
+Indianapolis,Chicken Fillets (1 lb),5.24,Meat & Cheese
+Indianapolis,Beef Round (1 lb),6.99,Meat & Cheese
+Indianapolis,Mid-Range Wine,14,Alcohol & Cigarette
+Indianapolis,Domestic Beer (0.5 L),1.73,Alcohol & Cigarette
+Indianapolis,Imported Beer (12 oz),2.56,Alcohol & Cigarette
+Indianapolis,Marlboro (20 Pack),8,Alcohol & Cigarette
+Indianapolis,Monthly Transit Pass,95,Monthly Cost
+Indianapolis,Gasoline (13.2 gallons),48.18,Monthly Cost
+Indianapolis,Volkswagen Golf 1.4,35000,Own Property
+Indianapolis,Toyota Corolla Sedan,24944.15,Own Property
+Indianapolis,Internet (60 Mbps or More),81.82,Monthly Cost
+Indianapolis,Monthly Gym Fee (1 Adult),47.25,Monthly Cost
+Indianapolis,Levis 501 Jeans,61.57,Clothing
+Indianapolis,Summer Dress in a Chain Store,52.25,Clothing
+Indianapolis,Nike Running Shoes,94,Clothing
+Indianapolis,Men Leather Business Shoes,130.67,Clothing
+Indianapolis,1B Apt in City Centre,1615.56,Rent
+Indianapolis,1B Apt Outside of Centre,1148.33,Rent
+Indianapolis,3B Apt in City Centre,2878.57,Rent
+Indianapolis,3B Apt in Outside of Centre,2171.43,Rent
+Indianapolis,750 sq ft Apt in City Centre,150202.5,Own Property
+Indianapolis,750 sq ft Apt Outside of Centre,124492.5,Own Property
+Pittsburgh,Inexpensive Restaurant Meal,20,Dining Out
+Pittsburgh,Mid-range Restaurant Meal for 2,62.5,Dining Out
+Pittsburgh,McMeal at McDonalds,10,Dining Out
+Pittsburgh,Regular Cappuccino,4.83,Dining Out
+Pittsburgh,Milk (1 gallon),4.45,Grocery
+Pittsburgh,Eggs (12),3.09,Grocery
+Pittsburgh,Local Cheese (1 lb),5.73,Meat & Cheese
+Pittsburgh,Chicken Fillets (1 lb),5.72,Meat & Cheese
+Pittsburgh,Beef Round (1 lb),6.33,Meat & Cheese
+Pittsburgh,Mid-Range Wine,18,Alcohol & Cigarette
+Pittsburgh,Domestic Beer (0.5 L),1.73,Alcohol & Cigarette
+Pittsburgh,Imported Beer (12 oz),4.25,Alcohol & Cigarette
+Pittsburgh,Marlboro (20 Pack),10.82,Alcohol & Cigarette
+Pittsburgh,Monthly Transit Pass,97.5,Monthly Cost
+Pittsburgh,Gasoline (13.2 gallons),51.22,Monthly Cost
+Pittsburgh,Volkswagen Golf 1.4,30000,Own Property
+Pittsburgh,Toyota Corolla Sedan,25953.54,Own Property
+Pittsburgh,Internet (60 Mbps or More),67.75,Monthly Cost
+Pittsburgh,Monthly Gym Fee (1 Adult),61.67,Monthly Cost
+Pittsburgh,Levis 501 Jeans,47.14,Clothing
+Pittsburgh,Summer Dress in a Chain Store,52.5,Clothing
+Pittsburgh,Nike Running Shoes,79.44,Clothing
+Pittsburgh,Men Leather Business Shoes,98.17,Clothing
+Pittsburgh,1B Apt in City Centre,1730,Rent
+Pittsburgh,1B Apt Outside of Centre,1125.67,Rent
+Pittsburgh,3B Apt in City Centre,2775.56,Rent
+Pittsburgh,3B Apt in Outside of Centre,1789.17,Rent
+Pittsburgh,750 sq ft Apt in City Centre,184725,Own Property
+Pittsburgh,750 sq ft Apt Outside of Centre,152017.5,Own Property
+Atlanta,Fruits (1 lb),2.09,Grocery
+Austin,Fruits (1 lb),1.78,Grocery
+Baltimore,Fruits (1 lb),1.56,Grocery
+Boston,Fruits (1 lb),2.13,Grocery
+Charlotte,Fruits (1 lb),2.24,Grocery
+Chicago,Fruits (1 lb),1.9,Grocery
+Cincinnati,Fruits (1 lb),1.47,Grocery
+Dallas,Fruits (1 lb),1.69,Grocery
+Denver,Fruits (1 lb),1.86,Grocery
+Detroit,Fruits (1 lb),1.6,Grocery
+Houston,Fruits (1 lb),1.4,Grocery
+Indianapolis,Fruits (1 lb),1.8,Grocery
+Los Angeles,Fruits (1 lb),1.72,Grocery
+Miami,Fruits (1 lb),1.9,Grocery
+Minneapolis,Fruits (1 lb),1.93,Grocery
+Nashville,Fruits (1 lb),1.94,Grocery
+New York,Fruits (1 lb),2.2,Grocery
+Orlando,Fruits (1 lb),1.98,Grocery
+Philadelphia,Fruits (1 lb),1.64,Grocery
+Phoenix,Fruits (1 lb),1.53,Grocery
+Pittsburgh,Fruits (1 lb),2.32,Grocery
+Portland,Fruits (1 lb),1.93,Grocery
+Riverside,Fruits (1 lb),1.44,Grocery
+San Diego,Fruits (1 lb),1.48,Grocery
+San Francisco,Fruits (1 lb),2.32,Grocery
+San Jose,Fruits (1 lb),1.85,Grocery
+Seattle,Fruits (1 lb),1.82,Grocery
+St. Louis,Fruits (1 lb),1.79,Grocery
+Tampa,Fruits (1 lb),2.12,Grocery
+Washington DC,Fruits (1 lb),1.91,Grocery
+Atlanta,Vegetables (1 lb),1.9,Grocery
+Austin,Vegetables (1 lb),1.39,Grocery
+Baltimore,Vegetables (1 lb),1.51,Grocery
+Boston,Vegetables (1 lb),2.12,Grocery
+Charlotte,Vegetables (1 lb),1.74,Grocery
+Chicago,Vegetables (1 lb),1.59,Grocery
+Cincinnati,Vegetables (1 lb),1.55,Grocery
+Dallas,Vegetables (1 lb),1.65,Grocery
+Denver,Vegetables (1 lb),1.71,Grocery
+Detroit,Vegetables (1 lb),1.66,Grocery
+Houston,Vegetables (1 lb),1.17,Grocery
+Indianapolis,Vegetables (1 lb),1.55,Grocery
+Los Angeles,Vegetables (1 lb),1.6,Grocery
+Miami,Vegetables (1 lb),1.61,Grocery
+Minneapolis,Vegetables (1 lb),1.99,Grocery
+Nashville,Vegetables (1 lb),1.74,Grocery
+New York,Vegetables (1 lb),2.14,Grocery
+Orlando,Vegetables (1 lb),1.5,Grocery
+Philadelphia,Vegetables (1 lb),1.82,Grocery
+Phoenix,Vegetables (1 lb),1.55,Grocery
+Pittsburgh,Vegetables (1 lb),2.18,Grocery
+Portland,Vegetables (1 lb),1.73,Grocery
+Riverside,Vegetables (1 lb),1.51,Grocery
+San Diego,Vegetables (1 lb),1.52,Grocery
+San Francisco,Vegetables (1 lb),2.31,Grocery
+San Jose,Vegetables (1 lb),2.25,Grocery
+Seattle,Vegetables (1 lb),1.9,Grocery
+St. Louis,Vegetables (1 lb),1.65,Grocery
+Tampa,Vegetables (1 lb),1.99,Grocery
+Washington DC,Vegetables (1 lb),1.9,Grocery
