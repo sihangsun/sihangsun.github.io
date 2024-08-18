@@ -75,6 +75,14 @@ h1 {
     color: #E7F1F2;
 }
 
+#text a:visited {
+    color: #E7F1F2;
+}
+
+#text a:active {
+    color: #E7F1F2; 
+}
+
 .legend-viz {
     flex: 1;
     /* background-color: orange; */
