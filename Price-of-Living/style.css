@@ -71,6 +71,10 @@ h1 {
     bottom: 25px;
 }
 
+#text a {
+    color: #E7F1F2;
+}
+
 .legend-viz {
     flex: 1;
     /* background-color: orange; */

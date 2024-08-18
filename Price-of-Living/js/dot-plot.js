@@ -87,7 +87,7 @@ d3.csv("./data/long_data_final.csv").then(dataset => {
             .attr("text-anchor", "middle")
             .attr("opacity", "0")
 
-        const formatPrice = d3.format("($.2f")
+        const formatPrice = d3.format("$,.1f")
 
         const prices = bounds.selectAll(".prices")
         .data(data)
@@ -113,7 +113,7 @@ d3.csv("./data/long_data_final.csv").then(dataset => {
         const xAxisGenerator = d3.axisBottom()
         .scale(xScale)
         .tickValues(d3.extent(data, xAccessor))
-        .tickFormat(d3.format("$.1f"));
+        .tickFormat(d3.format("$,.1f"));
     
         bounds.append("g")
         .call(xAxisGenerator)
