@@ -1,20 +1,1183 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sihang Portfolio</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* --- DESIGN SYSTEM VARIABLES --- */
+        :root {
+            --black: #1A1A1A;
+            --white: #FFFFFF;
+            --orange: #FF4F00;
+            --gray: #F3F4F6;
+            --grid-line: #1A1A1A; /* Solid Dark lines */
+            --border-width: 1px;
+            --sidebar-width: 220px;
+        }
+
+        html {
+            scroll-behavior: smooth; /* Native smooth scrolling fallback */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Inter', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+            background-color: var(--white);
+            color: var(--black);
+            line-height: 1.4;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        button { background: none; border: none; cursor: pointer; font-family: inherit; color: inherit; }
+        a { text-decoration: none; color: inherit; cursor: pointer; }
+        [onclick] { cursor: pointer; }
+        ul { list-style: none; }
+
+        /* --- UTILITIES --- */
+        .text-orange { color: var(--orange); }
+        .font-mono { font-family: 'Courier New', Courier, monospace; }
+        .uppercase { text-transform: uppercase; }
+        .hidden { display: none !important; }
+        
+        /* Animations */
+        @keyframes revealFromMask { 0% { transform: translateY(110%); } 100% { transform: translateY(0); } }
+        @keyframes flyInSwiss { 0% { opacity: 0; transform: translateY(60px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes slideUpBase { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        .reveal-element { opacity: 0; animation: slideUpBase 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        .mask-container { overflow: hidden; display: block; line-height: 0.95; padding-bottom: 0.2rem; }
+        .text-reveal { display: block; transform: translateY(110%); animation: revealFromMask 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .text-fly { display: block; opacity: 0; animation: flyInSwiss 1.4s cubic-bezier(0.19, 1, 0.22, 1) forwards; line-height: 0.95; }
+
+        /* --- LAYOUT --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            border-right: var(--border-width) solid var(--grid-line);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 100;
+            background: var(--white);
+        }
+
+        .brand h1 { font-size: 1.5rem; line-height: 1; letter-spacing: -0.05em; font-weight: 800; }
+        .brand { cursor: pointer; }
+        .brand h1 span { display: inline-block; transition: transform 0.6s ease; }
+        .brand:hover h1 span { transform: translateX(6px); }
+        .brand p { margin-top: 0.5rem; font-size: 0.75rem; color: #888; }
+
+        /* Navigation Links (Anchor Style) */
+        .nav-links a {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.25rem;
+            transition: transform 0.2s, color 0.2s;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        /* Avoid moving the link itself on hover (can cause cursor to flicker/disappear) */
+        .nav-links a:hover { color: var(--orange); }
+        .nav-links a.active { color: var(--orange); }
+
+        .sidebar-footer { font-size: 0.75rem; color: #888; }
+        .social-icons { display: flex; gap: 1rem; margin-top: 1rem; }
+        .social-link { color: var(--black); transition: color 0.3s ease, transform 0.3s ease; display: inline-flex; }
+        .social-link:hover { color: var(--orange); }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            width: calc(100% - var(--sidebar-width));
+            background: var(--white);
+            min-height: 100vh;
+        }
+
+        /* --- SECTIONS --- */
+        section { 
+            scroll-margin-top: 2rem; 
+        } /* Offset for scroll anchors desktop */
+
+        /* Hero */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+            border-bottom: var(--border-width) solid var(--grid-line);
+        }
+        .hero h1 { font-size: 5rem; line-height: 0.9; letter-spacing: -0.04em; margin-bottom: 2rem; font-weight: 800; }
+        .stroke-text { -webkit-text-stroke: 2px var(--black); color: transparent; transition: color 0.3s; }
+        .stroke-text:hover { color: var(--black); }
+        .hero p { border-left: 4px solid var(--orange); padding-left: 1.5rem; font-size: 1.25rem; color: #444; }
+
+        /* Project Grid */
+        .project-grid { display: grid; grid-template-columns: 1fr; border-bottom: var(--border-width) solid var(--grid-line); }
+        @media (min-width: 768px) {
+            .project-grid { grid-template-columns: 1fr 1fr; }
+            .project-card:nth-child(odd) { border-right: var(--border-width) solid var(--grid-line); }
+            .project-card { border-right: none; } 
+            .project-card:nth-child(2n) { border-right: none; } 
+            .project-card:nth-child(2n-1) { border-right: var(--border-width) solid var(--grid-line); }
+        }
+        @media (min-width: 1400px) {
+            .project-grid { grid-template-columns: 1fr 1fr 1fr; }
+            .project-card:nth-child(2n-1) { border-right: none; }
+            .project-card { border-right: var(--border-width) solid var(--grid-line); }
+            .project-card:nth-child(3n) { border-right: none; } 
+        }
+
+        .project-card {
+            background: var(--black); 
+            aspect-ratio: 4/3;
+            border-bottom: var(--border-width) solid var(--grid-line);
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .card-img-container { width: 100%; height: 100%; overflow: hidden; position: relative; }
+        .card-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease-out, opacity 0.4s ease; }
+        .project-card:hover img { transform: scale(1.05); opacity: 0.5; }
+        
+        .hover-badge { position: absolute; top: 1.5rem; right: 1.5rem; background: var(--white); border: 1px solid var(--black); padding: 0.5rem 1rem; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0; transform: translateY(10px); transition: all 0.3s ease-in-out; z-index: 10; }
+        .project-card:hover .hover-badge { opacity: 1; transform: translateY(0); }
+
+        .card-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2rem; background: var(--white); border-top: 1px solid var(--grid-line); display: flex; justify-content: space-between; align-items: flex-start; transform: translateY(100%); transition: transform 0.3s ease-in-out; }
+        .project-card:hover .card-info { transform: translateY(0); }
+        .card-info h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+        /* Project card arrow icon (Lucide injects an SVG with class "lucide") */
+        .card-info .lucide { transition: color 0.3s ease, stroke 0.3s ease; color: var(--orange); stroke: var(--orange); }
+        .project-card:hover .card-info .lucide { color: var(--orange); stroke: var(--orange); }
+
+        .card-desc { font-size: 0.9rem; color: #666; line-height: 1.4; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+        
+        /* About Teaser */
+        .about-teaser { background-color: var(--black); color: var(--white); padding: 8rem 4rem; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; align-items: center; border-bottom: var(--border-width) solid var(--grid-line); }
+        .about-teaser h2 { font-size: 3.5rem; line-height: 1.1; font-weight: 800; }
+        .teaser-content p { font-size: 1.25rem; color: #ccc; margin-bottom: 1.5rem; line-height: 1.6; }
+        .teaser-content p:last-of-type { margin-bottom: 3rem; }
+        .teaser-btn { border: 1px solid var(--white); padding: 1rem 2rem; font-size: 0.8rem; text-transform: uppercase; font-weight: 800; transition: all 0.3s ease; color: var(--white); letter-spacing: 0.1em; }
+        .teaser-btn:hover { background: var(--white); color: var(--black); }
+
+        /* Archive Section */
+        .archive-section { padding: 10rem 4rem 11rem 4rem; border-bottom: var(--border-width) solid var(--grid-line); }
+        .archive-list { margin-top: 4rem; border-top: 2px solid var(--black); }
+        .archive-entry { display: flex; flex-direction: column; padding: 2.5rem 0; border-bottom: 1px solid var(--grid-line); gap: 1.5rem; position: relative; transition: background-color 0.2s ease; }
+        .archive-entry:hover { background-color: var(--gray); }
+        .archive-year { font-family: 'Courier New', monospace; font-size: 0.9rem; color: #888; min-width: 80px; }
+        .archive-name { font-weight: 800; font-size: 1.5rem; color: var(--black); line-height: 1.2; }
+        .archive-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .archive-tag { font-size: 0.7rem; text-transform: uppercase; border: 1px solid var(--black); background-color: var(--white); padding: 4px 8px; margin-right: 4px; color: var(--black); white-space: nowrap; display: inline-block; }
+        .archive-desc { color: #555; font-size: 1rem; line-height: 1.5; }
+        .archive-link { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid transparent; transition: all 0.2s ease; color: var(--black); align-self: flex-start; }
+        .archive-entry:hover .archive-link { color: var(--orange); background: transparent; border-color: transparent; }
+
+        @media (min-width: 1024px) {
+            .archive-entry { flex-direction: row; align-items: center; gap: 2rem; padding: 2rem 1rem; }
+            .archive-year { width: 80px; flex-shrink: 0; }
+            .archive-name { width: 25%; flex-shrink: 0; font-size: 1.25rem; }
+            .archive-tags { width: 20%; flex-shrink: 0; }
+            .archive-desc { flex: 1; }
+            .archive-link { align-self: center; margin-left: auto; }
+        }
+
+        /* About Section */
+        .about-section { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+        .about-hero-img { height: 100vh; position: sticky; top: 0;}
+        .about-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+        .about-content { padding: 6rem; display: flex; flex-direction: column; justify-content: center; background: var(--white); }
+        
+        .resume-btn { 
+            border: 1px solid var(--black); 
+            padding: 1rem 2rem; 
+            font-size: 0.8rem; 
+            text-transform: uppercase; 
+            font-weight: 600; 
+            transition: all 0.3s ease; 
+            color: var(--black); 
+            letter-spacing: 0.1em; 
+            display: inline-block; 
+            text-decoration: none; 
+        }
+        .resume-btn:hover { 
+            border-color: var(--orange);
+            color: var(--orange);
+            font-weight: 900;
+        }
+
+        /* Detail View (Overlay) */
+        #detail-view { 
+            position: fixed; 
+            top: 0; 
+            left: var(--sidebar-width); 
+            width: calc(100% - var(--sidebar-width)); 
+            height: 100vh; 
+            overflow-y: auto; 
+            background: var(--white); 
+            z-index: 200; 
+            transform: translateX(100%); 
+            /* UPDATED: Faster, linear transition */
+            transition: transform 0.4s; 
+            /* Prevent off-canvas panel from intercepting hover/clicks when closed */
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #detail-view.active { transform: translateX(0); visibility: visible; pointer-events: auto; }
+        
+        .detail-nav { position: sticky; top: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--grid-line); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
+        .detail-hero-img { width: 100%; height: 70vh; object-fit: cover; border-bottom: 1px solid var(--grid-line); }
+        .detail-header { display: grid; grid-template-columns: 8fr 4fr; border-bottom: 1px solid var(--grid-line); }
+        .detail-title-block { padding: 4rem; border-right: 1px solid var(--grid-line); }
+        .detail-title-block h1 { font-size: 4.5rem; font-weight: 800; line-height: 1; margin-bottom: 2rem; letter-spacing: -0.04em; }
+        .detail-title-block p { font-size: 1.5rem; color: #444; max-width: 800px; }
+        
+        .detail-description-link {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--black);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: transform 0.2s ease, color 0.2s ease;
+            text-decoration: none;
+            margin-top: 1.5rem;
+        }
+        .detail-description-link:hover { color: var(--orange); }
+
+        .detail-meta-block { padding: 4rem; background: var(--gray); font-family: 'Courier New', monospace; font-size: 1rem; }
+        
+        /* Tool Tag styling for external links */
+        .tool-tag {
+            border: 1px solid var(--black);
+            padding: 4px 10px;
+            margin: 0 5px 5px 0;
+            display: inline-block;
+            background: var(--white);
+            color: var(--black);
+            font-weight: bold;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        a.tool-tag:hover { color: var(--orange); border-color: var(--orange); }
+
+        .process-section { max-width: 900px; margin: 8rem auto; padding: 0 2rem; }
+        .process-step { display: flex; flex-direction: column; gap: 2.5rem; margin-bottom: 10rem; }
+        .step-accent { width: 60px; height: 8px; background-color: var(--orange); margin-bottom: 1.5rem; }
+        
+        /* Updated Process Image styling for actual images */
+        .process-img { 
+            width: 100%; 
+            /* background: #f5f5f5;  */
+            /* border: 1px solid var(--grid-line);  */
+            overflow: hidden;
+            /* display: flex; */
+            align-items: center;
+            justify-content: center;
+        }
+        .process-img img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            object-fit: cover;
+        }
+        
+        .process-desc-paragraph { font-size: 1.2rem; line-height: 1.7; color: #333; margin-bottom: 1.5rem; }
+        /* Updated: Style for links within process descriptions */
+        .process-desc-paragraph a {
+            color: var(--black);
+            text-decoration: underline;
+            font-weight: inherit;
+            transition: all 0.2s ease;
+        }
+        .process-desc-paragraph a:hover {
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        .award-box { margin-top: 2.5rem; border: 1px solid var(--orange); background-color: rgba(255, 79, 0, 0.03); padding: 2rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; position: relative; }
+        .award-badge-icon { width: 10rem; height: 10rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--orange); overflow: hidden; }
+        .award-label { font-family: 'Courier New', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); font-weight: bold; }
+        .award-title { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 800; line-height: 1.4; color: var(--orange); }
+
+        .back-link { font-weight: 800; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border: none; background: transparent; transition: transform 0.2s, color 0.2s; color: var(--black); cursor: pointer; }
+        .back-link:hover { color: var(--orange); background: transparent; }
+        .back-link i { transition: color 0.2s; }
+        .back-link:hover i { color: var(--orange); }
+
+        /* --- MOBILE NAV & FIXES --- */
+        /* Force hidden on desktop */
+        .mobile-header { display: none; }
+        .mobile-menu { display: none; }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            
+            /* Show Mobile Header */
+            .mobile-header { 
+                display: flex; 
+                position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+                background: var(--white); border-bottom: 1px solid var(--grid-line);
+                justify-content: space-between; align-items: center; padding: 0 1.5rem; z-index: 200;
+            }
+            
+            /* Mobile Menu Styles (Only active within media query) */
+            .mobile-menu {
+                position: fixed; top: 60px; left: 0; width: 100%;
+                background: var(--white); border-bottom: 1px solid var(--grid-line);
+                padding: 2rem; display: none; flex-direction: column; gap: 1.5rem; z-index: 199;
+            }
+            .mobile-menu.open { display: flex; }
+
+            .main-content { margin-left: 0; width: 100%; padding-top: 60px; }
+            #detail-view { left: 0; width: 100%; }
+            .project-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 3rem; }
+            .about-teaser { grid-template-columns: 1fr; padding: 4rem 2rem; }
+            .about-section { grid-template-columns: 1fr; }
+            .about-hero-img { height: 50vh; position: relative; }
+            .detail-header { grid-template-columns: 1fr; }
+            .detail-title-block { border-right: none; border-bottom: 1px solid var(--grid-line); padding: 2rem; }
+            .detail-title-block h1 { font-size: 3rem; }
+            
+            /* Increase scroll offset on mobile to account for sticky header */
+            section { scroll-margin-top: 80px; }
+        }
+
+        /* Back to Top */
+        #back-to-top-btn { position: fixed; bottom: 3rem; right: 3rem; width: 3.5rem; height: 3.5rem; background-color: var(--white); border: 1px solid var(--black); color: var(--black); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease, opacity 0.3s ease; z-index: 9999; opacity: 0; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        #back-to-top-btn.visible { opacity: 1; pointer-events: auto; }
+        #back-to-top-btn:hover { background-color: var(--orange); color: var(--white); border-color: var(--orange); }
+        
+        @media (max-width: 768px) {
+             #back-to-top-btn { bottom: 1.5rem; right: 1.5rem; }
+        }
+
+        footer { padding: 3rem; border-top: 1px solid var(--grid-line); font-size: 0.75rem; color: #999; text-align: left; }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-<p>links here</p>
 
+    <!-- SIDEBAR NAVIGATION (ANCHORS) -->
+    <nav class="sidebar">
+        <div class="brand" onclick="handleLogoClick()" style="cursor: pointer;">
+            <h1>SIHANG<span class="text-orange">.</span></h1>
+            <p class="font-mono uppercase">Data Viz Portfolio</p>
+        </div>
+        <div class="nav-links">
+            <a onclick="handleSidebarClick('selected-work')" id="link-selected-work">Selected</a>
+            <a onclick="handleSidebarClick('archive')" id="link-archive">All Projects</a>
+            <a onclick="handleSidebarClick('about')" id="link-about">About</a>
+        </div>
+        <div class="sidebar-footer">
+            <p class="font-mono uppercase">Let’s connect</p>
+            <div class="social-icons">
+                <a href="www.linkedin.com/in/sihang-sun" class="social-link" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+                <a href="sun.siha@northeastern.edu" class="social-link" aria-label="Email"><i data-lucide="mail"></i></a>
+            </div>
+        </div>
+    </nav>
 
-<a href="./tech1/mp1/index.html" target="_blank" >Mini Project 1</a>
-<a href="./tech1/mp2/index.html" target="_blank" >Mini Project 2</a>
-<a href="./tech1/final/index.html" target="_blank" >Final Project</a>
-<a href="./influence_industry/index.html" target="_blank" >Influence Industry</a>
-<a href="./shape_of_democracy/index.html" target="_blank" >The Shape of Democracy</a>
-<a href="./Rhetoric_Poster/index.html" target="_blank" >Why Information Design Is a Form of Rhetoric</a>
-<a href="./Passport_Project/index.html" target="_blank" >Who Opens the Door for Whom?</a>
+    <header class="mobile-header">
+        <div class="brand" onclick="handleLogoClick()">
+            <h1 style="font-size: 1.5rem; font-weight: 800;">SIHANG<span class="text-orange">.</span></h1>
+        </div>
+        <button onclick="toggleMobileMenu()"><i data-lucide="menu"></i></button>
+    </header>
 
-<a href="./influence_test/index.html" target="_blank" >test</a>
-  
+    <div class="mobile-menu" id="mobile-menu">
+        <button onclick="mobileNavigate('#selected-work')" style="font-size: 1.5rem; font-weight: bold; text-align: left;">SELECTED WORK</button>
+        <button onclick="mobileNavigate('#archive')" style="font-size: 1.5rem; font-weight: bold; text-align: left;">ALL PROJECTS</button>
+        <button onclick="mobileNavigate('#about')" style="font-size: 1.5rem; font-weight: bold; text-align: left;">ABOUT</button>
+    </div>
+
+    <main class="main-content" id="main-scroll-view">
+        <section id="hero" class="hero">
+            <h1 style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem;">
+                <div class="mask-container"><span class="text-reveal" style="animation-delay: 0ms">TURNING</span></div>
+                <div><span class="text-fly stroke-text" style="animation-delay: 200ms">COMPLEX DATA</span></div>
+                <div class="mask-container"><span class="text-reveal" style="animation-delay: 400ms">INTO COMPELLING</span></div>
+                <div><span class="text-fly text-orange" style="animation-delay: 600ms">VISUALS</span></div>
+            </h1>
+            <p class="reveal-element" style="animation-delay: 800ms">Hi, I’m Sihang Sun — an Information & Data Visualization Designer.</p>
+            <p class="reveal-element" style="animation-delay: 800ms">Scroll down to view selected work</p>
+        </section>
+
+        <section id="selected-work">
+            <!-- Project Grid Injected Here -->
+        </section>
+
+        <!-- <section id="about-teaser" class="about-teaser reveal-element">
+            <div><h2>The Intersection of <br>Logic & <span class='text-orange'>Aesthetics</span></h2></div>
+            <div class="teaser-content">
+                <p>With a background in computer science and a passion for graphic design, I build tools that help people navigate the complexity of modern information.</p>
+                <p>By bridging the gap between technical implementation and visual storytelling, I create digital experiences that transform raw data into clear, actionable insights.</p>
+                <button onclick="handleSidebarClick('archive')" class="teaser-btn">View Full Project Archive &rarr;</button>
+            </div>
+        </section> -->
+
+        <section id="archive" class="archive-section">
+            <h1 style="font-size: 4.5rem; font-weight: 800; margin-bottom: 2rem;">ALL PROJECTS<span class='text-orange'>.</span></h1>
+            <div style="max-width: 600px; margin-bottom: 4rem;">
+                <p style="font-size: 1.25rem; color: #666; margin-bottom: 1.5rem; line-height: 1.6;">
+                    Explore a list tracing my creative journey, from early academic experiments to recent professional commissions.
+                </p>
+
+            </div>
+            <div id="archive-list-container" class="archive-list">
+                <!-- Archive Rows Injected Here -->
+            </div>
+        </section>
+
+        <section id="about" class="about-section">
+            <div class="about-hero-img">
+                <img src="img/portrait.jpeg" alt="Sihang">
+            </div>
+            <div class="about-content">
+                <h1 style="font-size: 4.5rem; font-weight: 800; margin-bottom: 2rem;">ABOUT<span class='text-orange'>.</span></h1>
+                <p style="font-size: 1.5rem; margin-bottom: 2rem; font-weight: 600;">An interdisciplinary data storyteller transforming complex data into compelling visuals.</p>
+                <p style="font-size: 1.1rem; color: #666; margin-bottom: 1.5rem; line-height: 1.7;">Sihang Sun holds a master’s degree from Northeastern University, where he specialized in information design and data visualization. He tells stories with data.</p>
+
+                <p style="font-size: 1.1rem; color: #666; margin-bottom: 1.5rem; line-height: 1.7;">In his current role at MassDOT, Sihang helps communicate complex transit data and findings through analysis, design, and code—making technical information accessible to a broad audience.</p>
+                    
+                <p style="font-size: 1.1rem; color: #666; margin-bottom: 1.5rem; line-height: 1.7;">Before transitioning into data visualization, Sihang worked as a journalist covering Chicago’s Chinese communities. That experience continues to shape his approach to data, grounding his work in narrative, context, and human impact.</p>
+                    
+                <p style="font-size: 1.1rem; color: #666; margin-bottom: 1.5rem; line-height: 1.7;">Years of study and professional practice in both journalism and design have shaped Sihang’s strengths in critical thinking, creativity, curiosity, and empathy. He brings a human-centered, editorial lens to data storytelling, using visualization as a tool to inform, clarify, and engage.</p>
+                <div>
+                    <a href="img/resume(102525).pdf"
+                    class="resume-btn"
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    VIEW RESUME
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <footer>© 2022 - 2026 SIHANG SUN | ALL RIGHTS RESERVED</footer>
+    </main>
+
+    <div id="detail-view">
+        <!-- Content injected dynamically -->
+    </div>
+
+    <button id="back-to-top-btn" onclick="handleBackToTop()" title="Back to Top">
+        <i data-lucide="arrow-up"></i>
+    </button>
+
+    <script>
+        // --- DATA ---
+        const PROJECTS = [
+    // {
+    //     id: 1,
+    //     title: "Passport Project",
+    //     category: "Data Visualization",
+    //     year: "2024",
+    //     roles: ["Lead Designer", "Data Architect", "Motion Specialist"],
+    //     ShortDescription: "A real-time transit data visualization experiment.",
+    //     descriptionMain: "A real-time visualization of city transit patterns, transforming raw GTFS data into an interactive living organism.",
+    //     descriptionSecondary: "View this project, click here.",
+    //     externalLink: "https://example.com/urban-pulse",
+    //     tools: [
+    //         { name: "D3.js", link: "https://www.google.com" },
+    //         { name: "React", link: null },
+    //         { name: "Mapbox GL", link: null }
+    //     ],
+    //     visual: "https://iibawards-prod.s3.amazonaws.com/projects/images/000/006/838/page.jpg?1741532839",
+    //     award: "Best in InfoDesign 2024",
+    //     awardImage: "https://pbs.twimg.com/profile_images/1067434773180702720/FBbQfJKE_400x400.jpg",
+    //     process: [
+    //         { 
+    //             step: "01", 
+    //             title: "Data Ingestion", 
+    //             image: "https://sihangsun.github.io/influence_industry/img/diagram.jpg", 
+    //             desc: [
+    //                 "I started by normalizing 4TB of transit logs...", 
+    //                 "The data was extremely noisy and required significant deduplication before any visualization could take place."
+    //             ] 
+    //         },
+    //         { 
+    //             step: "02", 
+    //             title: "Visual Prototyping", 
+    //             image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
+    //             desc: [
+    //                 "Using D3.js, I experimented with particle systems...", 
+    //                 {
+    //                     text: "Early iterations focused too much on geographic accuracy, but the final version prioritized the 'pulse' of human movement.",
+    //                     links: [{ phrase: "final version", url: "https://www.google.com" }]
+    //                 }
+    //             ] 
+    //         }
+    //     ]
+    // },
+    {
+        id: 2,
+        title: "Exploring the Price of Living Across Major U.S. Cities",
+        category: "Journalism",
+        year: "2024",
+        roles: ["Information Designer", "Data Analyst", "Front-End Developer"],
+        ShortDescription: "An interactive tool allows you to look up and compare the prices of 31 goods and services across 30 different U.S. cities.",
+        descriptionMain: "An interactive tool allows you to look up and compare the prices of 31 goods and services across 30 different U.S. cities. These cities are the top 30 in the economy, measured by their gross domestic product (GDP).",
+        descriptionSecondary: "View this project, click here.",
+        externalLink: "https://sihangsun.github.io/Price-of-Living/index.html",
+        tools: [
+            { name: "HTML/CSS", link: null },
+            { name: "D3.js", link: null }
+        ],
+        visual: "img/cost-of-living/cover.jpg",
+        award: "Information is Beautiful Awards 2024 Longlist",
+        awardImage: "img/2024 IIB Awards Badge_Longlist.png",
+        process: [ 
+            { 
+                step: "01", 
+                title: "Data", 
+                desc: [{
+                    text: "The data used in this project comes from Numbeo, a crowd-sourced global database of cost of living information. ",
+                    links: [{ phrase: "Numbeo", url: "https://www.numbeo.com/cost-of-living/" }]
+                }] 
+            },
+            { step: "02", title: "Project Overview", image: "img/cost-of-living/download.gif", desc: ["This interactive tool allows you to look up and compare the prices of 31 goods and services across 30 different U.S. cities. These cities are the top 30 in the economy, measured by their gross domestic product (GDP).", "The tool provides two ways to compare the cost of living in different cities. While the overall Cost of Living Index offers a quick, aggregated city comparison, the tool's primary focus is on the prices of specific goods and services. This feature allows you to compare items most relevant to your lifestyle, offering a personalized insight into the cost differences between cities."] }
+        ]
+    },
+    {
+        id: 6,
+        title: "The Shape of Democracy",
+        category: "Data Visualization",
+        year: "2023",
+        roles: ["Information Designer"],
+        ShortDescription: "A visualization exploring the structure and patterns of democratic systems.",
+        descriptionMain: "This visualization shows Economist Intelligence Unit's Democracy Index 2021 data for the world's top 20 most populous countries. The visualization encourages readers to explore the relationships between political systems, material satisfaction, and overall happiness.",
+        descriptionSecondary: "To view it in full size, click here.",
+        externalLink: "https://sihangsun.github.io/shape_of_democracy/index.html",
+        tools: [
+            { name: "Adobe Illustrator", link: null },
+            { name: "RAWGraphs", link: null }
+        ],
+        visual: "img/shape-of-democracy/cover.jpg",
+        award: "Information is Beautiful Awards 2024 Longlist",
+        awardImage: "img/2024 IIB Awards Badge_Longlist.png",
+        process: [ 
+            { 
+                step: "01",
+                title: "Data",
+                desc: [
+                    {
+                        text: "The democracy index data comes from the EIU's annual report. The happiness score data comes from ourworldindata.com. This visualization uses the latest World Bank data on GDP Per Capita and population.",
+                        links: [
+                            { phrase: "EIU's annual report", url: "https://www.eiu.com/n/campaigns/democracy-index-2021/?utm_source=eiu-website&utm_medium=blog&utm_campaign=democracy-index-2021" },
+                            { phrase: "ourworldindata.com", url: "https://ourworldindata.org/happiness-and-life-satisfaction" }
+                        ]
+                    },
+                    "Read on for more information about some key design decisions."
+                ]
+            },
+            {
+                step: "02",
+                title: "Visualization",
+                desc: [
+                    { type: "image", src: "img/shape-of-democracy/image-03.jpg"}
+                ]
+            },
+            {
+                step: "03",
+                title: "Legend",
+                desc: [
+                    { type: "image", src: "img/shape-of-democracy/image-04.jpg"}
+                ]
+            },
+            {
+                step: "04",
+                title: "Details",
+                desc: [
+                    { type: "image", src: "img/shape-of-democracy/image-05.jpg"},
+                    { type: "image", src: "img/shape-of-democracy/image-06.jpg"}
+                ]
+            },
+            {
+                step: "05",
+                title: "Why GDP and happiness score?",
+                desc: [
+                    "EIU wrote in its Democracy Index 2021 report, “Any system must be judged by the degree to which it maximises humankind’s ability to live “the good life” … it rests on … the satisfaction of material needs;”.",
+                    "It still remains my personal belief that democracy, despite many of its shortcomings, is the optimal political system most aligned with mankind's universal values. But I also often wonder if this best system truly brings the people \"the good life”?",
+                    "For that reason, I selected GDP Per Capita as well as happiness score as contextual information in this visualization to explore the relationships between political systems, material satisfaction, and overall happiness.",
+                    { type: "image", src: "img/shape-of-democracy/image-07.jpg", caption: "Initial mapping idea"},
+                    "In the visualization, 20 countries are ordered along the vertical axis by the country's happiness score and along the horizontal axis by GDP Per Capita. In reading a country's democracy index, I also hope that readers can get a sense of the country's economy and happiness, so they can think about the relationship between them."
+                ]
+            },
+            {
+                step: "06",
+                title: "Design the main visual element",
+                desc: [
+                    "Leaf and fruit were used as visual inspiration for main visual element. Overall democracy scores (fruit) provide a simple way to evaluate a country's democratic state. But the individual indicator scores (leaf) and their pattern give readers a full picture of a country's democracy and why that country scores the way that it does. In the same way that leaves nourish fruit, fruit of democracy cannot flourish without big leaves.",
+                    { type: "image", src: "img/shape-of-democracy/image-08.jpg", caption: "Sketch of main visual element"},
+                    { type: "image", src: "img/shape-of-democracy/image-09.jpg", caption: "Implemented the design idea in Adobe Illustrator"},
+                    "That is also why I used two different visual attributes of the main visual element to represent the same metric data ( The overall score is calculated by averaging the scores of the five indicators ). As a result, I hope to give both the main metric data and sub-metrics data equal visual weight and encourage readers to take the time to read them both carefully."
+                ]
+            },
+            {
+                step: "07",
+                title: "Why highlighting the highest and lowest scores?",
+                desc: [
+                    "In the visualization, I used dot to highlight the highest indicator score for non-democracies and lowest indicator score for democracies. The aim of this design decision is to encourage readers to examine the inadequacies of democracy in democratic countries and also the promising aspects of non-democracies."
+                ]
+            }
+        ]
+    },
+    {
+        id: 5,
+        title: "MBTA Performance Metrics Dashboard",
+        category: "Data Visualization",
+        year: "2022",
+        roles: ["Data Viz Designer", "Tableau Developer"],
+        ShortDescription: "Features four interactive dashboards that track and display transportation performance metrics.",
+        descriptionMain:"MBTA Performance Metrics Dashboard features four interactive dashboards that track and display transportation performance metrics including reliability, ridership, customer satisfaction, and accuracy.", 
+        descriptionSecondary: "View this project, click here.",
+        externalLink: "https://www.mbta.com/performance-metrics",
+        tools: [
+            { name: "Tableau Desktop", link: null },
+            { name: "Tableau Prep", link: null }
+        ],
+        visual: "img/mbta-performance/cover.jpg",
+        award: null,
+        awardImage: null,
+        process: [ 
+            { 
+                step: "01", 
+                title: "My Roles", 
+                desc: ["As part of the project, I played the roles of designer and developer. As a designer, my responsibilities included designing the visualizations and dashboard layouts. My role as a developer was to implement the design by developing the dashboards in Tableau Desktop.", 
+                
+                "The project was a collaborative project between different departments within MBTA, I also worked closely with data administrators and MBTA website content team to communicate and coordinate about design/develop and publish the dashboards."
+                ] 
+            },
+            {
+                step: "02",
+                title: "The Dashboards",
+                desc: [
+                    "MBTA Performance Metrics Dashboard project features four interactive dashboards including the Reliability Dashboard, the Ridership Dashboard, the Customer Satisfaction Dashboard, and the Accuracy Dashboard. The Subway Trip Time Dashboard is part of the Reliability dashboard.",
+                    "The dashboards use commonly used visualizations to make performance data easily accessible to the general public. A variety of times and levels of information were displayed through interactivity.",
+                    { type: "image", src: "img/mbta-performance/reliability.gif", caption: "The Reliability Dashboard" },
+                    { type: "image", src: "img/mbta-performance/ridership.gif", caption: "The Ridership Dashboard" },
+                    { type: "image", src: "img/mbta-performance/csat.gif", caption: "The Customer Satisfaction Dashboard" },
+                    { type: "image", src: "img/mbta-performance/accuracy.gif", caption: "The Accuracy Dashboard" },
+                    { type: "image", src: "img/mbta-performance/trip-time.gif", caption: "The Trip Time Dashboard" }
+                ]
+            },
+            {
+                step: "03",
+                title: "Design the Entry Point",
+                desc: [
+                    "The Subway Trip Time Dashboard's landing page was designed to present simple, digestible information. Scaled numbers on the left shows the average trip time for the selected date, to provide highly summarized data, allowing the user to quickly grasp the information.",
+                    "The sparklines on the right show a 30-day trend in trip time. This sparkline was selected to emphasize only the pattern of change in trip time over the past 30 days. Sparkline's simplicity and minimalism provides the user an easy way to understand the trip time trend.",
+                    { type: "image", src: "img/mbta-performance/image-10.gif", caption: "Landing page: an entry point to the dashboard" },
+                    "Providing only the first layer of information to general riders, the landing page functions as an entry point to the dashboard. Information that was more complex and granular was designed to place on the dashboard's \"View line detail\" page."
+                ]
+            },
+            {
+                step: "04",
+                title: "Design the Interactive Tool",
+                desc: [
+                    "On the \"View line detail\" page, trip time data is displayed at a more granular level. It was designed for users who wish to explore the data in more detail and have a greater interest in it.",
+                    "In order to serve as an exploratory and analytical tool, more interactive functions were added to this dashboard page.",
+                    { type: "image", src: "img/mbta-performance/image-11.gif", caption: "An analytical tool to explore the data in more detail" },
+                    "As requested by stakeholders, the dashboard showed \"7-day moving average trip time\" and \"two directions' daily trip time\", resulting in three lines on the chart and cluttering the view. A filter was designed to toggle between different metrics on the dashboard and make it easier for the user to interact with it.",
+                    "To meet the demand from the user for more accurate data numbers, another filter was created that switches between chart and table views on the dashboard."
+                ]
+            }
+        ]
+    },
+    {
+        id: 3,
+        title: "Bird Strikes",
+        category: "Data Visualization",
+        year: "2022",
+        roles: ["Information Designer", "Data Analyst"],
+        ShortDescription: "An infographic poster visualizes a subset of bird strikes data using a set of glyphs.",
+        descriptionMain: "This infographic poster visualizes a subset of bird strikes data using a set of glyphs. The glyphs were designed to visualize 6 different dimensions of the data in one visual composite and facilitate user tasks that lead to meaningful insights.",
+        descriptionSecondary: "View the poster, click here.",
+        externalLink: "https://sihangsun.github.io/bird_strikes/index.html",
+        tools: [
+            { name: "R", link: null },
+            { name: "RAWGraphs", link: null },
+            { name: "Adobe Illustrator", link: null }
+        ],
+        visual: "img/bird-strikes/cover.jpg",
+        award: null,
+        awardImage: null,
+        process: [ 
+            { 
+                step: "01", 
+                title: "Brief", 
+                desc: ["Creating a set of glyphs that visualize a subset of bird strikes data set. The glyphs need to visually represent at least 6 variables of the data and the infographic need to include all 25 data points and facilitate user tasks that lead to meaningful insights.", "Read on for more information about the design process."] 
+            },
+            { 
+                step: "02", 
+                title: "Data", 
+                desc: ["This data set contains 25 observations and 9 variables. Each observation describes a bird strike incident in the US. The original data set is from the Federal Aviation Association."],
+                images: ["img/bird-strikes/image-03.png"]
+            },
+            { 
+                step: "03", 
+                title: "Data Analysis", 
+                desc: [
+                    "A glyph is a visual representation of a data observation where the visual attributes of a glyph are dictated by one or more attributes of a data observation. A set of glyph has a great strength in describing inter-record and intra-record relationships in a data set.",
+                    "To firstly explore the relationships in the data set, a scatter plot was created using ggplot2 package in R. The 4 continuous numerical variables can be grouped into two groups (cost and speed) and two representative variables from each group are \"Speed IAS in knots\" and \"Cost Total $\".",
+                    "As shown in the scatter plot below, the speed variable is plotted on the x-axis, the total cost variable (log10) is plotted on the y-axis, and different colors correspond to different sizes of wildlife.",
+                    { type: "image", src: "img/bird-strikes/image-04.jpg" },
+                    "The scatter plot shows no correlation between aircraft's speed and incident's total cost in this data set. But some interesting insight worth to be revealed in the infographic.",
+                    { type: "list", items: ["Firstly, there are three most costly incidents on the top were all caused by large birds.", "Second, Medium bird strikes usually to occur on high-speed aircraft.", "Third, the costs of small bird strikes can also be high, despite the fact that large birds caused many costly strikes."] },
+                    "Later, annotations in the infographic were designed to help viewers find these insights.",
+                    { type: "image", src: "img/bird-strikes/image-05.jpg" },
+                    "Variables \"Cost Total\", \"Cost Repair\", and \"Cost Other\" have part to whole relationships, which can be illustrated as \"cost repair + cost other = cost total\".",
+                    "Most incidents' total costs equal their repair costs, as shown in the slope chart above. Some incidents, however, caused fewer repair costs and substantial amounts of non-repair costs."
+                ],
+            },
+            { 
+                step: "04", 
+                title: "Sketches & Ideas", 
+                desc: ["The main part of the glyph is a bird feather like element to make it visually appealing and fit the theme of the data set.", 
+                "This element serves as a human recognizable object. According to some researches, human recognizable objects allow a visualization to be retrieved from memory more effectively and help convey the message of the visualization.",
+                { type: "image", src: "img/bird-strikes/image-06.jpg" },
+                "The second part of the glyph is a circle. As a commonly used visualization mark, circle is readily perceived visual element and its visual attributes are later used to encode many data variables.",
+                "Moreover, the circle element also mimics the damage used to represent damage cost related data variables, as bird strikes produce bullseye type damages."
+            ],
+            },
+            { 
+                step: "05", 
+                title: "Mapping & Layout", 
+                desc: ["To visualize 6 different variables using glyph, several visual attributes of the glyph are encoded by data. The mappings of visual attributes to each data variable are as following:", 
+                { type: "list", items: ["Speed IAS in knots: vertical position ", "Cost Total: size of the outer circle", "Cost Other: size of the inner circle", "Phase of Flight: direction of the feather", "Wildlife Size: color of the outer circle", "Wildlife Species: color of the feather"] },
+                "In order to facilitate the user's task of exploring relationships among different variables in the data set, the glyphs were plotted along the vertical space of the poster using ordering relationships derived from the speed variable.",
+                "In other word, higher the glyph, higher the speed recorded in the observation.",
+                { type: "image", src: "img/bird-strikes/image-07.jpg" },
+                "In this way, the user can perceive other dimensions of the data along the vertical position (speed) to explore the relationships between speed and other variables and led to interesting insights."
+            ],
+                
+
+            },
+            { 
+                step: "06", 
+                title: "Development", 
+                desc: [{
+                    text: "To accurately encode the data, the circle part of the glyph came from a bubble chart of the data set made in RAWGraphs. Adobe Illustrator was used to design other visual elements, annotations, and the layout.",
+                    links: [{ phrase: "RAWGraphs", url: "https://app.rawgraphs.io/" }]
+                }],
+            }
+        ]
+    },
+    {
+        id: 4,
+        title: "Hotel Manager Dashboard",
+        category: "Data Visualization",
+        year: "2022",
+        roles: ["User Researcher", "Information Designer", "Tableau Specialist"],
+        ShortDescription: "An interactive dashboard for hotel managers to access key operational and management information.",
+        descriptionMain: "An interactive dashboard for hotel managers to access key operational and management information. This project was collaboratively developed with a real hotel manager in accordance with the principles of user-centered design.",
+        descriptionSecondary: "Interact with the dashboard, click here.",
+        externalLink: "https://public.tableau.com/app/profile/sihang.sun/viz/Hotel_Dash_extract_data/Dashboard",
+        tools: [
+            { name: "Tableau Desktop", link: null },
+            { name: "R", link: null }
+        ],
+        visual: "img/hotel-manager-dashboard/cover.jpg",
+        award: null,
+        awardImage: null,
+        process: [ 
+            { 
+                step: "01", 
+                title: "Brief", 
+                desc: ["Creating an interactive dashboard for the client, who is a front desk manager at a hypothetical hotel. The dashboard should help the client to access key information needed to perform day-to-day operational tasks and to achieve specific objectives.", 
+                "This is a personal project. Read on for more information about the design process."] 
+            },
+            {
+                step: "02",
+                title: "Research & Interview",
+                desc: [
+                    "The client is a hotel front desk manager. Daily tasks for the client include monitoring key information for operations and staff management, identifying guests with certain characteristics for marketing, and accessing performance data.",
+                    "In order to assess the client's dashboard needs, a series of interviews were conducted with the client to identify the specific goals and tasks they wish to accomplish using the data.",
+                    "The client's needs and requirements, including, but not limited to:",
+                    { type: "list", items: [
+                        "Key information must be monitored are today's arrival, departure, occupancy rate, and ADR (Average Daily Rate) for operations management. Data for the next 7 days of the above KPIs for staff management.",
+                        "For customer service and marketing, the dashboard needs to identify all return guests among today's arrivals and return guests booked through travel agencies (return TA) among today's departures.",
+                        "The dashboard needs to display historical data for the number of return TA departures for performance management.",
+                        "The dashboard need to be updated daily and hosted only on desktop computers."
+                    ]},
+                    "As a result of the research and interview, design choices such as the use of graphs, layouts, and interactivity can be made."
+                ]
+            },
+            {
+                step: "03",
+                title: "Sketch & Iteration",
+                desc: [
+                    "In the form of sketches, an initial concept of the dashboard design was presented to the client. With the sketches, we were able to work with the client to improve the design further.",
+                    { type: "image", src: "img/hotel-manager-dashboard/image-03.jpg", caption: "First sketch - initial concept" },
+                    { type: "image", src: "img/hotel-manager-dashboard/image-04.jpg", caption: "Second sketch - improved layout" },
+                    "After receiving feedback from the client and understanding the client's mental model when using the information, the design was iterated several times and moved to development."
+                ]
+            },
+            {
+                step: "04",
+                title: "Data Transformation",
+                desc: [
+                    {
+                        text: "The data set used for this project was obtained from Kaggle.com. The data set contains 119390 observations representing hotel bookings between the 1st of July 2015 and 31st of August 2017. All data elements pertaining hotel or costumer identification were deleted.",
+                        links: [{ phrase: "Kaggle.com", url: "https://www.kaggle.com/" }]
+                    },
+                    { type: "image", src: "img/hotel-manager-dashboard/image-05.jpg" },
+                    "R was used for the calculation and transformation of data into the appropriate format.",
+                    "Among all the data transformations, the biggest challenge was to calculate the daily occupancy rate. A hotel's occupancy rate considers both new arrivals as well as in-house bookings. This data set, however, only provides daily new arrivals and does not provide accumulated in-house bookings over time.",
+                    "Luckily, the library(patientcounter) in R provided a simple and quick solution to calculation daily occupancy rate.",
+                    { type: "image", src: "img/hotel-manager-dashboard/image-06.jpg" },
+                    "Other calculations and transformations were performed to prepare the best possible data format for Tableau dashboard development."
+                ]
+            },
+            {
+                step: "05",
+                title: "Development",
+                desc: [
+                    "The dashboard was developed in Tableau Desktop. Several calculations were made to deliver the desired view, including logical and level of detail calculations.",
+                ]
+            }
+        ]
+    }
+];
+
+        const ARCHIVE_DATA = [
+            { year: "2024", name: "Exploring the Price of Living Across Major U.S. Cities", tags: ["Cost living", "d3.js"], desc: "An interactive tool for looking up and comparing the prices of 31 goods and services across 30 different U.S. cities.", link: "https://sihangsun.github.io/Price-of-Living/index.html" },
+            { year: "2023", name: "The Industry Behind Your Vote", tags: ["Campaign data", "Scrollytelling"], desc: "This visual essay uses spending data from Donald Trump’s 2020 presidential campaign to trace investments in data-driven influence services and reveal the companies behind the influence industry.", link: "https://influenceindustry.org/en/explorer/case-studies/industry-behind-vote-visual-essay/" },
+            { year: "2023", name: "MBTA Subway Crowding Dashboard", tags: ["Subway crowding", "d3.js"], desc: "An interactive dashboard that provides MBTA subway crowding information.", link: "https://sihang-tech2.github.io/final_development/index.html" },
+            { year: "2023", name: "The Shape of Democracy", tags: ["Democracy index", "Data art"], desc: "The visualization shows EIU Democracy Index 2021 data for 20 countries.", link: "https://sihangsun.github.io/shape_of_democracy/index.html" },
+            { year: "2022", name: "Bird Strikes", tags: ["Info design", "Aviation safety"], desc: "An infographic poster visualize a subset of bird strikes data using a set of glyphs.", link: "https://sihangsun.myportfolio.com/bird-strikes" },
+            { year: "2022", name: "Hotel Manager Dashboard", tags: ["User-centered", "Tableau Dashboard"], desc: "An interactive dashboard for hotel managers to access key operational and management information.", link: "https://public.tableau.com/app/profile/sihang.sun/viz/Hotel_Dash_extract_data/Dashboard" },
+            { year: "2022", name: "MBTA Performance Metrics Dashboard", tags: ["Transit performance", "Metrics dashboard"], desc: "Features four interactive dashboards that track and display transportation performance metrics.", link: "https://www.mbta.com/performance-metrics" },
+            { year: "2022", name: "Why Information Design Is a Form of Rhetoric", tags: ["Info design", "Visual rhetoric"], desc: "This concept map shows why information design is a form of rhetoric and proposes three rhetorical means used in information design.", link: "https://sihangsun.github.io/Rhetoric_Poster/index.html" },
+            { year: "2021", name: "American billionaires VS Chinese billionaires", tags: ["Billionaires", "US&China"], desc: "This project explores how American billionaires and Chinese billionaires dominate the billionaires list across all industries.", link: "https://sihangsun.github.io/tech1/final/index.html" },
+            { year: "2021", name: "The Richer, the Happier？", tags: ["Wealth happiness", "Data analysis"], desc: "This project explores the relationships between happiness and income from a \"state level\".", link: "https://sihangsun.github.io./tech1/mp2/index.html" },
+            { year: "2021", name: "Observations on Immigration In Canada 1984-2013", tags: ["Immigration", "Canada"], desc: "This report explores several topics related to immigration in Canada in these 30 years.", link: "https://sihangsun.github.io./tech1/mp1/index.html" }
+        ];
+
+        // --- DOM ELEMENTS ---
+        const mainScrollView = document.getElementById('main-scroll-view');
+        const detailView = document.getElementById('detail-view');
+        const backToTopBtn = document.getElementById('back-to-top-btn');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSelectedWork();
+            renderArchiveList();
+            lucide.createIcons();
+            setupScrollSpy();
+        });
+
+        // --- RENDERING FUNCTIONS ---
+        function renderSelectedWork() {
+            const container = document.getElementById('selected-work');
+            const projectsHtml = PROJECTS.map((p, i) => `
+                <div class="project-card reveal-element" style="animation-delay: ${600 + (i * 100)}ms" onclick="openProject(${p.id})">
+                    <div class="hover-badge">View Details</div>
+                    <div class="card-img-container">
+                        <img src="${p.visual}" alt="${p.title}">
+                    </div>
+                    <div class="card-info">
+                        <div style="flex: 1;">
+                            <h3>${p.title}</h3>
+                            <p class="card-desc">${p.ShortDescription}</p>
+                        </div>
+                        <i data-lucide="arrow-right" style="margin-top: 5px;"></i>
+                    </div>
+                </div>
+            `).join('');
+            container.innerHTML = `<div class="project-grid">${projectsHtml}</div>`;
+        }
+
+        function renderArchiveList() {
+            const container = document.getElementById('archive-list-container');
+            const archiveItems = ARCHIVE_DATA.map(item => `
+                <a href="${item.link}" target="_blank" class="archive-entry" style="text-decoration: none; color: inherit; display: flex;">
+                    <div class="archive-year">${item.year}</div>
+                    <div class="archive-name">${item.name}</div>
+                    <div class="archive-tags">
+                        ${item.tags.map(tag => `<span class="archive-tag">${tag}</span>`).join('')}
+                    </div>
+                    <div class="archive-desc">${item.desc}</div>
+                    <div class="archive-link">
+                        <i data-lucide="arrow-up-right" size="24"></i>
+                    </div>
+                </a>
+            `).join('');
+            container.innerHTML = archiveItems;
+        }
+
+        // --- INTERACTION: PROJECT DETAIL OVERLAY ---
+        function openProject(id) {
+            const p = PROJECTS.find(proj => proj.id === id);
+            
+            const stepsHtml = p.process.map(s => {
+                const descArray = Array.isArray(s.desc) ? s.desc : [s.desc];
+                
+                // Helper to process descriptions that might contain links, inline images, or inline lists
+                const paragraphsHtml = descArray.map(descItem => {
+                    // Handle inline images
+                    if (typeof descItem === 'object' && descItem.type === 'image') {
+                        const captionHtml = descItem.caption 
+                            ? `<p class="image-caption" style="margin-top: 0.5rem; font-size: 1rem; color: #888; text-align: center;">${descItem.caption}</p>`
+                            : '';
+                        return `<div class="process-img" style="margin: 2rem 0;">
+                            <img src="${descItem.src}" alt="${s.title} Process">
+                            ${captionHtml}
+                        </div>`;
+                    }
+                    
+                    // Handle inline lists
+                    if (typeof descItem === 'object' && descItem.type === 'list') {
+                        return `<ul class="process-list" style="list-style: disc; padding-left: 1.5rem; margin: 1.5rem 0; font-size: 1rem;">
+                            ${descItem.items.map(item => {
+                                // Bold text before colon if present
+                                const formattedItem = item.includes(':') 
+                                    ? item.replace(/^([^:]+):/, '<strong>$1:</strong>')
+                                    : item;
+                                return `<li style="margin-bottom: 0.5rem;">${formattedItem}</li>`;
+                            }).join('')}
+                        </ul>`;
+                    }
+                    
+                    let textContent = "";
+                    
+                    if (typeof descItem === 'string') {
+                        textContent = descItem;
+                    } else if (descItem.text && descItem.links) {
+                        textContent = descItem.text;
+                        // Replace phrases with hyperlinks
+                        descItem.links.forEach(link => {
+                            const regex = new RegExp(`(${link.phrase})`, 'g');
+                            textContent = textContent.replace(regex, `<a href="${link.url}" target="_blank">$1</a>`);
+                        });
+                    }
+                    
+                    return `<p class="process-desc-paragraph">${textContent}</p>`;
+                }).join('');
+
+                // Handle list if present
+                const listHtml = s.list && Array.isArray(s.list) ? `
+                    <ul class="process-list" style="list-style: disc; padding-left: 1.5rem; margin: 1.5rem 0; font-size: 1rem;">
+                        ${s.list.map(item => `<li style="margin-bottom: 0.5rem;">${item}</li>`).join('')}
+                    </ul>` : '';
+
+                // Handle images - support both single image and images array
+                let imageHtml = '';
+                if (s.images && Array.isArray(s.images)) {
+                    // Multiple images
+                    imageHtml = s.images.map(img => `
+                        <div class="process-img">
+                            <img src="${img}" alt="${s.title} Process">
+                        </div>`).join('');
+                } else if (s.image) {
+                    // Single image (backward compatibility)
+                    imageHtml = `
+                        <div class="process-img">
+                            <img src="${s.image}" alt="${s.title} Process">
+                        </div>`;
+                }
+
+                return `
+                <div class="process-step">
+                    <div class="step-text">
+                        <div class="step-accent"></div>
+                        <h3 style="font-size: 2.25rem; font-weight: 800; margin-bottom: 1.5rem;">${s.title}</h3>
+                        ${paragraphsHtml}
+                        ${listHtml}
+                    </div>
+                    ${imageHtml}
+                </div>`;
+            }).join('');
+
+            detailView.innerHTML = `
+                <div class="fade-in">
+                    <nav class="detail-nav">
+                        <button onclick="closeProject()" class="back-link">
+                            <i data-lucide="arrow-left" size="16"></i> Index
+                        </button>
+                        <!-- <span class="font-mono" style="font-size: 0.75rem; color: #888;">${p.category} // ${p.year}</span> -->
+                    </nav>
+                    <img src="${p.visual}" class="detail-hero-img">
+                    <header class="detail-header">
+                        <div class="detail-title-block">
+                            <h1>${p.title}</h1>
+                            <p>${p.descriptionMain}</p>
+                            <a href="${p.externalLink}" target="_blank" class="detail-description-link">
+                                ${p.descriptionSecondary} <i data-lucide="arrow-right"></i>
+                            </a>
+                        </div>
+                        <div class="detail-meta-block">
+                            <div style="margin-bottom: 2.5rem;">
+                                <p style="color: #999; margin-bottom: 0.8rem; font-size: 0.75rem; letter-spacing: 0.1em;" class="uppercase font-mono">Roles</p>
+                                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.2rem;">
+                                    ${p.roles.map(r => `<li style="font-weight: 800; line-height: 1.2;">${r}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div style="margin-bottom: 2.5rem;">
+                                <p style="color: #999; margin-bottom: 1rem;">STACK</p>
+                                ${p.tools.map(t => {
+                                    if (t.link) {
+                                        return `<a href="${t.link}" target="_blank" class="tool-tag">${t.name}</a>`;
+                                    } else {
+                                        return `<span class="tool-tag">${t.name}</span>`;
+                                    }
+                                }).join('')}
+                            </div>
+                            <div style="margin-bottom: 2.5rem;">
+                                <p style="color: #999; margin-bottom: 0.5rem;">YEAR</p>
+                                <p><strong>${p.year || "2023"}</strong></p>
+                            </div>
+                            ${p.award ? `<div class="award-box"><div class="award-badge-icon">${p.awardImage ? `<img src="${p.awardImage}" alt="Award Logo" style="width: 100%; height: 100%; object-fit: cover;">` : `<i data-lucide="award" size="28"></i>`}</div><div><div class="award-label">Recognition</div><div class="award-title">${p.award}</div></div></div>` : ''}
+                        </div>
+                    </header>
+                    <section class="process-section">
+                        <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 5rem; border-bottom: 4px solid var(--orange); display: inline-block;">THE PROCESS</h2>
+                        ${stepsHtml}
+                    </section>
+                    <footer>© 2025 SIHANG. ALL RIGHTS RESERVED.</footer>
+                </div>
+            `;
+            
+            detailView.scrollTop = 0;
+            detailView.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeProject() {
+            detailView.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // --- NAVIGATION & SCROLLSPY ---
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('open');
+        }
+
+        function mobileNavigate(hash) {
+            toggleMobileMenu();
+            handleSidebarClick(hash.replace('#', ''));
+        }
+
+        function smoothScrollTo(element, duration = 1200) {
+            const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const ease = (t) => (--t)*t*t+1;
+                const run = ease(timeElapsed / duration) * distance + startPosition;
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+            requestAnimationFrame(animation);
+        }
+
+        function smoothScrollElementToTop(element, duration = 1000) {
+            const startPosition = element.scrollTop;
+            const distance = -startPosition;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const ease = (t) => (--t)*t*t+1;
+                const run = ease(timeElapsed / duration) * distance + startPosition;
+                element.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+            requestAnimationFrame(animation);
+        }
+
+        function handleSidebarClick(id) {
+            if (detailView.classList.contains('active')) {
+                closeProject();
+            }
+            const element = document.getElementById(id);
+            if (element) {
+                setTimeout(() => {
+                    smoothScrollTo(element, 1500);
+                }, 50);
+            }
+        }
+
+        function handleLogoClick() {
+            if (detailView.classList.contains('active')) {
+                closeProject();
+            }
+            const hero = document.getElementById('hero');
+            if (hero) {
+                smoothScrollTo(hero, 2000);
+            }
+        }
+
+        function setupScrollSpy() {
+            const sections = document.querySelectorAll('section');
+            const options = { threshold: 0.3 };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => link.classList.remove('active'));
+                        const id = entry.target.getAttribute('id');
+                        const activeLink = document.getElementById(`link-${id}`);
+                        if (activeLink) activeLink.classList.add('active');
+                    }
+                });
+            }, options);
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        function handleBackToTop() {
+            if (detailView.classList.contains('active')) {
+                smoothScrollElementToTop(detailView, 1000);
+            } else {
+                const hero = document.getElementById('hero');
+                if (hero) smoothScrollTo(hero, 1000);
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        detailView.addEventListener('scroll', () => {
+             if (detailView.scrollTop > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+    </script>
 </body>
 </html>
