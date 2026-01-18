@@ -20,6 +20,7 @@
 
         html {
             scroll-behavior: smooth; /* Native smooth scrolling fallback */
+            overflow-x: hidden; /* Prevent horizontal scroll on mobile */
         }
 
         * {
@@ -230,6 +231,7 @@
             top: 0; 
             left: var(--sidebar-width); 
             width: calc(100% - var(--sidebar-width)); 
+            max-width: 100vw; /* Avoid creating horizontal overflow on mobile */
             height: 100vh; 
             overflow-y: auto; 
             background: var(--white); 
@@ -352,6 +354,9 @@
             #detail-view { left: 0; width: 100%; }
             .project-grid { grid-template-columns: 1fr; }
             .hero h1 { font-size: 3rem; }
+            /* Make section H1s consistent with hero on mobile (override inline styles) */
+            #archive h1,
+            #about h1 { font-size: 3rem !important; }
             .about-teaser { grid-template-columns: 1fr; padding: 4rem 2rem; }
             .about-section { grid-template-columns: 1fr; }
             .about-hero-img { height: 50vh; position: relative; }
@@ -391,8 +396,8 @@
         <div class="sidebar-footer">
             <p class="font-mono uppercase">Let’s connect</p>
             <div class="social-icons">
-                <a href="www.linkedin.com/in/sihang-sun" class="social-link" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
-                <a href="sun.siha@northeastern.edu" class="social-link" aria-label="Email"><i data-lucide="mail"></i></a>
+                <a href="https://www.linkedin.com/in/sihang-sun" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i data-lucide="linkedin"></i></a>
+                <a href="mailto:sun.siha@northeastern.edu" class="social-link" aria-label="Email"><i data-lucide="mail"></i></a>
             </div>
         </div>
     </nav>
@@ -1014,7 +1019,7 @@
                 <div class="fade-in">
                     <nav class="detail-nav">
                         <button onclick="closeProject()" class="back-link">
-                            <i data-lucide="arrow-left" size="16"></i> Index
+                            <i data-lucide="arrow-left" size="16"></i> Back
                         </button>
                         <!-- <span class="font-mono" style="font-size: 0.75rem; color: #888;">${p.category} // ${p.year}</span> -->
                     </nav>
