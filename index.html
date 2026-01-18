@@ -339,7 +339,7 @@
                 display: flex; 
                 position: fixed; top: 0; left: 0; width: 100%; height: 60px;
                 background: var(--white); border-bottom: 1px solid var(--grid-line);
-                justify-content: space-between; align-items: center; padding: 0 1.5rem; z-index: 200;
+                justify-content: space-between; align-items: center; padding: 0 2rem; z-index: 200;
             }
             
             /* Mobile Menu Styles (Only active within media query) */
@@ -357,6 +357,10 @@
             .project-card .card-info { transform: translateY(0); background: rgba(255, 255, 255, 0.85); }
             .project-card .card-desc { display: none; }
             .hero h1 { font-size: 3rem; }
+            .hero { padding: 4rem 2rem; }
+            .archive-section { padding: 6rem 2rem; }
+            .about-content { padding: 4rem 2rem; }
+            footer { padding: 3rem 2rem; }
             /* Make section H1s consistent with hero on mobile (override inline styles) */
             #archive h1,
             #about h1 { font-size: 3rem !important; }
@@ -365,6 +369,7 @@
             .about-hero-img { height: 50vh; position: relative; }
             .detail-header { grid-template-columns: 1fr; }
             .detail-title-block { border-right: none; border-bottom: 1px solid var(--grid-line); padding: 2rem; }
+            .detail-meta-block { padding: 2rem; }
             .detail-title-block h1 { font-size: 3rem; }
             
             /* Increase scroll offset on mobile to account for sticky header */
@@ -1037,13 +1042,13 @@
                         </div>
                         <div class="detail-meta-block">
                             <div style="margin-bottom: 2.5rem;">
-                                <p style="color: #999; margin-bottom: 0.8rem; font-size: 0.75rem; letter-spacing: 0.1em;" class="uppercase font-mono">Roles</p>
+                                <p style="color: #999; margin-bottom: 1rem;" class="uppercase font-mono">Roles</p>
                                 <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.2rem;">
                                     ${p.roles.map(r => `<li style="font-weight: 800; line-height: 1.2;">${r}</li>`).join('')}
                                 </ul>
                             </div>
                             <div style="margin-bottom: 2.5rem;">
-                                <p style="color: #999; margin-bottom: 1rem;">STACK</p>
+                                <p style="color: #999; margin-bottom: 1rem;" class="uppercase font-mono">Tools</p>
                                 ${p.tools.map(t => {
                                     if (t.link) {
                                         return `<a href="${t.link}" target="_blank" class="tool-tag">${t.name}</a>`;
@@ -1053,7 +1058,7 @@
                                 }).join('')}
                             </div>
                             <div style="margin-bottom: 2.5rem;">
-                                <p style="color: #999; margin-bottom: 0.5rem;">YEAR</p>
+                                <p style="color: #999; margin-bottom: 1rem;" class="uppercase font-mono">Year</p>
                                 <p><strong>${p.year || "2023"}</strong></p>
                             </div>
                             ${p.award ? `<div class="award-box"><div class="award-badge-icon">${p.awardImage ? `<img src="${p.awardImage}" alt="Award Logo" style="width: 100%; height: 100%; object-fit: cover;">` : `<i data-lucide="award" size="28"></i>`}</div><div><div class="award-label">Recognition</div><div class="award-title">${p.award}</div></div></div>` : ''}
