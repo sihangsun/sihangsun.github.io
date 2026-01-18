@@ -353,6 +353,9 @@
             .main-content { margin-left: 0; width: 100%; padding-top: 60px; }
             #detail-view { left: 0; width: 100%; }
             .project-grid { grid-template-columns: 1fr; }
+            /* Mobile: no hover — keep project title panel visible, hide description */
+            .project-card .card-info { transform: translateY(0); background: rgba(255, 255, 255, 0.85); }
+            .project-card .card-desc { display: none; }
             .hero h1 { font-size: 3rem; }
             /* Make section H1s consistent with hero on mobile (override inline styles) */
             #archive h1,
