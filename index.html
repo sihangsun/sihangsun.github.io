@@ -387,9 +387,11 @@
 
         /* Mobile/Touch Active State */
         #back-to-top-btn:active {
-            background-color: var(--orange);
-            color: var(--white);
+            background-color: var(--orange) !important;
+            color: var(--white) !important;
+            border-color: var(--orange) !important;
             transform: scale(0.9);
+            transition: none;
         }
         
         @media (max-width: 768px) {
