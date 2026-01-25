@@ -379,7 +379,18 @@
         /* Back to Top */
         #back-to-top-btn { position: fixed; bottom: 3rem; right: 3rem; width: 3.5rem; height: 3.5rem; background-color: var(--white); border: 1px solid var(--black); color: var(--black); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease, opacity 0.3s ease; z-index: 9999; opacity: 0; pointer-events: none; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         #back-to-top-btn.visible { opacity: 1; pointer-events: auto; }
-        #back-to-top-btn:hover { background-color: var(--orange); color: var(--white); border-color: var(--orange); }
+        
+        /* Desktop Hover */
+        @media (hover: hover) {
+            #back-to-top-btn:hover { background-color: var(--orange); color: var(--white); border-color: var(--orange); }
+        }
+
+        /* Mobile/Touch Active State */
+        #back-to-top-btn:active {
+            background-color: var(--orange);
+            color: var(--white);
+            transform: scale(0.9);
+        }
         
         @media (max-width: 768px) {
              #back-to-top-btn { bottom: 1.5rem; right: 1.5rem; }
@@ -486,7 +497,7 @@
             </div>
         </section>
 
-        <footer>© 2022 - 2026 SIHANG SUN | ALL RIGHTS RESERVED</footer>
+        <footer>© 2021 - 2026 SIHANG SUN | ALL RIGHTS RESERVED</footer>
     </main>
 
     <div id="detail-view">
@@ -498,50 +509,50 @@
     </button>
 
     <script>
-        // --- DATA ---
+        // --- DATA --- 
         const PROJECTS = [
-    // {
-    //     id: 1,
-    //     title: "Passport Project",
-    //     category: "Data Visualization",
-    //     year: "2024",
-    //     roles: ["Lead Designer", "Data Architect", "Motion Specialist"],
-    //     ShortDescription: "A real-time transit data visualization experiment.",
-    //     descriptionMain: "A real-time visualization of city transit patterns, transforming raw GTFS data into an interactive living organism.",
-    //     descriptionSecondary: "View this project, click here.",
-    //     externalLink: "https://example.com/urban-pulse",
-    //     tools: [
-    //         { name: "D3.js", link: "https://www.google.com" },
-    //         { name: "React", link: null },
-    //         { name: "Mapbox GL", link: null }
-    //     ],
-    //     visual: "https://iibawards-prod.s3.amazonaws.com/projects/images/000/006/838/page.jpg?1741532839",
-    //     award: "Best in InfoDesign 2024",
-    //     awardImage: "https://pbs.twimg.com/profile_images/1067434773180702720/FBbQfJKE_400x400.jpg",
-    //     process: [
-    //         { 
-    //             step: "01", 
-    //             title: "Data Ingestion", 
-    //             image: "https://sihangsun.github.io/influence_industry/img/diagram.jpg", 
-    //             desc: [
-    //                 "I started by normalizing 4TB of transit logs...", 
-    //                 "The data was extremely noisy and required significant deduplication before any visualization could take place."
-    //             ] 
-    //         },
-    //         { 
-    //             step: "02", 
-    //             title: "Visual Prototyping", 
-    //             image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
-    //             desc: [
-    //                 "Using D3.js, I experimented with particle systems...", 
-    //                 {
-    //                     text: "Early iterations focused too much on geographic accuracy, but the final version prioritized the 'pulse' of human movement.",
-    //                     links: [{ phrase: "final version", url: "https://www.google.com" }]
-    //                 }
-    //             ] 
-    //         }
-    //     ]
-    // },
+    {
+        id: 1,
+        title: "Who Opens the Door for Whom?",
+        category: "Data Visualization",
+        year: "2025",
+        roles: ["Data Viz Designer", "Developer", "Storyteller"],
+        ShortDescription: "A visual essay explores Asia’s complex web of visa relationships from multiple angles.",
+        descriptionMain: "A visual essay explores Asia’s complex web of visa relationships from multiple angles.",
+        descriptionSecondary: "View this project, click here.",
+        externalLink: "http://www.sihangdataviz.com/Passport_Project/index.html",
+        tools: [
+            { name: "Svelte", link: null },
+            { name: "D3.js", link: null },
+            { name: "R", link: null }
+        ],
+        visual: "img/passport/cover.jpg",
+        award: "The Pudding Cup Honorable 2025 mentions",
+        awardImage: "img/pudding.png",
+        process: [
+            // { 
+            //     step: "01", 
+            //     title: "Data Ingestion", 
+            //     image: "https://sihangsun.github.io/influence_industry/img/diagram.jpg", 
+            //     desc: [
+            //         "I started by normalizing 4TB of transit logs...", 
+            //         "The data was extremely noisy and required significant deduplication before any visualization could take place."
+            //     ] 
+            // },
+            // { 
+            //     step: "02", 
+            //     title: "Visual Prototyping", 
+            //     image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
+            //     desc: [
+            //         "Using D3.js, I experimented with particle systems...", 
+            //         {
+            //             text: "Early iterations focused too much on geographic accuracy, but the final version prioritized the 'pulse' of human movement.",
+            //             links: [{ phrase: "final version", url: "https://www.google.com" }]
+            //         }
+            //     ] 
+            // }
+        ]
+    },
     {
         id: 2,
         title: "Exploring the Price of Living Across Major U.S. Cities",
@@ -558,7 +569,7 @@
         ],
         visual: "img/cost-of-living/cover.jpg",
         award: "Information is Beautiful Awards 2024 Longlist",
-        awardImage: "img/2024 IIB Awards Badge_Longlist.png",
+        awardImage: "img/IIB-Award.png",
         process: [ 
             { 
                 step: "01", 
@@ -587,7 +598,7 @@
         ],
         visual: "img/shape-of-democracy/cover.jpg",
         award: "Information is Beautiful Awards 2024 Longlist",
-        awardImage: "img/2024 IIB Awards Badge_Longlist.png",
+        awardImage: "img/IIB-Award.png",
         process: [ 
             { 
                 step: "01",
@@ -874,6 +885,7 @@
 ];
 
         const ARCHIVE_DATA = [
+            { year: "2025", name: "Who Opens the Door for Whom?", tags: ["Passport Index", "Svelte"], desc: "A visual essay explores Asia’s complex web of visa relationships from multiple angles.", link: "http://www.sihangdataviz.com/Passport_Project/index.html" },
             { year: "2024", name: "Exploring the Price of Living Across Major U.S. Cities", tags: ["Cost living", "d3.js"], desc: "An interactive tool for looking up and comparing the prices of 31 goods and services across 30 different U.S. cities.", link: "https://sihangsun.github.io/Price-of-Living/index.html" },
             { year: "2023", name: "The Industry Behind Your Vote", tags: ["Campaign data", "Scrollytelling"], desc: "This visual essay uses spending data from Donald Trump’s 2020 presidential campaign to trace investments in data-driven influence services and reveal the companies behind the influence industry.", link: "https://influenceindustry.org/en/explorer/case-studies/industry-behind-vote-visual-essay/" },
             { year: "2023", name: "MBTA Subway Crowding Dashboard", tags: ["Subway crowding", "d3.js"], desc: "An interactive dashboard that provides MBTA subway crowding information.", link: "https://sihang-tech2.github.io/final_development/index.html" },
@@ -1068,7 +1080,7 @@
                         <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 5rem; border-bottom: 4px solid var(--orange); display: inline-block;">THE PROCESS</h2>
                         ${stepsHtml}
                     </section>
-                    <footer>© 2025 SIHANG. ALL RIGHTS RESERVED.</footer>
+                    <footer>© 2021 - 2026 SIHANG SUN | ALL RIGHTS RESERVED</footer>
                 </div>
             `;
             
