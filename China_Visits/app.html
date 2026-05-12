@@ -2918,14 +2918,14 @@
       const countryAreaG = g
         .append("g")
         .attr("class", "country-radial-area")
-        .attr("pointer-events", "none")
-        .attr("filter", "url(#ink-xuan-paper)");
+        .attr("pointer-events", "none");
 
       countryAreaG
         .selectAll("path.area-fill")
         .data(d3.range(n))
         .join("path")
         .attr("class", "area-fill")
+        .attr("filter", "url(#ink-xuan-paper)")
         .attr("d", (d) => quadSlicePath(d))
         .attr("fill", (d) => `url(#${gradientIdForContinent(countryData[d].continent)})`)
         .attr("stroke", "none")
