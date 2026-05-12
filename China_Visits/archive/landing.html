@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bridging Mountains · Connecting Worlds</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #2a261f;
+      --ink-dim: #5c5548;
+      --accent: #8b4a32;
+      --gold: #9a6b3f;
+      --orbit-stroke: rgba(82, 121, 108, 0.42);
+      --orbit-node: #52796c;
+      --orbit-node-soft: rgba(82, 121, 108, 0.75);
+      --orbit-node-accent: rgba(139, 74, 50, 0.55);
+      /* Portrait stack: vh tracks viewport height; rem caps extremes (调这里改上下间距) */
+      --portrait-pull-left: clamp(-3.85rem, -8vh, -2.35rem);
+      --portrait-pull-right: clamp(-4rem, -8.4vh, -2.45rem);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+
+    #canvas-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    #grain-svg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.055;
+      mix-blend-mode: multiply;
+    }
+
+    .portrait-orbit {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      overflow: visible;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #d8c8b2;
+      color: var(--ink);
+      font-family: "JetBrains Mono", monospace;
+      line-height: 1.5;
+    }
+
+    /* ── Hero: CSS Grid ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      z-index: 4;
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow: hidden;
+      /* Desktop default: left-portrait | center | right-portrait */
+      display: grid;
+      grid-template-columns: 26vw 1fr 26vw;
+      grid-template-rows: 1fr;
+      grid-template-areas: "left center right";
+    }
+
+    /* ── Column bases ────────────────────────────────────────────────── */
+    .col {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100svh;
+    }
+    .col-left  { grid-area: left;   overflow: visible; }
+    .col-right { grid-area: right;  overflow: visible; }
+
+    /* ── ≥768px: lock viewport height; center column clips (no inner scroll) ─── */
+    @media (min-width: 768px) {
+      .hero {
+        height: 100svh;
+        min-height: 100svh;
+        max-height: 100svh;
+      }
+      .hero > .col {
+        min-height: 0;
+        height: 100%;
+        max-height: 100%;
+      }
+      .col-center {
+        min-height: 0;
+        overflow: hidden;
+      }
+
+      .col-left,
+      .col-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      .col-left  { align-items: flex-start; }
+      .col-right { align-items: flex-end; }
+
+      .col-left .portrait,
+      .col-right .portrait {
+        position: relative;
+        flex-shrink: 0;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        transform: translateY(14px) scale(0.98);
+        animation-name: portrait-in;
+      }
+
+      .l-tl {
+        margin: -1vh 0 0 -3vw;
+      }
+      .l-ml {
+        margin: var(--portrait-pull-left) 0 0 2vw;
+        animation-delay: 0.58s;
+      }
+      .l-bl {
+        margin: calc(var(--portrait-pull-left) + 2.5rem) 0 -3vh -2vw;
+        animation-delay: 0.74s;
+      }
+
+      .l-tr {
+        margin: -2vh 2vw 0 0;
+      }
+      .l-mr {
+        margin: var(--portrait-pull-right) -3vw 0 0;
+        animation-delay: 0.66s;
+      }
+      .l-br {
+        margin: var(--portrait-pull-right) 0 -2vh 0;
+        animation-delay: 0.82s;
+      }
+    }
+    .col-center {
+      grid-area: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* justify-content: center; */
+      gap: 0.75rem;
+      padding: clamp(0.75rem, 3vw, 2rem);
+      z-index: 10;
+    }
+
+    /* ── Portraits: absolute ≤767px; relative + flex stack ≥768px ───── */
+    .portrait {
+      position: absolute;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(14px) scale(0.98);
+      animation: portrait-in 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .portrait img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: auto;
+      display: block;
+      mix-blend-mode: normal;
+    }
+
+    /* ≤767px: absolute anchors (短条 portrait 区); ≥768px 由上方 @media 覆盖为 flex */
+
+    /* Row 1 */
+    .l-tl {
+      width: clamp(135px, 20.8vw, 400px);
+      top: -1%;
+      left: -3vw;
+      animation-delay: 0.42s;
+    }
+    .l-tr {
+      width: clamp(140px, 24vw, 460px);
+      top: -2%;
+      right: 2vw;
+      animation-delay: 0.5s;
+    }
+    /* Row 2 */
+    .l-ml {
+      width: clamp(115px, 18.2vw, 350px);
+      top: 48%;
+      left: 2vw;
+      transform: translateY(-50%) translateY(14px) scale(0.98);
+      animation-name: portrait-in-ml;
+      animation-delay: 0.58s;
+    }
+    .l-mr {
+      width: clamp(115px, 19.8vw, 380px);
+      top: 53%;
+      right: -3vw;
+      transform: translateY(-50%) translateY(14px) scale(0.98);
+      animation-name: portrait-in-mr;
+      animation-delay: 0.66s;
+    }
+    /* Row 3 */
+    .l-bl {
+      width: clamp(135px, 26vw, 500px);
+      bottom: -3%;
+      left: -2vw;
+      animation-delay: 0.74s;
+    }
+    .l-br {
+      width: clamp(135px, 19.8vw, 380px);
+      bottom: -1%;
+      right: 0;
+      animation-delay: 0.82s;
+    }
+
+    @keyframes portrait-in {
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    @keyframes portrait-in-ml {
+      to {
+        opacity: 1;
+        transform: translateY(-50%) translateY(0) scale(1);
+      }
+    }
+    @keyframes portrait-in-mr {
+      to {
+        opacity: 1;
+        transform: translateY(-50%) translateY(0) scale(1);
+      }
+    }
+
+    .heading-block {
+      text-align: center;
+      max-width: 34rem;
+      width: 100%;
+    }
+    .narrative {
+      width: 100%;
+      max-width: 34rem;
+      margin-inline: auto;
+      text-align: center;
+    }
+    .narrative .lead:first-of-type {
+      margin-top: 0.85rem;
+    }
+
+    .title {
+      margin: 0;
+      font-family: "Noto Serif SC", Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(1.85rem, 4.2vw, 3.15rem);
+      line-height: 1.12;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--ink);
+      opacity: 0;
+      transform: translateY(16px);
+      animation: text-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .lead {
+    text-align: left;
+      margin: 0.95rem 0 0;
+      padding: 0 0.25rem;
+      max-width: 34em;
+      margin-left: auto;
+      margin-right: auto;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 400;
+      font-size: clamp(0.68rem, 1.15vw, 0.82rem);
+      line-height: 1.65;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      color: var(--ink);
+      opacity: 0;
+      transform: translateY(12px);
+      animation: text-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
+    }
+
+    .subtitle {
+      margin: 1rem 0 0;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 400;
+      font-size: clamp(0.58rem, 1.05vw, 0.72rem);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      opacity: 0;
+      transform: translateY(12px);
+      animation: text-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.16s forwards;
+    }
+
+    .byline {
+      display: block;
+      margin: 0.9rem 0 0;
+      font-family: "JetBrains Mono", monospace;
+      font-style: normal;
+      font-weight: 400;
+      font-size: clamp(0.52rem, 0.9vw, 0.65rem);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: text-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+    }
+    .byline .byline-label {
+      opacity: 0.55;
+      margin-right: 0.35em;
+    }
+
+    .divider {
+      margin-top: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      width: min(240px, 80vw);
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0;
+      animation: text-in 0.75s ease 0.26s forwards;
+      margin-bottom: 2rem;
+    }
+    .div-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(
+        to right,
+        transparent,
+        rgba(90, 70, 45, 0.35) 25%,
+        rgba(90, 70, 45, 0.35) 75%,
+        transparent
+      );
+    }
+    .div-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+    }
+    .div-dot {
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    /* Region palette (matches ink-rose-viz REGION_COLORS); varied sizes */
+    .div-dot.d1 { width: 8px; height: 8px; background: #dd9b4d; opacity: 0.88; }  /* Africa */
+    .div-dot.d2 { width: 6px; height: 6px; background: #487280; opacity: 0.88; }  /* Americas */
+    .div-dot.d3 { width: 9px; height: 9px; background: #a74713; opacity: 0.88; } /* Asia */
+    .div-dot.d4 { width: 5px; height: 5px; background: #6cb4a5; opacity: 0.88; } /* Europe */
+    .div-dot.d5 { width: 7px; height: 7px; background: #606b8f; opacity: 0.88; } /* Oceania */
+
+    @keyframes text-in {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Tablet landscape: 768–1023px ────────────────────────────────── */
+    @media (max-width: 1023px) and (min-width: 768px) {
+      .hero {
+        grid-template-columns: 22vw 1fr 22vw;
+      }
+      /* widths already scale via vw clamp; tweak column fit only */
+      .l-tl { width: clamp(120px, 21vw, 340px); }
+      .l-tr { width: clamp(125px, 23vw, 380px); }
+      .l-ml { width: clamp(100px, 17vw, 300px); }
+      .l-mr { width: clamp(100px, 18vw, 320px); }
+      .l-bl { width: clamp(120px, 24vw, 420px); }
+      .l-br { width: clamp(120px, 18vw, 320px); }
+    }
+
+    /* ── ≤767px: 3-column top row (portraits | heading | portraits),
+                  narrative full-width below — smaller portraits, flex stack     */
+    @media (max-width: 767px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        grid-template-areas:
+          "portL heading portR"
+          "narr  narr    narr";
+        min-height: 100svh;
+        align-items: start;
+        overflow: visible;
+      }
+      .col-left {
+        grid-area: portL;
+        min-height: unset;
+        height: auto;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.35rem 0 0.5rem;
+      }
+      .col-right {
+        grid-area: portR;
+        min-height: unset;
+        height: auto;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        padding: 0.35rem 0 0.5rem;
+      }
+      .col-center {
+        display: contents;
+        padding: 0;
+        min-height: unset;
+        overflow: visible;
+        gap: 0;
+      }
+      .heading-block {
+        grid-area: heading;
+        align-self: center;
+        justify-self: stretch;
+        max-width: none;
+        width: 100%;
+        padding: 0.75rem 0.35rem 0.35rem;
+        z-index: 10;
+      }
+      .narrative {
+        grid-area: narr;
+        max-width: 92vw;
+        width: 100%;
+        padding: 0 1.25rem 2.5rem;
+      }
+      .title  { font-size: clamp(1.15rem, 4.2vw, 1.75rem); }
+      .subtitle { font-size: clamp(0.5rem, 2.4vw, 0.68rem); }
+      .lead   { font-size: clamp(0.7rem, 2.8vw, 0.88rem); }
+      .narrative .lead:first-of-type {
+        margin-top: 4rem;
+      }
+      .narrative .lead {
+        margin-top: 1.15rem;
+      }
+      .divider {
+        width: 100%;
+        max-width: 100%;
+        margin-top: 0.85rem;
+      }
+
+      /* Portraits: flex stack, smaller widths, light overlap (like desktop) */
+      .col-left .portrait,
+      .col-right .portrait {
+        position: relative !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        flex-shrink: 0;
+        transform: translateY(10px) scale(0.98);
+        animation-name: portrait-in;
+        width: min(100%) !important;
+        margin-top: clamp(-0.55rem, -2vw, -0.2rem);
+      }
+      .col-left .portrait:first-child,
+      .col-right .portrait:first-child {
+        margin-top: 0;
+      }
+      .l-tl { animation-delay: 0.42s; }
+      .l-ml { animation-delay: 0.58s; }
+      .l-bl { animation-delay: 0.74s; }
+      /* Li only: larger raster, same flex footprint (visual scale, no layout change) */
+      .col-left .l-bl img {
+        transform: scale(1.35);
+        transform-origin: center top;
+      }
+      .l-tr { animation-delay: 0.5s; }
+      .l-mr { animation-delay: 0.66s; }
+      .l-br { animation-delay: 0.82s; }
+    }
+
+    /* ── Mobile narrow: ≤479px — even smaller portraits in side rails ──── */
+    @media (max-width: 479px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
+      }
+      .heading-block { padding: 0.5rem 0.2rem 0.25rem; }
+      .narrative {
+        max-width: 96vw;
+        padding: 0 1rem 2rem;
+      }
+      .title  { font-size: clamp(1.05rem, 6vw, 1.5rem); }
+      .lead   { font-size: clamp(0.68rem, 3.2vw, 0.82rem); }
+      .narrative .lead:first-of-type {
+        margin-top: 1.45rem;
+      }
+      .narrative .lead {
+        margin-top: 1.3rem;
+      }
+
+      .col-left .portrait,
+      .col-right .portrait {
+        width: min(100%) !important;
+        margin-top: clamp(-0.45rem, -1.8vw, -0.15rem);
+      }
+      .col-left .portrait:first-child,
+      .col-right .portrait:first-child {
+        margin-top: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .title, .lead, .subtitle, .divider, .portrait {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas-bg" aria-hidden="true"></canvas>
+  <svg id="grain-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <filter id="parchment-grain" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72 0.68" numOctaves="4" seed="7" stitchTiles="stitch" result="noise" />
+      <feColorMatrix type="matrix"
+        values="0.9 0.1 0   0 0
+                0.1 0.8 0.1 0 0
+                0   0.1 0.7 0 0
+                0   0   0   1 0"
+        in="noise" />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#parchment-grain)" />
+  </svg>
+
+  <section class="hero">
+
+    <!-- ── Left column: Zhu · Hu · Li ─────────────────────────── -->
+    <div class="col col-left">
+
+      <!-- ZHU Rongji -->
+      <div class="portrait l-tl">
+        <svg class="portrait-orbit" viewBox="-20 -20 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="48" cy="33" r="54" fill="none" stroke="rgba(82,121,108,0.28)" stroke-width="0.55"/>
+          <circle cx="48" cy="33" r="44" fill="none" stroke="rgba(82,121,108,0.20)" stroke-width="0.42" stroke-dasharray="2.2 1.6"/>
+          <circle cx="48" cy="33" r="34" fill="none" stroke="rgba(82,121,108,0.14)" stroke-width="0.32"/>
+          <circle cx="81.3" cy="-9.6"  r="2.0" fill="#52796c" opacity="0.82"/>
+          <circle cx="49.5" cy="-11"   r="1.6" fill="#8b4a32" opacity="0.70"/>
+          <circle cx="101.6" cy="39.6" r="1.3" fill="#52796c" opacity="0.68"/>
+          <circle cx="-5.8"  cy="37.7" r="1.0" fill="#52796c" opacity="0.58"/>
+        </svg>
+        <img src="img/zhu.png" alt="" />
+      </div>
+
+      <!-- HU Jintao -->
+      <div class="portrait l-ml">
+        <svg class="portrait-orbit" viewBox="-20 -20 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="49" cy="36" r="56" fill="none" stroke="rgba(82,121,108,0.28)" stroke-width="0.55"/>
+          <circle cx="49" cy="36" r="46" fill="none" stroke="rgba(82,121,108,0.20)" stroke-width="0.42" stroke-dasharray="2.2 1.6"/>
+          <circle cx="49" cy="36" r="36" fill="none" stroke="rgba(82,121,108,0.14)" stroke-width="0.32"/>
+          <circle cx="81.1"  cy="-9.9"  r="1.2" fill="#52796c" opacity="0.65"/>
+          <circle cx="53.8"  cy="-9.8"  r="1.5" fill="#52796c" opacity="0.75"/>
+          <circle cx="104.7" cy="41.9"  r="2.0" fill="#cc5d4e" opacity="0.72"/>
+          <circle cx="-6.9"  cy="33.1"  r="1.4" fill="#52796c" opacity="0.62"/>
+        </svg>
+        <img src="img/wen.png" alt="" />
+      </div>
+
+      <!-- LI Keqiang -->
+      <div class="portrait l-bl">
+        <svg class="portrait-orbit" viewBox="-20 -20 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="50" cy="37" r="55" fill="none" stroke="rgba(82,121,108,0.28)" stroke-width="0.55"/>
+          <circle cx="50" cy="37" r="45" fill="none" stroke="rgba(82,121,108,0.20)" stroke-width="0.42" stroke-dasharray="2.2 1.6"/>
+          <circle cx="50" cy="37" r="35" fill="none" stroke="rgba(82,121,108,0.14)" stroke-width="0.32"/>
+          <circle cx="86.8"  cy="-3.9"  r="2.1" fill="#52796c" opacity="0.85"/>
+          <circle cx="52.4"  cy="-7.9"  r="1.5" fill="#52796c" opacity="0.72"/>
+          <circle cx="104.8" cy="41.8"  r="1.6" fill="#8b4a32" opacity="0.68"/>
+          <circle cx="-5.0"  cy="37.0"  r="1.1" fill="#52796c" opacity="0.58"/>
+        </svg>
+        <img src="img/li.png" alt="" />
+      </div>
+
+    </div><!-- /col-left -->
+
+    <!-- ── Center: heading + narrative (≤767px: split into 2 grid rows via display:contents) -->
+    <div class="col col-center">
+      <div class="heading-block">
+        <h1 class="title">China Visits</h1>
+        <p class="subtitle">Chinese leaders' state visits around the globe</p>
+        <div class="divider">
+          <div class="div-line"></div>
+          <div class="div-dots">
+            <span class="div-dot d1"></span>
+            <span class="div-dot d2"></span>
+            <span class="div-dot d3"></span>
+            <span class="div-dot d4"></span>
+            <span class="div-dot d5"></span>
+          </div>
+          <div class="div-line"></div>
+        </div>
+        <address class="byline"><span class="byline-label">By</span>Sihang Sun</address>
+      </div>
+      <div class="narrative">
+        <p class="lead">
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+        <p class="lead">
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+        <p class="lead">
+          Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+      </div>
+    </div><!-- /col-center -->
+
+    <!-- ── Right column: Jiang · Wen · Xi ──────────────────────── -->
+    <div class="col col-right">
+
+      <!-- JIANG Zemin -->
+      <div class="portrait l-tr">
+        <svg class="portrait-orbit" viewBox="-20 -20 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="52" cy="32" r="57" fill="none" stroke="rgba(82,121,108,0.28)" stroke-width="0.55"/>
+          <circle cx="52" cy="32" r="47" fill="none" stroke="rgba(82,121,108,0.20)" stroke-width="0.42" stroke-dasharray="2.2 1.6"/>
+          <circle cx="52" cy="32" r="37" fill="none" stroke="rgba(82,121,108,0.14)" stroke-width="0.32"/>
+          <circle cx="82.2"  cy="-16.3" r="1.5" fill="#52796c" opacity="0.75"/>
+          <circle cx="61.8"  cy="-14.0" r="1.8" fill="#52796c" opacity="0.82"/>
+          <circle cx="108.1" cy="41.9"  r="2.2" fill="#cc5d4e" opacity="0.68"/>
+          <circle cx="-4.9"  cy="35.0"  r="1.0" fill="#52796c" opacity="0.58"/>
+        </svg>
+        <img src="img/jiang.png" alt="" />
+      </div>
+
+      <!-- WEN Jiabao -->
+      <div class="portrait l-mr">
+        <svg class="portrait-orbit" viewBox="-20 -20 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="51" cy="34" r="58" fill="none" stroke="rgba(82,121,108,0.28)" stroke-width="0.55"/>
+          <circle cx="51" cy="34" r="48" fill="none" stroke="rgba(82,121,108,0.20)" stroke-width="0.42" stroke-dasharray="2.2 1.6"/>
+          <circle cx="51" cy="34" r="38" fill="none" stroke="rgba(82,121,108,0.14)" stroke-width="0.32"/>
+          <circle cx="78.2"  cy="-17.2" r="1.8" fill="#cc5d4e" opacity="0.68"/>
+          <circle cx="51.0"  cy="-14.0" r="1.4" fill="#52796c" opacity="0.72"/>
+          <circle cx="108.3" cy="43.1"  r="1.1" fill="#52796c" opacity="0.58"/>
+          <circle cx="-6.4"  cy="42.1"  r="2.0" fill="#52796c" opacity="0.80"/>
+        </svg>
+        <img src="img/hu.png" alt="" />
+      </div>
+
+      <!-- XI Jinping -->
+      <div class="portrait l-br">
+        <svg class="portrait-orbit" viewBox="-20 -20 140 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="50" cy="35" r="58" fill="none" stroke="rgba(82,121,108,0.28)" stroke-width="0.55"/>
+          <circle cx="50" cy="35" r="48" fill="none" stroke="rgba(82,121,108,0.20)" stroke-width="0.42" stroke-dasharray="2.2 1.6"/>
+          <circle cx="50" cy="35" r="38" fill="none" stroke="rgba(82,121,108,0.14)" stroke-width="0.32"/>
+          <circle cx="83.3"  cy="-12.5" r="2.0" fill="#52796c" opacity="0.85"/>
+          <circle cx="54.2"  cy="-12.8" r="1.6" fill="#8b4a32" opacity="0.70"/>
+          <circle cx="107.4" cy="43.1"  r="2.4" fill="#cc5d4e" opacity="1"/>
+          <circle cx="-7.8"  cy="40.1"  r="1.3" fill="#cc5d4e" opacity="0.65"/>
+          <circle cx="21.0"  cy="-15.2" r="1.0" fill="#cc5d4e" opacity="0.60"/>
+        </svg>
+        <img src="img/xi.png" alt="" />
+      </div>
+
+    </div><!-- /col-right -->
+
+  </section>
+
+  <script>
+  (function () {
+    'use strict';
+    const canvas = document.getElementById('canvas-bg');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    function mkRng(seed) {
+      let s = seed >>> 0;
+      return function () {
+        s = Math.imul(s ^ (s >>> 15), 1 | s);
+        s = (s + Math.imul(s ^ (s >>> 7), 61 | s)) ^ s;
+        return ((s ^ (s >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function draw(W, H) {
+      const rng = mkRng(0xC0FFEE17);
+      const bg = ctx.createLinearGradient(0, 0, W * 0.88, H);
+      bg.addColorStop(0.0, '#f4efe4');
+      bg.addColorStop(0.28, '#ebe3d4');
+      bg.addColorStop(0.52, '#e4d9c8');
+      bg.addColorStop(0.78, '#ddcfbd');
+      bg.addColorStop(1.0, '#d8c8b2');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      for (let i = 0; i < 8; i++) {
+        const x = rng() * W, y = rng() * H;
+        const r = W * (0.06 + rng() * 0.22);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        const a = 0.012 + rng() * 0.028;
+        g.addColorStop(0, `rgba(255, 250, 238, ${a})`);
+        g.addColorStop(1, 'rgba(255, 250, 238, 0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+      }
+      ctx.restore();
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      for (let i = 0; i < 6; i++) {
+        const x = rng() * W, y = rng() * H;
+        const r = Math.max(W, H) * (0.08 + rng() * 0.22);
+        const asp = 0.35 + rng() * 0.65;
+        const rot = rng() * Math.PI;
+        const hue = 28 + rng() * 16;
+        const a = 0.026 + rng() * 0.055;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rot);
+        ctx.scale(1, asp);
+        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+        g.addColorStop(0, `hsla(${hue}, 40%, 52%, ${a})`);
+        g.addColorStop(0.42, `hsla(${hue}, 35%, 58%, ${a * 0.5})`);
+        g.addColorStop(1, `hsla(${hue}, 30%, 64%, 0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+      const minerals = [
+        { h: 214, s: 32, l: 62, count: 3, maxSize: 0.18, alpha: 0.038 },
+        { h: 168, s: 26, l: 64, count: 3, maxSize: 0.16, alpha: 0.034 },
+        { h: 22, s: 28, l: 66, count: 3, maxSize: 0.18, alpha: 0.041 },
+        { h: 202, s: 22, l: 68, count: 2, maxSize: 0.12, alpha: 0.03 },
+        { h: 12, s: 26, l: 68, count: 3, maxSize: 0.13, alpha: 0.035 },
+        { h: 36, s: 22, l: 70, count: 2, maxSize: 0.14, alpha: 0.033 },
+      ];
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      minerals.forEach((m) => {
+        for (let i = 0; i < m.count; i++) {
+          const x = rng() * W, y = rng() * H;
+          const r = Math.max(W, H) * (0.04 + rng() * m.maxSize);
+          const asp = 0.28 + rng() * 0.8;
+          const rot = rng() * Math.PI * 2;
+          const dh = (rng() - 0.5) * 20;
+          const a = m.alpha * (0.55 + rng() * 0.8);
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(rot);
+          ctx.scale(1, asp);
+          const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+          g.addColorStop(0, `hsla(${m.h + dh}, ${m.s}%, ${m.l}%, ${a})`);
+          g.addColorStop(0.48, `hsla(${m.h + dh}, ${m.s}%, ${m.l + 5}%, ${a * 0.35})`);
+          g.addColorStop(1, `hsla(${m.h + dh}, ${m.s - 8}%, ${m.l + 10}%, 0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      });
+      ctx.restore();
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.lineCap = 'round';
+      const nFibers = Math.floor((W * H) / 1750);
+      for (let i = 0; i < nFibers; i++) {
+        const x = rng() * W, y = rng() * H;
+        const len = 5 + rng() * 40;
+        const angle = rng() * Math.PI * 2;
+        const wobble = (rng() - 0.5) * 0.7;
+        const alpha = 0.028 + rng() * 0.11;
+        const width = 0.18 + rng() * 0.45;
+        const fHue = rng() > 0.82 ? 8 + rng() * 18 : 27 + rng() * 20;
+        const fL = 18 + rng() * 38;
+        const fS = 28 + rng() * 45;
+        ctx.strokeStyle = `hsla(${fHue}, ${fS}%, ${fL}%, ${alpha})`;
+        ctx.lineWidth = width;
+        const cx = x + Math.cos(angle + wobble) * len * 0.45 + (rng() - 0.5) * 7;
+        const cy = y + Math.sin(angle + wobble) * len * 0.45 + (rng() - 0.5) * 7;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.quadraticCurveTo(cx, cy, x + Math.cos(angle) * len, y + Math.sin(angle) * len);
+        ctx.stroke();
+      }
+      ctx.restore();
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      const nSpecks = Math.floor((W * H) / 300);
+      for (let i = 0; i < nSpecks; i++) {
+        const x = rng() * W, y = rng() * H;
+        const sz = 0.3 + rng() * 0.9;
+        const a = 0.012 + rng() * 0.065;
+        ctx.fillStyle = rng() > 0.42 ? `rgba(42, 38, 32, ${a})` : `rgba(180, 175, 165, ${a * 0.4})`;
+        ctx.fillRect(x, y, sz, sz);
+      }
+      ctx.restore();
+      (function applyPixelGrain() {
+        const imgData = ctx.getImageData(0, 0, Math.ceil(W), Math.ceil(H));
+        const data = imgData.data;
+        const grainRng = mkRng(0xFACE1234);
+        for (let p = 0; p < data.length; p += 4) {
+          const n = (grainRng() - 0.5) * 9.5;
+          data[p] = Math.min(255, Math.max(0, data[p] + n));
+          data[p + 1] = Math.min(255, Math.max(0, data[p + 1] + n * 0.8));
+          data[p + 2] = Math.min(255, Math.max(0, data[p + 2] + n * 0.55));
+        }
+        ctx.putImageData(imgData, 0, 0);
+      })();
+    }
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw(W, H);
+    }
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 200);
+    });
+    resize();
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,2839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radial cluster + rose (ink paper)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+  <style>
+    :root {
+      --ink: #2a261f;
+      --ink-dim: #5c5548;
+      --accent: #8b4a32;
+      --gold: #9a6b3f;
+      --border: rgba(45, 35, 22, 0.22);
+      --panel-bg: rgba(255, 252, 245, 0.42);
+      --code-bg: rgba(90, 70, 45, 0.08);
+      /* Square #chart: limit by narrower of column vs viewport height (fit whole viz) */
+      --chart-max-side: 1100px;
+      --chart-viewport-chrome-y: calc(
+        1.2rem + 2rem + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)
+      );
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    #canvas-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    #grain-svg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.055;
+      mix-blend-mode: multiply;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      /* 与 canvas 渐变末端一致，略暗、略泛黄 */
+      background: #d8c8b2;
+      color: var(--ink);
+      font-family: "JetBrains Mono", monospace;
+      line-height: 1.5;
+    }
+    .wrap {
+      position: relative;
+      z-index: 4;
+      max-width: 1100px;
+      margin: 0 auto;
+      /* padding: 1.75rem 1.2rem 2.25rem; */
+    }
+    .sub code {
+      background: var(--code-bg);
+      padding: 0.06em 0.32em;
+      border-radius: 3px;
+      font-size: 0.92em;
+    }
+    .sub {
+      margin: 0.35rem 0 0;
+      max-width: 52rem;
+      font-size: 0.9rem;
+      color: var(--ink-dim);
+    }
+    .panel {
+      /* margin-top: 1.2rem; */
+      /* border: 1px solid var(--border); */
+      border-radius: 6px;
+      /* background: var(--panel-bg); */
+      /* box-shadow: 0 2px 24px rgba(40, 30, 18, 0.07); */
+      /* backdrop-filter: blur(3px); */
+      /* -webkit-backdrop-filter: blur(3px); */
+      overflow: hidden;
+    }
+    #chart {
+      display: block;
+      margin: 0 auto;
+      /* viewBox is square: width drives height (height: auto). Cap width by shortest usable viewport edge. */
+      width: min(
+        100%,
+        var(--chart-max-side),
+        calc(100vh - var(--chart-viewport-chrome-y))
+      );
+      max-width: 100%;
+      height: auto;
+      touch-action: none;
+      cursor: default;
+      overflow: hidden;
+    }
+    @supports (height: 100svh) {
+      #chart {
+        width: min(
+          100%,
+          var(--chart-max-side),
+          calc(100svh - var(--chart-viewport-chrome-y))
+        );
+      }
+    }
+    /* Wider than tall: match #canvas-bg (full viewport height); width follows square, capped by column */
+    @media (min-aspect-ratio: 1/1) {
+      #chart {
+        width: auto;
+        max-width: min(100%, var(--chart-max-side));
+        height: 100vh;
+        aspect-ratio: 1 / 1;
+      }
+    }
+    @supports (height: 100dvh) {
+      @media (min-aspect-ratio: 1/1) {
+        #chart {
+          height: 100dvh;
+        }
+      }
+    }
+    /* cursor: default until zoomed; then "move" set from JS on #chart */
+    /* legend-row disabled
+    .legend-row {
+      margin-top: 0.85rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+    .legend-row h3 {
+      width: 100%;
+      margin: 0 0 0.25rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      color: var(--gold);
+      font-weight: 500;
+    }
+    */
+    .sw {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-right: 0.75rem;
+      margin-bottom: 0.25rem;
+    }
+    .leader-bound-arc-year {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 10.5px;
+      font-weight: 500;
+      fill: rgba(42, 36, 28, 0.82);
+    }
+    .sw i {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    /* legend-distance swatches disabled (was inside legend-row)
+    .legend-dist-sw {
+      cursor: pointer;
+      border-radius: 3px;
+      padding: 0.12rem 0.28rem;
+      margin-right: 0.45rem;
+      margin-bottom: 0.2rem;
+      transition: background 0.12s ease, outline 0.12s ease;
+      outline: 1px solid transparent;
+    }
+    .legend-dist-sw:hover {
+      background: rgba(139, 74, 50, 0.1);
+    }
+    .legend-dist-sw.is-selected {
+      outline: 1px solid rgba(139, 74, 50, 0.45);
+      background: rgba(154, 107, 63, 0.14);
+      color: var(--ink);
+    }
+    */
+    /** Country ring vertices (match Radial-area-chart). */
+    #chart g.country-vertices g.vertex {
+      cursor: crosshair;
+    }
+    #chart g.country-vertices g.vertex:hover .vertex-line {
+      stroke-width: 2.35px;
+    }
+    #chart g.yin-yang-embed .rose-slice {
+      stroke: none;
+      cursor: crosshair;
+    }
+    #chart g.yin-yang-embed .rose-center { pointer-events: none; text-anchor: middle; }
+    /* ── Rose-center text: one font size for all lines ──────────────────
+       Toggle EVERYTHING by changing the single font-size below (currently 9px).
+       To make individual lines different, override font-size on each rule.     */
+    #chart g.yin-yang-embed .rose-center .c-year,
+    #chart g.yin-yang-embed .rose-center .c-sub,
+    #chart g.yin-yang-embed .rose-center .c-focus,
+    #chart g.yin-yang-embed .rose-center .c-total {
+      font-size: 10px;
+      font-weight: 400;
+      fill: #3d3a36;
+    }
+    /* Leader name: color set per-hover in JS (office color); bold weight here */
+    #chart g.yin-yang-embed .rose-center .c-focus { font-weight: 600; }
+    /* Stops line: bold */
+    #chart g.yin-yang-embed .rose-center .c-total { font-weight: 600; }
+    #chart g.yin-yang-embed .rose-center .c-line { font-size: 9.5px; fill: #3d3a36; }
+    #chart g.yin-yang-embed .rose-center .c-hint { font-size: 8.5px; fill: #7a756d; }
+    #chart g.yin-yang-embed g.rose-vertices g.vertex { cursor: crosshair; }
+    #chart g.yin-yang-embed g.rose-vertices g.vertex:hover .vertex-line { stroke-width: 2.35px; }
+    #chart g.yin-yang-embed path.rose-tip-cap {
+      pointer-events: none;
+      stroke: none;
+    }
+    /* ── Country search widget ──────────────────────────────────────── */
+    .country-search-wrap {
+      position: absolute;
+      top: 0.65rem;
+      right: 0.65rem;
+      z-index: 20;
+      width: 200px;
+      font-family: "JetBrains Mono", monospace;
+    }
+    .country-search-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .country-search-input {
+      width: 100%;
+      padding: 0.38rem 2rem 0.38rem 0.6rem;
+      background: rgba(255, 250, 240, 0.88);
+      border: 1px solid rgba(174, 145, 125, 0.5);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 0.65rem;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      outline: none;
+      box-shadow: 0 2px 12px rgba(40, 28, 18, 0.09);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      transition: border-color 0.14s ease, box-shadow 0.14s ease;
+    }
+    /* Hide native clear on type="search" (Chrome/Safari blue ✕); we use #country-search-clear. */
+    .country-search-input::-webkit-search-cancel-button,
+    .country-search-input::-webkit-search-decoration {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .country-search-input::-ms-clear {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+    .country-search-input::placeholder { color: var(--ink-dim); }
+    .country-search-input:focus {
+      border: 3px solid rgba(139, 74, 50, 0.62);
+      box-shadow:
+        0 2px 8px rgba(139, 74, 50, 0.12),
+        0 10px 28px rgba(40, 28, 18, 0.16);
+    }
+    .country-search-clear {
+      position: absolute;
+      right: 0.38rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      padding: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-dim);
+      font-size: 0.75rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.1s ease;
+    }
+    .country-search-clear:hover { opacity: 1; color: var(--accent); }
+    .country-search-clear.hidden { display: none; }
+    .country-search-suggestions {
+      position: absolute;
+      top: calc(100% + 3px);
+      left: 0;
+      right: 0;
+      background: rgba(255, 250, 240, 0.97);
+      border: 1px solid rgba(90, 60, 40, 0.22);
+      border-radius: 4px;
+      box-shadow: 0 6px 20px rgba(40, 28, 18, 0.14);
+      list-style: none;
+      margin: 0;
+      padding: 0.2rem 0;
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 30;
+    }
+    .country-search-suggestions.hidden { display: none; }
+    .country-search-suggestions li {
+      padding: 0.32rem 0.65rem;
+      font-size: 0.63rem;
+      letter-spacing: 0.03em;
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .country-search-suggestions li:hover,
+    .country-search-suggestions li.active {
+      background: rgba(139, 74, 50, 0.1);
+      color: var(--accent);
+    }
+    .country-search-suggestions li.no-result {
+      color: var(--ink-dim);
+      cursor: default;
+      font-style: italic;
+    }
+    .country-search-suggestions li.no-result:hover { background: none; color: var(--ink-dim); }
+    /* Narrow screens: search box sits below the panel, full width */
+    @media (max-aspect-ratio: 1/1) {
+      .country-search-wrap {
+        --cs-pad: clamp(1.1rem, 14vw, 2.35rem);
+        position: relative;
+        width: 100%;
+        max-width: min(100%, var(--chart-max-side));
+        margin: 0.55rem auto 0;
+        padding-inline: 0;
+        box-sizing: border-box;
+        display: block;
+      }
+      .country-search-wrap .country-search-inner {
+        padding-inline: var(--cs-pad);
+        box-sizing: border-box;
+      }
+      .country-search-wrap .country-search-suggestions {
+        left: var(--cs-pad);
+        right: var(--cs-pad);
+        width: auto;
+        box-sizing: border-box;
+      }
+      .country-search-wrap .country-search-input {
+        background: rgba(255, 250, 240, 0.72);
+      }
+    }
+    /* ── End country search ─────────────────────────────────────────── */
+
+    #tip {
+      position: fixed;
+      z-index: 50;
+      pointer-events: none;
+      max-width: min(300px, calc(100vw - 20px));
+      padding: 0.75rem 0.9rem;
+      border: 1px solid rgba(90, 60, 40, 0.28);
+      background: rgba(255, 250, 240, 0.97);
+      border-radius: 4px;
+      box-shadow: 0 8px 28px rgba(40, 28, 18, 0.18);
+      font-size: 0.74rem;
+      line-height: 1.4;
+      color: var(--ink);
+      opacity: 0;
+      transition: opacity 0.1s ease;
+    }
+    #tip.visible { opacity: 1; }
+    /* Inline strong so e.g. country + " · continent" stay on one line */
+    #tip strong { color: var(--accent); display: inline; font-size: 0.88rem; font-weight: 500; }
+    #tip .meta {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.64rem;
+      color: var(--ink-dim);
+      margin-top: 0.35rem;
+    }
+    #tip .meta-extra {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.58rem;
+      color: #5a5a5a;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Legend “How to read” help (fixed top-left) ───────────────────── */
+    .legend-help-btn {
+      position: fixed;
+      z-index: 25;
+      top: calc(0.6rem + env(safe-area-inset-top, 0px));
+      left: calc(0.6rem + env(safe-area-inset-left, 0px));
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-family: "JetBrains Mono", monospace;
+      color: var(--ink);
+    }
+    .legend-help-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(255, 250, 240, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(40, 28, 18, 0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    .legend-help-btn:hover .legend-help-icon-wrap,
+    .legend-help-btn:focus-visible .legend-help-icon-wrap {
+      transform: scale(1.06);
+      box-shadow: 0 4px 16px rgba(40, 28, 18, 0.2);
+      border-color: rgba(139, 74, 50, 0.45);
+    }
+    .legend-help-label {
+      margin-left: 0.35rem;
+      padding: 0.32rem 0.55rem 0.32rem 0;
+      font-size: clamp(0.5rem, 1.85vw, 0.68rem);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      white-space: nowrap;
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      transform: translateX(-4px);
+      pointer-events: none;
+      transition: max-width 0.28s ease, opacity 0.22s ease, transform 0.28s ease;
+    }
+    .legend-help-btn:hover .legend-help-label,
+    .legend-help-btn:focus-visible .legend-help-label {
+      max-width: 160px;
+      opacity: 1;
+      transform: translateX(0);
+    }
+    @media (max-width: 479px) {
+      .legend-help-label {
+        font-size: clamp(0.46rem, 2.8vw, 0.55rem);
+        letter-spacing: 0.1em;
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .legend-help-icon-wrap,
+      .legend-help-label {
+        transition: none;
+      }
+      .legend-help-btn:hover .legend-help-label,
+      .legend-help-btn:focus-visible .legend-help-label {
+        max-width: 160px;
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* ── Legend modal (highest stack) ────────────────────────────────── */
+    .legend-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: max(0.75rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right))
+        max(0.75rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+    }
+    .legend-modal.hidden {
+      display: none;
+    }
+    .legend-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(22, 20, 16, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    /* Square from explicit min(vw,vh,cap) — avoids Safari flex + aspect-ratio + max-height bugs on resize. */
+    .legend-modal-panel {
+      position: relative;
+      z-index: 1;
+      width: min(92vw, 92vh, 920px);
+      height: min(92vw, 92vh, 920px);
+      min-height: 0;
+      flex-shrink: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(40, 28, 18, 0.38);
+      border: 1px solid var(--border);
+    }
+    @supports (height: 100dvh) {
+      .legend-modal-panel {
+        width: min(92vw, 92dvh, 920px);
+        height: min(92vw, 92dvh, 920px);
+      }
+    }
+    .legend-modal-parchment {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e8e1d6;
+    }
+    .legend-modal-grain {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.055;
+      mix-blend-mode: multiply;
+    }
+    .legend-modal-panel img {
+      position: relative;
+      z-index: 1;
+      display: block;
+      box-sizing: border-box;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      object-position: center;
+      background: transparent;
+    }
+    .legend-modal-close {
+      position: absolute;
+      top: 0.45rem;
+      right: 0.45rem;
+      z-index: 2;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: rgba(255, 250, 240, 0.96);
+      box-shadow: 0 2px 10px rgba(40, 28, 18, 0.12);
+      cursor: pointer;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 1.05rem;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .legend-modal-close:hover {
+      border-color: rgba(139, 74, 50, 0.5);
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas-bg" aria-hidden="true"></canvas>
+  <svg id="grain-svg" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <filter id="parchment-grain" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.72 0.68" numOctaves="4" seed="7" stitchTiles="stitch" result="noise"/>
+      <feColorMatrix type="matrix"
+        values="0.9 0.1 0   0 0
+                0.1 0.8 0.1 0 0
+                0   0.1 0.7 0 0
+                0   0   0   1 0"
+        in="noise"/>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#parchment-grain)"/>
+  </svg>
+  <button type="button" id="legend-help-btn" class="legend-help-btn" title="How to read">
+    <span class="legend-help-icon-wrap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <path stroke-linecap="round" d="M12 16v-5M12 8.25h.01"/>
+      </svg>
+    </span>
+    <span class="legend-help-label">How to read</span>
+  </button>
+  <div class="wrap">
+    <div class="panel">
+      <svg id="chart" viewBox="-480 -480 960 960" overflow="hidden" role="img" aria-label="Radial cluster with rose chart center"></svg>
+    </div>
+    <!-- Country search: floats top-right on wide screens, static below panel on narrow -->
+    <div class="country-search-wrap" id="country-search-wrap" aria-label="Search countries">
+      <div class="country-search-inner">
+        <input
+          id="country-search-input"
+          class="country-search-input"
+          type="search"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Search country…"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded="false"
+          aria-controls="country-search-suggestions"
+          aria-haspopup="listbox"
+        />
+        <button
+          id="country-search-clear"
+          class="country-search-clear hidden"
+          aria-label="Clear selection"
+          tabindex="-1"
+        >✕</button>
+      </div>
+      <ul
+        id="country-search-suggestions"
+        class="country-search-suggestions hidden"
+        role="listbox"
+        aria-label="Country suggestions"
+      ></ul>
+    </div>
+    <!-- legend-row disabled
+    <div class="legend-row">
+      <div>
+        <h3>Leader (inner nodes)</h3>
+        <span id="legend-leaders"></span>
+      </div>
+      <div>
+        <h3>Continent (visits)</h3>
+        <span id="legend-continents"></span>
+      </div>
+      <div>
+        <h3>Distance rings (km)</h3>
+        <span id="legend-distance"></span>
+      </div>
+    </div>
+    -->
+  </div>
+  <div id="tip" role="tooltip" aria-live="polite"></div>
+
+  <div id="legend-modal" class="legend-modal hidden">
+    <div class="legend-modal-backdrop"></div>
+    <div class="legend-modal-panel">
+      <button type="button" class="legend-modal-close" id="legend-modal-close" title="Close">✕</button>
+      <div class="legend-modal-parchment">
+        <svg class="legend-modal-grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <filter id="parchment-grain-modal" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.72 0.68" numOctaves="4" seed="7" stitchTiles="stitch" result="noise"/>
+            <feColorMatrix type="matrix"
+              values="0.9 0.1 0   0 0
+                      0.1 0.8 0.1 0 0
+                      0   0.1 0.7 0 0
+                      0   0   0   1 0"
+              in="noise"/>
+          </filter>
+          <rect width="100%" height="100%" filter="url(#parchment-grain-modal)"/>
+        </svg>
+        <img src="img/legend.svg" alt="Legend — how to read the chart" width="1000" height="1000" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    const modal = document.getElementById("legend-modal");
+    const helpBtn = document.getElementById("legend-help-btn");
+    const closeBtn = document.getElementById("legend-modal-close");
+    const backdrop = modal && modal.querySelector(".legend-modal-backdrop");
+    const panel = modal && modal.querySelector(".legend-modal-panel");
+    if (!modal || !helpBtn || !closeBtn || !backdrop || !panel) return;
+    function openLegendModal() {
+      modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    }
+    function closeLegendModal() {
+      modal.classList.add("hidden");
+      document.body.style.overflow = "";
+    }
+    helpBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openLegendModal();
+    });
+    closeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeLegendModal();
+    });
+    backdrop.addEventListener("click", closeLegendModal);
+    panel.addEventListener("click", (e) => e.stopPropagation());
+  })();
+  </script>
+
+  <script>
+  (function () {
+    'use strict';
+    const canvas = document.getElementById('canvas-bg');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    function mkRng(seed) {
+      let s = seed >>> 0;
+      return function () {
+        s = Math.imul(s ^ (s >>> 15), 1 | s);
+        s = (s + Math.imul(s ^ (s >>> 7), 61 | s)) ^ s;
+        return ((s ^ (s >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function draw(W, H) {
+      const rng = mkRng(0xC0FFEE17);
+      const bg = ctx.createLinearGradient(0, 0, W * 0.88, H);
+      bg.addColorStop(0.0, '#f4efe4');
+      bg.addColorStop(0.28, '#ebe3d4');
+      bg.addColorStop(0.52, '#e4d9c8');
+      bg.addColorStop(0.78, '#ddcfbd');
+      bg.addColorStop(1.0, '#d8c8b2');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      for (let i = 0; i < 8; i++) {
+        const x = rng() * W, y = rng() * H;
+        const r = W * (0.06 + rng() * 0.22);
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+        const a = 0.012 + rng() * 0.028;
+        g.addColorStop(0, `rgba(255, 250, 238, ${a})`);
+        g.addColorStop(1, 'rgba(255, 250, 238, 0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+      }
+      ctx.restore();
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      for (let i = 0; i < 6; i++) {
+        const x = rng() * W, y = rng() * H;
+        const r = Math.max(W, H) * (0.08 + rng() * 0.22);
+        const asp = 0.35 + rng() * 0.65;
+        const rot = rng() * Math.PI;
+        const hue = 28 + rng() * 16;
+        const a = 0.026 + rng() * 0.055;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rot);
+        ctx.scale(1, asp);
+        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+        g.addColorStop(0, `hsla(${hue}, 40%, 52%, ${a})`);
+        g.addColorStop(0.42, `hsla(${hue}, 35%, 58%, ${a * 0.5})`);
+        g.addColorStop(1, `hsla(${hue}, 30%, 64%, 0)`);
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(0, 0, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+      const minerals = [
+        { h: 214, s: 32, l: 62, count: 3, maxSize: 0.18, alpha: 0.038 },
+        { h: 168, s: 26, l: 64, count: 3, maxSize: 0.16, alpha: 0.034 },
+        { h: 22, s: 28, l: 66, count: 3, maxSize: 0.18, alpha: 0.041 },
+        { h: 202, s: 22, l: 68, count: 2, maxSize: 0.12, alpha: 0.03 },
+        { h: 12, s: 26, l: 68, count: 3, maxSize: 0.13, alpha: 0.035 },
+        { h: 36, s: 22, l: 70, count: 2, maxSize: 0.14, alpha: 0.033 },
+      ];
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      minerals.forEach((m) => {
+        for (let i = 0; i < m.count; i++) {
+          const x = rng() * W, y = rng() * H;
+          const r = Math.max(W, H) * (0.04 + rng() * m.maxSize);
+          const asp = 0.28 + rng() * 0.8;
+          const rot = rng() * Math.PI * 2;
+          const dh = (rng() - 0.5) * 20;
+          const a = m.alpha * (0.55 + rng() * 0.8);
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(rot);
+          ctx.scale(1, asp);
+          const g = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
+          g.addColorStop(0, `hsla(${m.h + dh}, ${m.s}%, ${m.l}%, ${a})`);
+          g.addColorStop(0.48, `hsla(${m.h + dh}, ${m.s}%, ${m.l + 5}%, ${a * 0.35})`);
+          g.addColorStop(1, `hsla(${m.h + dh}, ${m.s - 8}%, ${m.l + 10}%, 0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      });
+      ctx.restore();
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.lineCap = 'round';
+      const nFibers = Math.floor((W * H) / 1750);
+      for (let i = 0; i < nFibers; i++) {
+        const x = rng() * W, y = rng() * H;
+        const len = 5 + rng() * 40;
+        const angle = rng() * Math.PI * 2;
+        const wobble = (rng() - 0.5) * 0.7;
+        const alpha = 0.028 + rng() * 0.11;
+        const width = 0.18 + rng() * 0.45;
+        const fHue = rng() > 0.82 ? 8 + rng() * 18 : 27 + rng() * 20;
+        const fL = 18 + rng() * 38;
+        const fS = 28 + rng() * 45;
+        ctx.strokeStyle = `hsla(${fHue}, ${fS}%, ${fL}%, ${alpha})`;
+        ctx.lineWidth = width;
+        const cx = x + Math.cos(angle + wobble) * len * 0.45 + (rng() - 0.5) * 7;
+        const cy = y + Math.sin(angle + wobble) * len * 0.45 + (rng() - 0.5) * 7;
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.quadraticCurveTo(cx, cy, x + Math.cos(angle) * len, y + Math.sin(angle) * len);
+        ctx.stroke();
+      }
+      ctx.restore();
+      ctx.save();
+      ctx.globalCompositeOperation = 'multiply';
+      const nSpecks = Math.floor((W * H) / 300);
+      for (let i = 0; i < nSpecks; i++) {
+        const x = rng() * W, y = rng() * H;
+        const sz = 0.3 + rng() * 0.9;
+        const a = 0.012 + rng() * 0.065;
+        ctx.fillStyle = rng() > 0.42 ? `rgba(42, 38, 32, ${a})` : `rgba(180, 175, 165, ${a * 0.4})`;
+        ctx.fillRect(x, y, sz, sz);
+      }
+      ctx.restore();
+      (function applyPixelGrain() {
+        const imgData = ctx.getImageData(0, 0, Math.ceil(W), Math.ceil(H));
+        const data = imgData.data;
+        const grainRng = mkRng(0xFACE1234);
+        for (let p = 0; p < data.length; p += 4) {
+          const n = (grainRng() - 0.5) * 9.5;
+          data[p] = Math.min(255, Math.max(0, data[p] + n));
+          data[p + 1] = Math.min(255, Math.max(0, data[p + 1] + n * 0.8));
+          data[p + 2] = Math.min(255, Math.max(0, data[p + 2] + n * 0.55));
+        }
+        ctx.putImageData(imgData, 0, 0);
+      })();
+    }
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      canvas.width = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw(W, H);
+    }
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 200);
+    });
+    resize();
+  })();
+  </script>
+
+  <script>
+(function () {
+  const svg = d3.select("#chart");
+  const tip = document.getElementById("tip");
+
+  const RADIUS = 420;
+  const LINK_PAD = 30;
+  const Y_OUT = RADIUS - LINK_PAD;
+  const RADIAL_EDGE = 210;
+  const R_INNER = 3;
+  /** Inner tour group-rect: uniform tangential + radial size. */
+  const INNER_RECT_TANGENTIAL_H = R_INNER * 2;
+  const INNER_RECT_RADIAL_BASE = R_INNER * 2.6;
+  /** President vs Premier: two distinct reds (flat fill, no ink gradient). */
+  const GROUP_RECT_FILL = { President: "#52796c", Premier: "#cc5d4e" };
+  /**
+   * Dotted radials: angles match **gaps between adjacent tour `group_rect`s** (same `d.x` sector layout),
+   * not a linear year scale. 1998 = seam before the chronologically first tour; 2003/2013 = first
+   * `leader_id` 1|2 and 2|3 transition along that order (see drawLeaderIdBoundaryLines).
+   * Line length: inner r0 = yInner; outer r1 = last .rings — see drawLeaderIdBoundaryLines.
+   */
+  const LEADER_ID_BOUNDARY_YEARS = [1998, 2003, 2013];
+  /** @墨点-三.html：rScale + HALO_RATIO + oScale；duration 映射到 val∈[1,8] */
+  const LEAF_INK_HALO_RATIO = 1.25;
+  const LEAF_INK_R_SCALE = d3.scaleSqrt().domain([1, 8]).range([2.5, 8]);
+  const LEAF_INK_O_SCALE = d3.scaleLinear().domain([1, 8]).range([0.6, 0.95]);
+  const CANVAS_MAX_R = 480;
+  const BAR_RING_GAP = 14;
+  const BAR_MAX_OUTER_R = 470;
+  /** d3.zoom：最小 1 = 不可再缩小（保持初始视图书写大小），最大可放大倍数 */
+  const CHART_ZOOM_MIN_SCALE = 1;
+  const CHART_ZOOM_MAX_SCALE = 14;
+  /** 与 #chart viewBox 一致；translateExtent 用「世界」坐标框住平移，避免拖出空白 */
+  const CHART_VIEWBOX = { x: -480, y: -480, w: 960, h: 960 };
+
+  /** Rose embed (560 design units) scaled to sit inside the radial inner void. */
+  const YY_SCALE = 0.68;
+
+  const LEADER_COLORS = {
+    "Jiang Zemin": "#c6a756",
+    "Hu Jintao": "#7d9a8c",
+    "Xi Jinping": "#9c4c3a",
+    "Wen Jiabao": "#6b8fbf",
+    "Li Keqiang": "#a67cb5",
+    "Zhu Rongji": "#8f9a6b",
+  };
+
+  const CONTINENT_COLORS = {
+    Africa: "#dd9b4d",
+    Americas: "#487280",
+    Asia: "#a74713",
+    Europe: "#6cb4a5",
+    Oceania: "#606b8f",
+  };
+
+  function appendInkStyleDefs(defs) {
+    const Lf = defs
+      .append("filter")
+      .attr("id", "ink-brush-line")
+      .attr("x", "-15%")
+      .attr("y", "-15%")
+      .attr("width", "130%")
+      .attr("height", "130%")
+      .attr("color-interpolation-filters", "sRGB");
+    Lf.append("feTurbulence").attr("type", "fractalNoise").attr("baseFrequency", 0.85).attr("numOctaves", 2).attr("seed", 17).attr("result", "ln");
+    Lf.append("feDisplacementMap")
+      .attr("in", "SourceGraphic")
+      .attr("in2", "ln")
+      .attr("scale", 0.14)
+      .attr("xChannelSelector", "R")
+      .attr("yChannelSelector", "G")
+      .attr("result", "ld");
+    Lf.append("feGaussianBlur").attr("in", "ld").attr("stdDeviation", 0.18);
+  }
+
+  const LEADER_ROSTER = [
+    { leader: "Jiang Zemin", office: "President" },
+    { leader: "Hu Jintao", office: "President" },
+    { leader: "Xi Jinping", office: "President" },
+    { leader: "Zhu Rongji", office: "Premier" },
+    { leader: "Wen Jiabao", office: "Premier" },
+    { leader: "Li Keqiang", office: "Premier" },
+  ];
+
+  function startYearFromRow(d) {
+    if (d.start && String(d.start).trim()) {
+      const t = new Date(d.start);
+      if (!isNaN(+t)) return t.getFullYear();
+    }
+    const y = +d.year;
+    return !isNaN(y) ? y : NaN;
+  }
+
+  const parseRow = (d) => ({
+    ...d,
+    index_num: +d.index,
+    group_order: +d.group_order || 0,
+    duration: +d.duration,
+    distance: +d.distance,
+    date: new Date(d.start),
+    year: +d.year,
+    startYear: startYearFromRow({ ...d, year: +d.year }),
+    leader_id: String(d.leader_id ?? "").trim(),
+  });
+
+  function officeForLeader(leaderName) {
+    const m = LEADER_ROSTER.find((x) => x.leader === leaderName);
+    return m ? m.office : "Premier";
+  }
+
+  function groupRectFillForNode(d) {
+    const o = String(d.data.office || "").trim();
+    if (o === "President") return GROUP_RECT_FILL.President;
+    if (o === "Premier") return GROUP_RECT_FILL.Premier;
+    return officeForLeader(d.data.leader) === "President" ? GROUP_RECT_FILL.President : GROUP_RECT_FILL.Premier;
+  }
+
+  function buildHierarchy(data) {
+    const byG = d3.group(data, (d) => d.global_id);
+    const groups = [...byG.entries()].map(([gid, rows]) => {
+      const sorted = [...rows].sort(
+        (a, b) => a.group_order - b.group_order || a.index_num - b.index_num
+      );
+      const first = sorted[0];
+      const office = String(first.office || "").trim() || officeForLeader(first.leader);
+      return { gid, leader: first.leader, office, rows: sorted };
+    });
+    groups.sort((a, b) => {
+      const ta = d3.min(a.rows, (r) => r.date.getTime());
+      const tb = d3.min(b.rows, (r) => r.date.getTime());
+      const na = Number.isNaN(ta);
+      const nb = Number.isNaN(tb);
+      if (na && nb) return 0;
+      if (na) return 1;
+      if (nb) return -1;
+      if (ta !== tb) return ta - tb;
+      return d3.min(a.rows, (r) => r.index_num) - d3.min(b.rows, (r) => r.index_num);
+    });
+    return {
+      name: "__root__",
+      leader: null,
+      children: groups.map((g) => ({
+        name: g.gid,
+        leader: g.leader,
+        office: g.office,
+        leader_id: String(g.rows[0].leader_id ?? "").trim(),
+        children: g.rows.map((r) => ({ ...r })),
+      })),
+    };
+  }
+
+  function leaderColor(leader) {
+    return LEADER_COLORS[leader] || "#888";
+  }
+
+  function continentColor(c) {
+    const k = (c || "").trim();
+    return CONTINENT_COLORS[k] || "#777";
+  }
+
+  function gradientIdForContinent(c) {
+    const k = String(c || "").trim();
+    if (CONTINENT_COLORS[k]) return `ink-wash-${k.replace(/\s+/g, "")}`;
+    return "ink-wash-Unknown";
+  }
+
+  /**
+   * Same as Radial-area-chart: organic ink radial gradient in user space, mapped to [rInner, rOuter] ring.
+   */
+  function appendOrganicInkGradient(defs, id, baseHex, rPx, rInner, rOuter) {
+    const innerCol = d3.rgb(d3.color(baseHex).darker(0.85));
+    const paper = d3.rgb("#f4efe4");
+    let seed = 2166136261;
+    for (let i = 0; i < id.length; i++) seed = Math.imul(seed ^ id.charCodeAt(i), 16777619);
+    const rnd = () => {
+      seed = (Math.imul(seed ^ (seed >>> 15), 2246822519) ^ Math.imul(seed ^ (seed >>> 13), 3266489917)) >>> 0;
+      return seed / 4294967296;
+    };
+    const nStops = 22;
+    const raw = d3.range(nStops).map(() => 0.35 + rnd() * 0.9);
+    const sum = d3.sum(raw) || 1;
+    const tAlong = [0];
+    let acc = 0;
+    for (let i = 0; i < nStops; i++) {
+      acc += raw[i] / sum;
+      tAlong.push(i === nStops - 1 ? 1 : acc);
+    }
+    const interp = d3.interpolateRgb(innerCol, paper);
+    const span = Math.max(1e-6, rOuter - rInner);
+    const G = defs
+      .append("radialGradient")
+      .attr("id", id)
+      .attr("gradientUnits", "userSpaceOnUse")
+      .attr("cx", 0)
+      .attr("cy", 0)
+      .attr("r", rPx);
+
+    tAlong.forEach((t) => {
+      const d0 = rInner + t * span;
+      const offsetPct = (d0 / rPx) * 100;
+      const c0 = d3.rgb(interp(t));
+      const j = (rnd() - 0.5) * 0.08;
+      c0.r = Math.max(0, Math.min(255, c0.r + j * 55));
+      c0.g = Math.max(0, Math.min(255, c0.g + j * 48));
+      c0.b = Math.max(0, Math.min(255, c0.b + j * 42));
+      const op = 0.88 + t * 0.1 + (rnd() - 0.5) * 0.06;
+      G.append("stop")
+        .attr("offset", `${offsetPct}%`)
+        .attr("stop-color", c0.formatRgb())
+        .attr("stop-opacity", Math.max(0.75, Math.min(1, op)));
+    });
+  }
+
+  function appendPaperInkFilter(defs) {
+    const F = defs
+      .append("filter")
+      .attr("id", "ink-xuan-paper")
+      .attr("x", "-30%")
+      .attr("y", "-30%")
+      .attr("width", "160%")
+      .attr("height", "160%")
+      .attr("color-interpolation-filters", "sRGB");
+    F.append("feTurbulence")
+      .attr("type", "fractalNoise")
+      .attr("baseFrequency", "0.014 0.022")
+      .attr("numOctaves", 2)
+      .attr("seed", 11)
+      .attr("result", "n");
+    F.append("feDisplacementMap")
+      .attr("in", "SourceGraphic")
+      .attr("in2", "n")
+      .attr("scale", 0.45)
+      .attr("xChannelSelector", "R")
+      .attr("yChannelSelector", "G")
+      .attr("result", "d");
+    F.append("feGaussianBlur").attr("in", "d").attr("stdDeviation", 0.22).attr("result", "b");
+    F.append("feMerge").append("feMergeNode").attr("in", "b");
+  }
+
+  function buildCountryBars(rows) {
+    const valid = rows.filter((r) => (r.country || "").trim());
+    const byCountry = d3.rollup(
+      valid,
+      (v) => ({
+        count: v.length,
+        continent: (v[0].Continent || "").trim(),
+        ccode: (v[0].ccode || "").trim(),
+        country: (v[0].country || "").trim(),
+      }),
+      (d) => (d.country || "").trim()
+    );
+    const entries = [...byCountry.entries()].map(([country, meta]) => ({
+      country,
+      ...meta,
+    }));
+    const continents = [...new Set(entries.map((e) => e.continent))].sort((a, b) =>
+      a.localeCompare(b)
+    );
+    const out = [];
+    for (const cont of continents) {
+      const inCont = entries
+        .filter((e) => e.continent === cont)
+        .sort((a, b) => a.country.localeCompare(b.country));
+      out.push(...inCont);
+    }
+    return out;
+  }
+
+  function sampleSegment(pathNode, s0, s1, steps) {
+    const pts = [];
+    for (let i = 0; i <= steps; i++) {
+      const s = s0 + (i / steps) * (s1 - s0);
+      const p = pathNode.getPointAtLength(s);
+      pts.push([p.x, p.y]);
+    }
+    return d3.line()(pts);
+  }
+
+  function sampleSegmentOffset(pathNode, pathLen, s0, s1, steps, offsetPx) {
+    const pts = [];
+    const eps = Math.min(1.5, (s1 - s0) / 200 || 0.5);
+    for (let i = 0; i <= steps; i++) {
+      const s = s0 + (i / steps) * (s1 - s0);
+      const p = pathNode.getPointAtLength(s);
+      const sp = Math.max(0, s - eps);
+      const sn = Math.min(pathLen, s + eps);
+      const prev = pathNode.getPointAtLength(sp);
+      const next = pathNode.getPointAtLength(sn);
+      let dx = next.x - prev.x;
+      let dy = next.y - prev.y;
+      const len = Math.hypot(dx, dy) || 1;
+      dx /= len;
+      dy /= len;
+      const nx = -dy;
+      const ny = dx;
+      pts.push([p.x + nx * offsetPx, p.y + ny * offsetPx]);
+    }
+    return d3.line()(pts);
+  }
+
+  function showTipHtml(html) {
+    tip.innerHTML = html;
+    tip.classList.add("visible");
+  }
+
+  function moveTip(ev) {
+    const pad = 14;
+    let x = ev.clientX + pad;
+    let y = ev.clientY + pad;
+    const rect = tip.getBoundingClientRect();
+    if (x + rect.width > window.innerWidth - 8) x = ev.clientX - rect.width - pad;
+    if (y + rect.height > window.innerHeight - 8) y = ev.clientY - rect.height - pad;
+    tip.style.left = `${x}px`;
+    tip.style.top = `${y}px`;
+  }
+
+  function renderRoseEmbed(defs, yyRoot, visitRows, yyOpts = {}) {
+    const { setArcLeaderHoverState, setRoseHoverState, roseTourSectorMap } = yyOpts;
+    const onRoseHover = setRoseHoverState || setArcLeaderHoverState;
+    const OFFICE_COLOR = { President: "#52796c", Premier: "#cc5d4e" };
+    const W = 560;
+    const H = 560;
+    /** 半根 vertex 线长（从帽尖 T 量：内向 −eOut / 外向 +eOut）；要「更长」的线段 — 只改这个。 */
+    const ROSE_VERTEX_HALF = 5;
+    const ROSE_VERTEX_HIT_OUTSET = 10;
+    const ROSE_VERTEX_HIT_SIZE = 23;
+    const ROSE_VERTEX_STROKE = "#704f26";
+
+    function dominantLeaderForSlice(year, office) {
+      const m = visitRows.filter((r) => r.startYear === year && r.office === office);
+      if (!m.length) return null;
+      const byL = d3.rollup(m, (v) => v.length, (r) => r.leader);
+      const top = [...byL.entries()].sort((a, b) => b[1] - a[1])[0];
+      const name = top && top[0] != null ? String(top[0]).trim() : "";
+      return name || null;
+    }
+
+    function dominantLeaderForYear(year) {
+      const m = visitRows.filter((r) => r.startYear === year);
+      if (!m.length) return null;
+      const byL = d3.rollup(m, (v) => v.length, (r) => r.leader);
+      const top = [...byL.entries()].sort((a, b) => b[1] - a[1])[0];
+      const name = top && top[0] != null ? String(top[0]).trim() : "";
+      return name || null;
+    }
+
+    defs
+      .append("radialGradient")
+      .attr("id", "rosePaperEmbed")
+      .attr("cx", "30%")
+      .attr("cy", "30%")
+      .attr("r", "75%")
+      .call((g) => {
+        g.append("stop").attr("offset", "0%").attr("stop-color", "#fffcfa");
+        g.append("stop").attr("offset", "100%").attr("stop-color", "#e8e4dc");
+      });
+
+    const g = yyRoot.append("g").attr("class", "rose-embed");
+
+    if (!visitRows.length) {
+      g.append("text")
+        .attr("text-anchor", "middle")
+        .attr("fill", "#5c5c5c")
+        .text("No President / Premier rows (same filter as radial)");
+      return;
+    }
+
+    const validYears = visitRows.map((d) => d.startYear).filter((y) => !isNaN(y));
+    if (!validYears.length) {
+      g.append("text")
+        .attr("text-anchor", "middle")
+        .attr("fill", "#5c5c5c")
+        .text("No valid startYear data");
+      return;
+    }
+
+    const yMin = d3.min(validYears);
+    const yMax = d3.max(validYears);
+    const withYear = visitRows.filter((d) => !isNaN(d.startYear));
+    const byYearOffice = d3.rollup(
+      withYear,
+      (v) => ({
+        President: v.filter((r) => r.office === "President").length,
+        Premier: v.filter((r) => r.office === "Premier").length,
+      }),
+      (d) => d.startYear
+    );
+    const years = d3.range(yMin, yMax + 1);
+    const roseData = years.map((year) => {
+      const o = byYearOffice.get(year) ?? { President: 0, Premier: 0 };
+      const president = o.President;
+      const premier = o.Premier;
+      return { year, president, premier, count: president + premier };
+    });
+    const cMax = d3.max(roseData, (d) => d.count) || 1;
+
+    const innerR = 40;
+    const outerRMax = 235;
+    const rScale = d3.scaleLinear().domain([0, cMax]).range([innerR, outerRMax]).nice();
+
+    g.insert("rect", ":first-child")
+      .attr("x", -W / 2)
+      .attr("y", -H / 2)
+      .attr("width", W)
+      .attr("height", H)
+      .attr("fill", "none");
+
+    /**
+     * Assign each year's startAngle / endAngle.
+     * If roseTourSectorMap is available: width ∝ tours in that year (same unit as the cluster),
+     * starting at wrapBoundary so all dotted-line boundaries align with rose year edges.
+     * Fallback: equal-width equal-angle slices (original d3.pie behaviour).
+     */
+    const pad = 0.004;
+    let pieData;
+    if (roseTourSectorMap) {
+      const { sector, wrapBoundary, tourCountByYear } = roseTourSectorMap;
+      let cumAngle = wrapBoundary;
+      pieData = roseData.map((row) => {
+        const tours = tourCountByYear.get(row.year) ?? 0;
+        const span = Math.max(0, tours * sector - pad);
+        const sa = cumAngle;
+        const ea = cumAngle + span;
+        cumAngle += tours * sector;
+        return { data: row, startAngle: sa, endAngle: ea, padAngle: pad };
+      });
+    } else {
+      const pie = d3
+        .pie()
+        .value(1)
+        .sort(null)
+        .startAngle(0)
+        .endAngle(2 * Math.PI)
+        .padAngle(pad);
+      pieData = pie(roseData);
+    }
+    const arcBuilder = d3.arc().padAngle(0).cornerRadius(0.35);
+
+    const sectorG = g.append("g").attr("class", "rose-slices");
+    const centerY = (line) => -6 + line * 11;
+    const centerG = g.append("g").attr("class", "rose-center");
+
+    function ringPath(inn, out, pd) {
+      return arcBuilder({
+        innerRadius: inn,
+        outerRadius: out,
+        startAngle: pd.startAngle,
+        endAngle: pd.endAngle,
+      });
+    }
+
+    const segmentRows = [];
+    pieData.forEach((pd) => {
+      const { year, president, premier, count } = pd.data;
+      /* Premier is now the inner band, President the outer band. */
+      const r1 = rScale(premier);
+      const r2 = rScale(premier + president);
+      if (premier > 0) {
+        segmentRows.push({
+          key: `${year}-Premier`,
+          pd,
+          office: "Premier",
+          n: premier,
+          year,
+          count,
+          r0: innerR,
+          r1,
+        });
+      }
+      if (president > 0 && r2 > r1) {
+        segmentRows.push({
+          key: `${year}-President`,
+          pd,
+          office: "President",
+          n: president,
+          year,
+          count,
+          r0: r1,
+          r1: r2,
+        });
+      }
+    });
+    /** One cap per year: only the stack’s outer ring (meets the year total radius). */
+    const tipCapRows = segmentRows.filter((d) => {
+      const rMax = rScale(d.pd.data.count);
+      return Math.abs(d.r1 - rMax) < 1e-5;
+    });
+    const maxN = d3.max(segmentRows, (d) => d.n) || 1;
+    const opScale = d3.scaleLinear().domain([1, maxN]).range([0.2, 0.8]);
+    const dimFactor = 0.14;
+
+    function baseOpacity(d) {
+      return opScale(d.n);
+    }
+    function setRoseCenter(p) {
+      if (!p) {
+        centerG.select(".c-hint").style("display", "block");
+        centerG.selectAll("text.c-year, text.c-sub, text.c-focus, text.c-total")
+          .style("display", "none")
+          .style("fill", null);
+        return;
+      }
+      if (p.mode === "tour") {
+        const { leader, office, stops, dateRange, dateYear } = p;
+        const offColor = OFFICE_COLOR[office] || "#1a1a1a";
+        centerG.select(".c-hint").style("display", "none");
+        centerG.selectAll("text.c-year, text.c-sub, text.c-focus, text.c-total").style("display", "block");
+        centerG.select("text.c-year").text(dateRange);
+        centerG.select("text.c-sub").text(dateYear);
+        centerG.select("text.c-focus").text(leader).style("fill", offColor);
+        centerG.select("text.c-total").text(`${stops} ${stops === 1 ? "stop" : "stops"}`);
+        return;
+      }
+      /* All other modes: hide c-sub */
+      centerG.select("text.c-sub").style("display", "none");
+      if (p.mode === "vertex") {
+        const { year, president, premier, count } = p;
+        centerG.select(".c-hint").style("display", "none");
+        centerG.selectAll("text.c-year, text.c-sub, text.c-focus, text.c-total").style("display", "block");
+        centerG.select("text.c-year").text(`${year}`);
+        centerG.select("text.c-sub")
+          .text(`President ${president}`)
+          .style("fill", OFFICE_COLOR["President"]);
+        centerG.select("text.c-focus")
+          .text(`Premier ${premier}`)
+          .style("fill", OFFICE_COLOR["Premier"]);
+        centerG.select("text.c-total")
+          .text(`${count} visits`)
+          .style("font-weight", "600");
+        return;
+      }
+      const { year, n, office, leader } = p;
+      centerG.select(".c-hint").style("display", "none");
+      centerG.select("text.c-sub").style("display", "none");
+      centerG.selectAll("text.c-year, text.c-focus, text.c-total").style("display", "block");
+      centerG.select("text.c-year").text(`${year}`);
+      centerG
+        .select("text.c-focus")
+        .text(leader || "")
+        .style("fill", OFFICE_COLOR[office]);
+      centerG.select("text.c-total")
+        .text(`${n} visits`)
+        .style("font-weight", "600");
+    }
+    function pointOnRoseAtMid(pd, r) {
+      const mid = (pd.startAngle + pd.endAngle) / 2;
+      return [r * Math.sin(mid), -r * Math.cos(mid)];
+    }
+    function pOnRoseCircle(r, ang) {
+      return [r * Math.sin(ang), -r * Math.cos(ang)];
+    }
+    /** 与 path.rose-tip-cap 相同几何：帽底外弧、半轴 L/bOut、外法向 eOut、弦中 C。 */
+    function roseCapGeometry(pd, r1) {
+      const a0 = pd.startAngle;
+      const a1 = pd.endAngle;
+      const span = a1 - a0;
+      if (!(span > 0) || !isFinite(r1)) return null;
+      const p0 = pOnRoseCircle(r1, a0);
+      const p1 = pOnRoseCircle(r1, a1);
+      const dAng = a1 - a0;
+      const largeArc = dAng > Math.PI ? 1 : 0;
+      const sweep = 1;
+      const C = [(p0[0] + p1[0]) * 0.5, (p0[1] + p1[1]) * 0.5];
+      const cLen = Math.hypot(C[0], C[1]) || 1;
+      const eOut = [C[0] / cLen, C[1] / cLen];
+      const chordV = [p1[0] - p0[0], p1[1] - p0[1]];
+      const ch = Math.hypot(chordV[0], chordV[1]) || 1e-6;
+      const eX = [chordV[0] / ch, chordV[1] / ch];
+      const L = 0.5 * ch;
+      const bFromData = 0.19 * r1 * span + 1.45;
+      const bFinger = 1.75 * L + 1.05;
+      const bOut = Math.max(1.1, Math.min(9.5, Math.max(bFromData, bFinger)));
+      return { p0, p1, C, cLen, eOut, eX, L, bOut, dAng, largeArc, sweep, span, a0, a1 };
+    }
+    /**
+     * 帽与饼图该年扇区同宽：底 = 最外整段外弧。外侧为 **高而窄** 的半椭圆，径向 b ≫ 弦向 L，像手指从扇区外缘伸出。
+     */
+    function roseTipCapPath(d) {
+      const geom = roseCapGeometry(d.pd, d.r1);
+      if (!geom) return "";
+      const { p0, p1, C, eOut, eX, L, bOut, largeArc, sweep } = geom;
+      const { r1 } = d;
+      const nSeg = 56;
+      const parts = [
+        `M ${p0[0]} ${p0[1]}`,
+        `A ${r1} ${r1} 0 ${largeArc} ${sweep} ${p1[0]} ${p1[1]}`,
+      ];
+      for (let i = 1; i < nSeg; i += 1) {
+        const t = (i / nSeg) * Math.PI;
+        const x = C[0] + L * Math.cos(t) * eX[0] + bOut * Math.sin(t) * eOut[0];
+        const y = C[1] + L * Math.cos(t) * eX[1] + bOut * Math.sin(t) * eOut[1];
+        parts.push(`L ${x} ${y}`);
+      }
+      parts.push(`L ${p0[0]} ${p0[1]} Z`);
+      return parts.join(" ");
+    }
+    function setDim(hovered) {
+      sectorG
+        .selectAll("path.rose-slice, path.rose-tip-cap")
+        .attr("fill-opacity", (d) => {
+          if (!hovered) return baseOpacity(d);
+          return d.key === hovered ? baseOpacity(d) : baseOpacity(d) * dimFactor;
+        });
+    }
+
+    sectorG
+      .selectAll("path.rose-slice")
+      .data(segmentRows, (d) => d.key)
+      .join("path")
+      .attr("class", "rose-slice")
+      .attr("d", (d) => ringPath(d.r0, d.r1, d.pd))
+      .attr("fill", (d) => OFFICE_COLOR[d.office])
+      .attr("fill-opacity", (d) => baseOpacity(d))
+      .on("mouseenter", (ev, d) => {
+        setDim(d.key);
+        setRoseCenter({ ...d, leader: dominantLeaderForSlice(d.year, d.office) });
+        if (setRoseHoverState) {
+          setRoseHoverState(d.year, dominantLeaderForSlice(d.year, d.office));
+        }
+      })
+      .on("mouseleave", (ev) => {
+        const t = ev.relatedTarget;
+        if (t && sectorG.node().contains(t)) return;
+        setDim(null);
+        if (t && t.closest && t.closest(".rose-vertices .vertex-hit")) return;
+        setRoseCenter(null);
+        if (setRoseHoverState) setRoseHoverState(null, null);
+      });
+
+    sectorG
+      .selectAll("path.rose-tip-cap")
+      .data(tipCapRows, (d) => d.key)
+      .join("path")
+      .attr("class", "rose-tip-cap")
+      .attr("d", (d) => roseTipCapPath(d))
+      .attr("fill", (d) => OFFICE_COLOR[d.office])
+      .attr("fill-opacity", (d) => baseOpacity(d))
+      .attr("pointer-events", "none");
+
+    g.append("g")
+      .attr("class", "rose-vertices")
+      .selectAll("g.vertex")
+      .data(pieData)
+      .join("g")
+      .attr("class", "vertex")
+      .each(function (pd) {
+        const row = pd.data;
+        const rOut = rScale(row.count);
+        const geom = roseCapGeometry(pd, rOut);
+        if (!geom) return;
+        const T = [geom.C[0] + geom.bOut * geom.eOut[0], geom.C[1] + geom.bOut * geom.eOut[1]];
+        const angDeg = (Math.atan2(geom.eOut[1], geom.eOut[0]) * 180) / Math.PI;
+        const half = ROSE_VERTEX_HALF;
+        const sel = d3.select(this);
+        sel.attr("transform", `translate(${T[0]},${T[1]}) rotate(${angDeg})`);
+        const h = ROSE_VERTEX_HIT_SIZE;
+        sel
+          .append("rect")
+          .attr("class", "vertex-hit")
+          /* ROSE_VERTEX_HIT_OUTSET shifts the rect outward along the cap's eOut axis.
+             Increase it to move the hit zone further from the rose bars. */
+          .attr("x", ROSE_VERTEX_HIT_OUTSET - h / 2)
+          .attr("y", -h / 2)
+          .attr("width", h)
+          .attr("height", h)
+          .attr("fill", "transparent")
+          .attr("pointer-events", "all")
+          .on("mouseenter", () => {
+            setDim(null);
+            setRoseCenter({ mode: "vertex", ...row });
+            if (setRoseHoverState) {
+              setRoseHoverState(row.year, null);
+            }
+          })
+          .on("mouseleave", (ev) => {
+            const t = ev.relatedTarget;
+            if (
+              t &&
+              (sectorG.node().contains(t) || (t.closest && t.closest(".rose-vertices .vertex-hit")))
+            )
+              return;
+            setRoseCenter(null);
+            if (setRoseHoverState) setRoseHoverState(null, null);
+          });
+        sel
+          .append("line")
+          .attr("class", "vertex-line")
+          .attr("x1", -half)
+          .attr("y1", 0)
+          .attr("x2", half)
+          .attr("y2", 0)
+          .attr("stroke", ROSE_VERTEX_STROKE)
+          .attr("stroke-width", 1.35)
+          .attr("pointer-events", "none");
+      });
+
+    g.append("circle")
+      .attr("class", "rose-inner")
+      .attr("r", innerR - 0.5)
+      .attr("fill", "none")
+      .attr("stroke", "none")
+      .attr("pointer-events", "none");
+
+    /* 4-line layout (used in "tour" mode): lines 0–3 evenly spaced.
+       Other modes only use c-year / c-focus / c-total (3 lines). */
+    /* 3-line layout (slice / vertex): lines evenly spaced ~11px apart, centred around 0.
+       4-line layout (tour): c-sub inserted between c-year and c-focus.
+       Adjust the multiplier in centerY or the line indices below to tune spacing. */
+    centerG.append("text").attr("class", "c-year") .attr("y", centerY(-1));
+    centerG.append("text").attr("class", "c-sub")  .attr("y", centerY( 0));
+    centerG.append("text").attr("class", "c-focus") .attr("y", centerY( 1));
+    centerG.append("text").attr("class", "c-total") .attr("y", centerY( 2));
+    setRoseCenter(null);
+    centerG.raise();
+    return { setRoseCenter };
+  }
+
+  function render(data, rawAll) {
+    const treeJson = buildHierarchy(data);
+    const root = d3.hierarchy(treeJson, (d) => d.children);
+    const cluster = d3
+      .cluster()
+      .size([2 * Math.PI, Y_OUT])
+      .separation((a, b) => (a.parent === b.parent ? 1 : 2) / (a.depth || 1));
+
+    cluster(root);
+
+    const edge = Math.min(RADIAL_EDGE, Y_OUT - 8);
+    const yInner = Y_OUT - edge;
+    root.each((d) => {
+      if (d.depth === 1) d.y = yInner;
+      else if (d.depth === 2) d.y = Y_OUT;
+    });
+
+    /** Fixed 1,200 km bin edges — 17 bins: 0–1.2k, 1.2k–2.4k, …, 19.2k–20.4k.
+     *  To change bin width, adjust the step (1200) and regenerate DIST_BIN_EDGES. */
+    const DIST_BIN_EDGES = [0, 1200, 2400, 3600, 4800, 6000, 7200, 8400, 9600, 10800, 12000, 13200, 14400, 15600, 16800, 18000, 19200, 20400];
+    const N_DIST_BINS = DIST_BIN_EDGES.length - 1;   // 17
+    const MIN_ARC_PX_BY_RING = [5.5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 11, 12, 13, 14, 14, 14];
+    const distBin = d3
+      .scaleThreshold()
+      .domain(DIST_BIN_EDGES.slice(1, -1))   // inner thresholds [2000,4000,…,18000]
+      .range(d3.range(N_DIST_BINS));
+    const ringGap = 12;
+    const ringInner = yInner + ringGap;
+    const ringRadii = d3.range(N_DIST_BINS).map((i) =>
+      ringInner + (i / (N_DIST_BINS - 1)) * (Y_OUT - ringInner)
+    );
+
+    const countryBars = buildCountryBars(rawAll);
+    const outerRingR = ringRadii[N_DIST_BINS - 1];
+    const barInnerR = outerRingR + BAR_RING_GAP;
+
+    const innerNodes = root.children || [];
+    const N = innerNodes.length;
+    innerNodes.forEach((d, i) => {
+      d.x = N ? (i / N) * 2 * Math.PI : 0;
+      const leaves = d.children || [];
+      const m = leaves.length;
+      const sector = N ? (2 * Math.PI) / N : 2 * Math.PI;
+      const organicMaxFan = sector * 0.98;
+
+      leaves.forEach((leaf) => {
+        const dist = leaf.data && leaf.data.distance;
+        const b =
+          isNaN(dist) || dist <= 0 ? 0 : distBin(dist);
+        leaf.y = ringRadii[b];
+        leaf._distBin = b;
+      });
+
+      const ordered = [...leaves].sort(
+        (a, c) =>
+          a.data.group_order - c.data.group_order ||
+          a.data.index_num - c.data.index_num
+      );
+      if (m <= 1) {
+        if (m === 1) ordered[0].x = d.x;
+      } else {
+        let step = organicMaxFan / (m - 1);
+        for (let binIdx = 0; binIdx < N_DIST_BINS; binIdx++) {
+          const subset = leaves.filter((l) => l._distBin === binIdx);
+          if (subset.length <= 1) continue;
+          const k = subset.length;
+          const r = ringRadii[binIdx];
+          const minArcPx =
+            MIN_ARC_PX_BY_RING[binIdx] ??
+            MIN_ARC_PX_BY_RING[MIN_ARC_PX_BY_RING.length - 1] ??
+            8;
+          const thetaFloor = minArcPx / r;
+          const stepRing = Math.max(organicMaxFan / (k - 1), thetaFloor);
+          step = Math.max(step, stepRing);
+        }
+        ordered.forEach((leaf, j) => {
+          leaf.x = d.x + (j - (m - 1) / 2) * step;
+        });
+      }
+    });
+
+    const link = d3
+      .linkRadial()
+      .angle((d) => d.x)
+      .radius((d) => d.y);
+
+    const linksVis = root.links().filter((l) => l.source.depth > 0);
+    const nodesVis = root.descendants().filter((d) => d.depth > 0);
+
+    const leafNodesList = nodesVis.filter((d) => !d.children);
+    const durVals = leafNodesList.map((d) => +d.data.duration).filter((v) => !isNaN(v));
+    const durMin = durVals.length ? d3.min(durVals) : 1;
+    const durMax = durVals.length ? d3.max(durVals) : 8;
+    const durationToInkVal =
+      durMin === durMax
+        ? () => 4.5
+        : d3.scaleLinear().domain([durMin, durMax]).range([1, 8]).clamp(true);
+
+    svg.selectAll("*").remove();
+    const defs = svg.append("defs");
+    appendInkStyleDefs(defs);
+    if (countryBars.length) {
+      const raOuter = BAR_MAX_OUTER_R;
+      const raInner = barInnerR;
+      Object.keys(CONTINENT_COLORS).forEach((name) => {
+        appendOrganicInkGradient(
+          defs,
+          `ink-wash-${name.replace(/\s+/g, "")}`,
+          CONTINENT_COLORS[name],
+          raOuter,
+          raInner,
+          raOuter
+        );
+      });
+      appendOrganicInkGradient(defs, "ink-wash-Unknown", "#777", raOuter, raInner, raOuter);
+      appendPaperInkFilter(defs);
+    }
+
+    /** Ink-style links: heavy at inner node → light toward leaf (aligned with visual-colors/ink.html). */
+    const INK_LINK_INNER = d3.rgb("#2a2d2f");
+    const INK_LINK_OUTER = d3.rgb("#9aa3a8");
+    function radialNodeToXY(node) {
+      const r = node.y;
+      const a = node.x;
+      return [r * Math.sin(a), -r * Math.cos(a)];
+    }
+    linksVis.forEach((l, i) => {
+      const [x1, y1] = radialNodeToXY(l.source);
+      const [x2, y2] = radialNodeToXY(l.target);
+      const grad = defs
+        .append("linearGradient")
+        .attr("id", `link-stroke-grad-${i}`)
+        .attr("gradientUnits", "userSpaceOnUse")
+        .attr("x1", x1)
+        .attr("y1", y1)
+        .attr("x2", x2)
+        .attr("y2", y2);
+      grad.append("stop").attr("offset", "0%").attr("stop-color", INK_LINK_INNER.formatRgb()).attr("stop-opacity", 0.94);
+      grad.append("stop").attr("offset", "42%").attr("stop-color", "#3a3e42").attr("stop-opacity", 0.62);
+      grad.append("stop").attr("offset", "100%").attr("stop-color", INK_LINK_OUTER.formatRgb()).attr("stop-opacity", 0.22);
+    });
+
+    /** Selected `group_rect` fill = same ink as link path start (see `.links` stroke grad 0%). */
+    function groupRectDisplayFill(d) {
+      if (selectedInner && d === selectedInner) return INK_LINK_INNER.formatRgb();
+      return groupRectFillForNode(d);
+    }
+
+    const zoomLayer = svg.append("g").attr("class", "chart-zoom-layer");
+    const g = zoomLayer.append("g");
+
+    let selectedInner = null;
+    let selectedDistBin = null;
+    /** Set when a country `vertex-hit` is clicked: same country filter as `countryBarHover` but held until reset. */
+    let selectedCountry = null;
+    let hoveredLeaf = null;
+    let hoverClearT = null;
+    let countryBarHover = null;
+    /** Leader name from center rose or arc hover; highlights tours + visits in radial. */
+    let hoveredArcLeader = null;
+    /** Rose hover state: year (always set together), leader (null = year-only / vertex hover). */
+    let hoveredRoseYear = null;
+    let hoveredRoseLeader = null;
+    /** Inner node (group_rect) being hovered; highlights its leaves, dims all others. */
+    let hoveredInner = null;
+
+    let updateLeafOpacity = () => {};
+
+    g.append("rect")
+      .attr("x", -480)
+      .attr("y", -480)
+      .attr("width", 960)
+      .attr("height", 960)
+      .attr("fill", "transparent")
+      .on("click", () => {
+        selectedInner = null;
+        selectedDistBin = null;
+        selectedCountry = null;
+        countryBarHover = null;
+        hoveredRoseYear = null;
+        hoveredRoseLeader = null;
+        setArcLeaderHoverState(null);
+        syncDistanceLegend();
+        updateLeafOpacity();
+        if (typeof window._clearCountrySearch === "function") window._clearCountrySearch();
+      });
+
+    const yyWrap = g
+      .append("g")
+      .attr("class", "yin-yang-embed")
+      .attr("transform", `scale(${YY_SCALE})`);
+
+    function setArcLeaderHoverState(leader) {
+      hoveredArcLeader = leader;
+      yyWrap.selectAll("g.leader-arc-g").attr("opacity", function () {
+        const L = this.getAttribute("data-leader");
+        if (!leader) return 1;
+        return L === leader ? 1 : 0.26;
+      });
+      updateLeafOpacity();
+    }
+
+    /**
+     * Rose-specific hover: year + optional leader.
+     * slice hover  → year & leader set  → show only group_rects / trips for that year × leader.
+     * vertex hover → year set, leader null → show all group_rects / trips for that year.
+     * clear        → both null.
+     */
+    function setRoseHoverState(year, leader) {
+      hoveredRoseYear = year;
+      hoveredRoseLeader = leader;
+      hoveredArcLeader = null;
+      updateLeafOpacity();
+    }
+
+    const visitRowsForRose = rawAll.filter(
+      (d) => d.office === "President" || d.office === "Premier"
+    );
+
+    /**
+     * Build the same tour-sector map used by drawLeaderIdBoundaryLines so the rose's year boundaries
+     * align exactly with the cluster's dotted-line angles.
+     * Each year gets angular width = (tours_in_year / total_tours) × 2π.
+     * The first slice starts at wrapBoundary (= angle of the "1998" dotted line).
+     */
+    let roseTourSectorMap = null;
+    if (innerNodes.length) {
+      const N_tours = innerNodes.length;
+      const sector = (2 * Math.PI) / N_tours;
+      const wrapBoundary = (N_tours - 0.5) * sector;
+      const tourCountByYear = new Map();
+      innerNodes.forEach((n) => {
+        // inner node has no year; derive from minimum startYear of its leaf rows
+        const leaves = n.children || [];
+        const yr = leaves.length
+          ? d3.min(leaves, (leaf) => leaf.data.startYear)
+          : NaN;
+        if (!isNaN(yr)) tourCountByYear.set(yr, (tourCountByYear.get(yr) ?? 0) + 1);
+      });
+      roseTourSectorMap = { sector, wrapBoundary, tourCountByYear };
+    }
+
+    const { setRoseCenter } =
+      renderRoseEmbed(defs, yyWrap, visitRowsForRose, { setArcLeaderHoverState, setRoseHoverState, roseTourSectorMap }) || {};
+
+    // ── SVG leaf-ink gradient defs (one halo + one ink gradient per continent×val bucket) ──
+    const LEAF_GRAD_BUCKETS = 8; // matches LEAF_INK_R_SCALE domain [1,8]
+    const leafGradIds = {}; // key: "cont_bucket_halo" | "cont_bucket_ink"
+    Object.entries(CONTINENT_COLORS).forEach(([cont, hex]) => {
+      const base = d3.color(hex);
+      for (let b = 0; b < LEAF_GRAD_BUCKETS; b++) {
+        const t = LEAF_GRAD_BUCKETS > 1 ? b / (LEAF_GRAD_BUCKETS - 1) : 0.5;
+        const val = 1 + t * 7; // domain [1,8]
+        const r = LEAF_INK_R_SCALE(val);
+        const s = r * LEAF_INK_HALO_RATIO;
+        const alpha = LEAF_INK_O_SCALE(val);
+        const contKey = cont.replace(/\s+/g, "");
+
+        // Halo gradient (water wash)
+        const haloId = `lg-halo-${contKey}-${b}`;
+        leafGradIds[`${cont}_${b}_halo`] = haloId;
+        const haloG = defs.append("radialGradient")
+          .attr("id", haloId)
+          .attr("cx", "50%").attr("cy", "50%").attr("r", "50%");
+        haloG.append("stop").attr("offset", "0%")
+          .attr("stop-color", hex).attr("stop-opacity", alpha * 0.4);
+        haloG.append("stop").attr("offset", "60%")
+          .attr("stop-color", hex).attr("stop-opacity", alpha * 0.15);
+        haloG.append("stop").attr("offset", "100%")
+          .attr("stop-color", hex).attr("stop-opacity", 0);
+
+        // Ink-core gradient
+        const inkId = `lg-ink-${contKey}-${b}`;
+        leafGradIds[`${cont}_${b}_ink`] = inkId;
+        const inkG = defs.append("radialGradient")
+          .attr("id", inkId)
+          .attr("cx", "50%").attr("cy", "50%").attr("r", "50%");
+        inkG.append("stop").attr("offset", "0%")
+          .attr("stop-color", hex).attr("stop-opacity", alpha);
+        inkG.append("stop").attr("offset", "85%")
+          .attr("stop-color", hex).attr("stop-opacity", alpha);
+        inkG.append("stop").attr("offset", "100%")
+          .attr("stop-color", hex).attr("stop-opacity", 0);
+      }
+    });
+
+    function leafGradBucket(val) {
+      const t = Math.max(0, Math.min(1, (val - 1) / 7));
+      return Math.round(t * (LEAF_GRAD_BUCKETS - 1));
+    }
+
+    /** Visit dots: 墨点-三 SVG（水晕+墨核）；命中区为透明圆。 */
+    function leafFillOpacity(d) {
+      if (d.children && d.depth === 1) {
+        const full = 0.8;
+        // Rose hover takes priority over other hover states.
+        if (hoveredRoseYear !== null) {
+          const tourYear = d3.min(d.children, (leaf) => leaf.data.startYear);
+          const yearMatch = tourYear === hoveredRoseYear;
+          if (hoveredRoseLeader !== null) {
+            // Slice hover: year + leader
+            return yearMatch && d.data.leader === hoveredRoseLeader ? full : 0.05;
+          }
+          // Vertex hover: year only
+          return yearMatch ? full : 0.05;
+        }
+        if (hoveredArcLeader) {
+          return d.data.leader === hoveredArcLeader ? full : 0.05;
+        }
+        return full;
+      }
+      if (hoveredLeaf) return hoveredLeaf === d ? 1 : 0.1;
+      if (selectedCountry) {
+        const name = (d.data.country || "").trim();
+        return name === selectedCountry ? 1 : 0.1;
+      }
+      if (countryBarHover) {
+        const name = (d.data.country || "").trim();
+        return name === countryBarHover ? 1 : 0.08;
+      }
+      // Rose hover for leaf dots.
+      if (hoveredRoseYear !== null) {
+        const yearMatch = d.data.startYear === hoveredRoseYear;
+        if (hoveredRoseLeader !== null) {
+          return yearMatch && d.data.leader === hoveredRoseLeader ? 1 : 0.06;
+        }
+        return yearMatch ? 1 : 0.06;
+      }
+      if (hoveredArcLeader) {
+        return d.data.leader === hoveredArcLeader ? 1 : 0.06;
+      }
+      if (hoveredInner) return d.parent === hoveredInner ? 1 : 0.1;
+      if (selectedDistBin !== null) {
+        return d._distBin === selectedDistBin ? 1 : 0.05;
+      }
+      if (selectedInner) return d.parent === selectedInner ? 1 : 0.05;
+      return 1;
+    }
+
+    function linkStrokeOpacity(l) {
+      const tgt = l.target;
+      if (selectedCountry) {
+        if (tgt.depth !== 2) return 0;
+        return (tgt.data.country || "").trim() === selectedCountry ? 1 : 0;
+      }
+      if (countryBarHover) {
+        if (tgt.depth !== 2) return 0;
+        return (tgt.data.country || "").trim() === countryBarHover ? 1 : 0;
+      }
+      if (hoveredArcLeader) {
+        if (tgt.depth !== 2) return 0;
+        return tgt.data.leader === hoveredArcLeader ? 1 : 0;
+      }
+      if (selectedDistBin !== null) {
+        return tgt.depth === 2 && tgt._distBin === selectedDistBin ? 1 : 0;
+      }
+      if (selectedInner) {
+        return l.source === selectedInner ? 1 : 0;
+      }
+      return 0;
+    }
+
+    g.append("g")
+      .attr("fill", "none")
+      .attr("pointer-events", "none")
+      .selectAll("circle")
+      .data(ringRadii)
+      .join("circle")
+      .attr("r", (r) => r)
+      .attr("stroke", "rgba(90, 75, 55, 0.14)")
+      .attr("stroke-width", 1)
+      .attr("opacity", 0.45)
+      .attr("class", "rings");
+
+    (function drawLeaderIdBoundaryLines() {
+      const N = innerNodes.length;
+      if (N < 1) return;
+      const sector = (2 * Math.PI) / N;
+      const lid = (d) => {
+        const v = d && d.data && d.data.leader_id;
+        const n = typeof v === "string" && v.trim() === "" ? NaN : +v;
+        return !isNaN(n) ? n : NaN;
+      };
+      /** Mid-angle between two adjacent `group_rect` sectors: boundary after i−1, before i (i = 0..N−1). */
+      const boundaryBetween = (i) => (i - 0.5) * sector;
+      /** Seam before the first tour in angular order = between last and first sector (same frame as `d.x`). */
+      const wrapBoundary = (N - 0.5) * sector;
+      let oneToTwo = NaN;
+      let twoToThree = NaN;
+      for (let i = 1; i < N; i += 1) {
+        const a = lid(innerNodes[i - 1]);
+        const b = lid(innerNodes[i]);
+        if (a === 1 && b === 2 && isNaN(oneToTwo)) oneToTwo = boundaryBetween(i);
+        if (a === 2 && b === 3 && isNaN(twoToThree)) twoToThree = boundaryBetween(i);
+      }
+      const yearToAngle = (yr) => {
+        if (yr === 1998) return wrapBoundary;
+        if (yr === 2003) return oneToTwo;
+        if (yr === 2013) return twoToThree;
+        return NaN;
+      };
+      const boundaryLineData = LEADER_ID_BOUNDARY_YEARS.map((yr) => ({
+        year: yr,
+        a: yearToAngle(yr),
+      })).filter((d) => !isNaN(d.a));
+      if (!boundaryLineData.length) return;
+      /** Lines extend inward to the rose chart's inner circle (innerR=40 in rose coords × YY_SCALE). */
+      const r0 = 40 * YY_SCALE;
+      /** Outermost `.rings` circle — same as last `ringRadii` / `outerRingR`. */
+      const r1 = outerRingR + 10;
+      /**
+       * Short clockwise arc (increasing a: 0 = 12 o’clock, + = clockwise) for textPath.
+       * P(a) = (r·sin a, -r·cos a); sweep 1 = clockwise in SVG.
+       */
+      function ringArcPathClockwise(r, a0, a1) {
+        const x0 = r * Math.sin(a0);
+        const y0 = -r * Math.cos(a0);
+        const x1 = r * Math.sin(a1);
+        const y1 = -r * Math.cos(a1);
+        const dAng = a1 - a0;
+        const large = Math.abs(dAng) > Math.PI ? 1 : 0;
+        return `M${x0},${y0}A${r},${r},0,${large},1,${x1},${y1}`;
+      }
+      /** Slightly inside last `.rings` circle so the label hugs the outermoust ring. */
+      const rText = outerRingR - 3;
+      /** Angular span of label arc (radians, clockwise from rad line). */
+      const textArcSpan = 0.42;
+      boundaryLineData.forEach((row, i) => {
+        const a0 = row.a;
+        const a1 = row.a + textArcSpan;
+        defs
+          .append("path")
+          .attr("id", `leader-bound-arc-txt-${i}`)
+          .attr("d", ringArcPathClockwise(rText, a0, a1));
+      });
+      g.append("g")
+        .attr("class", "leader-id-boundary-lines")
+        .attr("pointer-events", "none")
+        .attr("fill", "none")
+        .selectAll("line")
+        .data(boundaryLineData)
+        .join("line")
+        .attr("x1", (d) => r0 * Math.sin(d.a))
+        .attr("y1", (d) => -r0 * Math.cos(d.a))
+        .attr("x2", (d) => r1 * Math.sin(d.a))
+        .attr("y2", (d) => -r1 * Math.cos(d.a))
+        .attr("stroke", "rgba(42, 36, 28, 0.5)")
+        .attr("stroke-width", 1.15)
+        .attr("stroke-dasharray", "2.5 5")
+        .attr("stroke-linecap", "round");
+      g.append("g")
+        .attr("class", "leader-boundary-year-labels")
+        .attr("pointer-events", "none")
+        .selectAll("text")
+        .data(boundaryLineData)
+        .join("text")
+        .attr("class", "leader-bound-arc-year")
+        .append("textPath")
+        .attr("href", (d, i) => `#leader-bound-arc-txt-${i}`)
+        .attr("startOffset", "3%")
+        .text((d) => String(d.year));
+
+      /* ---- Leader name labels near group_rect, one per line ---- */
+      if (!isNaN(oneToTwo) && !isNaN(twoToThree)) {
+        /** Collect unique leaders per leader_id period, President first. */
+        const leadersByPeriod = new Map();
+        innerNodes.forEach((n) => {
+          const lNum = +String(n.data.leader_id ?? "").trim();
+          if (!isNaN(lNum) && lNum >= 1 && lNum <= 3) {
+            if (!leadersByPeriod.has(lNum)) leadersByPeriod.set(lNum, []);
+            const arr = leadersByPeriod.get(lNum);
+            const entry = { leader: n.data.leader, office: n.data.office };
+            if (!arr.some((e) => e.leader === entry.leader)) arr.push(entry);
+          }
+        });
+        leadersByPeriod.forEach((arr) =>
+          arr.sort((a, b) => (a.office === "President" ? -1 : 1))
+        );
+
+        /**
+         * Each period's label arc starts right at its boundary line angle,
+         * matching the year-label convention (year labels also start at row.a).
+         * lineAngle = the dotted boundary line for that period's start.
+         */
+        const periodArcs = [
+          { lid: 1, lineAngle: wrapBoundary },
+          { lid: 2, lineAngle: oneToTwo     },
+          { lid: 3, lineAngle: twoToThree   },
+        ];
+
+        /**
+         * Radial positions for leader labels — mirroring where year labels sit.
+         * Year labels are at rText = outerRingR - 3.
+         * Toggle radial position by changing rL0 / rL1:
+         *   • increase → moves label outward (closer to year labels)
+         *   • decrease → moves label inward (deeper into the rings zone)
+         * The gap between rL0 and rL1 (currently 14px) sets inter-line spacing.
+         */
+        const rL0 = outerRingR - 16;   // first leader line (President)
+        const rL1 = outerRingR - 30;   // second leader line (Premier / VP)
+
+        const leaderLabelSpan = 0.55;  // arc span in radians (≈ same as textArcSpan)
+        const leaderLabelGroup = g.append("g")
+          .attr("class", "leader-period-labels")
+          .attr("pointer-events", "none");
+
+        periodArcs.forEach(({ lid, lineAngle }) => {
+          const leaders = leadersByPeriod.get(lid) || [];
+          if (!leaders.length) return;
+          leaders.forEach((entry, li) => {
+            const rL = li === 0 ? rL0 : rL1 - (li - 1) * 14;
+            const arcPathId = `leader-period-lbl-arc-${lid}-${li}`;
+            defs.append("path")
+              .attr("id", arcPathId)
+              .attr("d", ringArcPathClockwise(rL, lineAngle, lineAngle + leaderLabelSpan));
+            leaderLabelGroup
+              .append("text")
+              .attr("class", "leader-bound-arc-year")
+              .append("textPath")
+              .attr("href", `#${arcPathId}`)
+              .attr("startOffset", "3%")
+              .text(entry.leader);
+          });
+        });
+      }
+    })();
+
+    if (countryBars.length) {
+      const countryData = countryBars;
+      const n = countryData.length;
+      const maxC = d3.max(countryData, (d) => d.count) || 1;
+      const raInner = barInnerR;
+      const raOuter = BAR_MAX_OUTER_R;
+      const angle = (i) => (i / n) * 2 * Math.PI;
+      const radiusC = d3
+        .scaleLinear()
+        .domain([-0.5, maxC])
+        .range([raInner, raOuter])
+        .nice();
+
+      function quadSlicePath(i) {
+        const j = (i + 1) % n;
+        const Ii = d3.pointRadial(angle(i), raInner);
+        const Ij = d3.pointRadial(angle(j), raInner);
+        const Oi = d3.pointRadial(angle(i), radiusC(countryData[i].count));
+        const Oj = d3.pointRadial(angle(j), radiusC(countryData[j].count));
+        return `M${Ii[0]},${Ii[1]}L${Ij[0]},${Ij[1]}L${Oj[0]},${Oj[1]}L${Oi[0]},${Oi[1]}Z`;
+      }
+
+      const countryBarFont = 6;
+
+      const countryAreaG = g
+        .append("g")
+        .attr("class", "country-radial-area")
+        .attr("pointer-events", "none")
+        .attr("filter", "url(#ink-xuan-paper)");
+
+      countryAreaG
+        .selectAll("path.area-fill")
+        .data(d3.range(n))
+        .join("path")
+        .attr("class", "area-fill")
+        .attr("d", (d) => quadSlicePath(d))
+        .attr("fill", (d) => `url(#${gradientIdForContinent(countryData[d].continent)})`)
+        .attr("stroke", "none")
+        .attr("fill-opacity", 0.78);
+
+      /** Half-length of the vertex tick in its default (idle) state. */
+      const COUNTRY_VERTEX_HALF = 2;
+      /** Half-length while the cursor is hovering — tune this to make the tick bigger/smaller on hover. */
+      const COUNTRY_VERTEX_HOVER_HALF = 5;
+      /** Square hit target (px) centered on the vertex; larger = easier to hover. */
+      const COUNTRY_VERTEX_HIT_SIZE = 32;
+      g.append("g")
+        .attr("class", "country-vertices")
+        .selectAll("g.vertex")
+        .data(countryData)
+        .join("g")
+        .attr("class", "vertex")
+        .each(function (d, i) {
+          const rv = radiusC(d.count);
+          const [x, y] = d3.pointRadial(angle(i), rv);
+          const len = Math.hypot(x, y) || 1;
+          const rx = x / len;
+          const ry = y / len;
+          const sel = d3.select(this);
+          const h = COUNTRY_VERTEX_HIT_SIZE;
+
+          /** Resize the vertex tick line to a given half-length. */
+          function setLineHalf(half) {
+            sel.select("line.vertex-line")
+              .attr("x1", x - rx * half).attr("y1", y - ry * half)
+              .attr("x2", x + rx * half).attr("y2", y + ry * half);
+          }
+
+          sel
+            .append("rect")
+            .attr("class", "vertex-hit")
+            .attr("x", x - h / 2)
+            .attr("y", y - h / 2)
+            .attr("width", h)
+            .attr("height", h)
+            .attr("fill", "transparent")
+            .attr("pointer-events", "all")
+            .style("cursor", "pointer")
+            .on("mouseenter", function () {
+              setLineHalf(COUNTRY_VERTEX_HOVER_HALF);
+              g.select(".country-radial-area-labels")
+                .selectAll("text.country-bar-label")
+                .filter((di) => di === i)
+                .attr("font-weight", "500")
+                .attr("font-size", `${countryBarFont * 1.5}px`);
+              showTipHtml(`
+                <strong>${d.country}</strong>${d.continent ? " · " + d.continent : ""}
+                <div class="meta">
+                  <div>Total visits: ${d.count}</div>
+                </div>
+              `);
+            })
+            .on("mousemove", moveTip)
+            .on("mouseleave", function () {
+              setLineHalf(COUNTRY_VERTEX_HALF);
+              g.select(".country-radial-area-labels")
+                .selectAll("text.country-bar-label")
+                .filter((di) => di === i)
+                .attr("font-weight", "500")
+                .attr("font-size", `${countryBarFont}px`);
+              tip.classList.remove("visible");
+            })
+            .on("click", function (ev) {
+              ev.stopPropagation();
+              countryBarHover = null;
+              selectedInner = null;
+              selectedDistBin = null;
+              syncDistanceLegend();
+              const next = selectedCountry === d.country ? null : d.country;
+              selectedCountry = next;
+              if (hoveredLeaf && selectedCountry) {
+                const h = (hoveredLeaf.data.country || "").trim();
+                if (h !== selectedCountry) hoveredLeaf = null;
+              }
+              updateLeafOpacity();
+              // Keep search bar in sync with click-toggle
+              const inp = document.getElementById("country-search-input");
+              const clr = document.getElementById("country-search-clear");
+              if (inp) {
+                if (selectedCountry) {
+                  inp.value = selectedCountry;
+                  if (clr) clr.classList.remove("hidden");
+                } else {
+                  inp.value = "";
+                  if (clr) clr.classList.add("hidden");
+                }
+              }
+            });
+          sel
+            .append("line")
+            .attr("class", "vertex-line")
+            .attr("x1", x - rx * COUNTRY_VERTEX_HALF)
+            .attr("y1", y - ry * COUNTRY_VERTEX_HALF)
+            .attr("x2", x + rx * COUNTRY_VERTEX_HALF)
+            .attr("y2", y + ry * COUNTRY_VERTEX_HALF)
+            .attr("stroke", "black")
+            .attr("stroke-width", 1.35)
+            .attr("pointer-events", "none");
+        });
+
+      /**
+       * Labels at the outer tip of each vertex, rotated radially outward —
+       * same convention as the D3 "Tree of Life":
+       *   rotate(deg - 90)  →  aligns the local x-axis with the outward radius
+       *   translate(r, 0)   →  moves to the vertex tip
+       *   rotate(180)       →  flips text for the left half so it reads outward
+       * Toggle label distance from tip by adjusting LABEL_OFFSET.
+       */
+      const LABEL_OFFSET = 6;  // px gap between bar tip and label start
+      g.append("g")
+        .attr("class", "country-radial-area-labels")
+        .attr("pointer-events", "none")
+        .selectAll("text.country-bar-label")
+        .data(d3.range(n))
+        .join("text")
+        .attr("class", "country-bar-label")
+        .text((d) => (countryData[d].ccode || "").trim().slice(0, 3).toUpperCase())
+        .attr("fill", "rgba(42, 36, 28, 0.88)")
+        .attr("font-family", "JetBrains Mono, monospace")
+        .attr("font-size", `${countryBarFont}px`)
+        .attr("font-weight", "500")
+        .attr("dy", "0.31em")
+        .each(function (d, i) {
+          const θ = angle(i);                        // vertex angle (radians, 0 = top)
+          const deg = (θ * 180) / Math.PI;           // degrees clockwise from top
+          const rTip = radiusC(countryData[i].count);
+          const rLabel = Math.min(rTip + LABEL_OFFSET, CANVAS_MAX_R - 2);
+          const flip = deg >= 180;
+          d3.select(this)
+            .attr("text-anchor", flip ? "end" : "start")
+            .attr("transform",
+              `rotate(${deg - 90}) translate(${rLabel},0)${flip ? " rotate(180)" : ""}`
+            );
+        });
+    }
+
+    const linkLayer = g
+      .append("g")
+      .attr("fill", "none")
+      .attr("pointer-events", "none")
+      .attr("stroke-width", 1)
+      .selectAll("path")
+      .data(linksVis)
+      .join("path")
+      .attr("d", link)
+      .attr("stroke", (d, i) => `url(#link-stroke-grad-${i})`)
+      .attr("stroke-opacity", (d) => linkStrokeOpacity(d))
+      .attr("filter", "url(#ink-brush-line)")
+      .attr("class", "links");
+
+    /* ---- Group-trip connectors: subtle polyline connecting dots of the same global_id ---- */
+    const groupConnectorData = innerNodes
+      .filter((inner) => (inner.children || []).length >= 2)
+      .map((inner) => ({
+        inner,
+        sorted: [...inner.children].sort(
+          (a, b) =>
+            a.data.group_order - b.data.group_order || a.data.index_num - b.data.index_num
+        ),
+      }));
+
+    const groupConnectorLayer = g
+      .append("g")
+      .attr("class", "group-connectors")
+      .attr("pointer-events", "none")
+      .attr("fill", "none");
+
+    groupConnectorLayer
+      .selectAll("path.group-connector")
+      .data(groupConnectorData)
+      .join("path")
+      .attr("class", "group-connector")
+      .attr("stroke", "rgba(42, 36, 28, 0.85)")
+      .attr("stroke-width", 0.65)
+      .attr("stroke-dasharray", "2 3.5")
+      .attr("stroke-linecap", "round")
+      .attr("d", ({ sorted }) =>
+        sorted
+          .map((leaf, i) => {
+            const [px, py] = radialNodeToXY(leaf);
+            return `${i === 0 ? "M" : "L"}${px},${py}`;
+          })
+          .join(" ")
+      );
+
+    /** 与 viewBox 对齐：世界坐标 (sx,sy) → canvas 像素 */
+    // ── SVG leaf ink layer (replaces canvas foreignObject) ───────────────
+    const leafInkLayer = g.append("g")
+      .attr("class", "leaf-ink-layer")
+      .attr("pointer-events", "none");
+
+    // Build one SVG group per leaf: halo circle + ink circle + hover-ring circle
+    leafNodesList.forEach((leafNode) => {
+      const [sx, sy] = radialNodeToXY(leafNode);
+      const row = leafNode.data;
+      const cont = (row.Continent || "").trim();
+      const dur = +row.duration;
+      const val = isNaN(dur) ? durationToInkVal(durMin) : durationToInkVal(dur);
+      const r = LEAF_INK_R_SCALE(val);
+      const s = r * LEAF_INK_HALO_RATIO;
+      const bucket = leafGradBucket(val);
+      const contKey = Object.keys(CONTINENT_COLORS).find(k => k === cont) || cont;
+
+      const haloGradId = leafGradIds[`${contKey}_${bucket}_halo`] || `lg-halo-Africa-0`;
+      const inkGradId  = leafGradIds[`${contKey}_${bucket}_ink`]  || `lg-ink-Africa-0`;
+
+      const lg = leafInkLayer.append("g")
+        .attr("class", "leaf-ink-g")
+        .datum(leafNode);
+
+      // Halo (water wash) — 2× radius of ink core
+      lg.append("circle")
+        .attr("class", "li-halo")
+        .attr("cx", sx).attr("cy", sy)
+        .attr("r", r + s)
+        .attr("fill", `url(#${haloGradId})`)
+        .attr("stroke", "none");
+
+      // Ink core
+      lg.append("circle")
+        .attr("class", "li-ink")
+        .attr("cx", sx).attr("cy", sy)
+        .attr("r", r)
+        .attr("fill", `url(#${inkGradId})`)
+        .attr("stroke", "none");
+
+      // Hover ring — hidden until hovered
+      lg.append("circle")
+        .attr("class", "li-ring")
+        .attr("cx", sx).attr("cy", sy)
+        .attr("r", r + 3)
+        .attr("fill", "none")
+        .attr("stroke", "rgba(0,0,0,0.5)")
+        .attr("stroke-width", 0.8)
+        .attr("stroke-dasharray", "2 2")
+        .attr("stroke-linecap", "round")
+        .attr("opacity", 0);
+    });
+
+    const node = g
+      .append("g")
+      .selectAll("g")
+      .data(nodesVis)
+      .join("g")
+      .attr(
+        "transform",
+        (d) => `rotate(${(d.x * 180) / Math.PI - 90}) translate(${d.y},0)`
+      );
+
+    const innerNodesSel = node.filter((d) => d.children);
+    const leafNodesSel = node.filter((d) => !d.children);
+
+    const innerW = INNER_RECT_RADIAL_BASE;
+    const innerRxy = Math.min(innerW, INNER_RECT_TANGENTIAL_H) * 0.2;
+    innerNodesSel
+      .append("rect")
+      /* Outward radial edge at local x=0 (link anchor); rect extends inward (toward center). */
+      .attr("x", -innerW)
+      .attr("y", -R_INNER)
+      .attr("width", innerW)
+      .attr("height", INNER_RECT_TANGENTIAL_H)
+      .attr("rx", innerRxy)
+      .attr("ry", innerRxy)
+      .attr("fill", (d) => groupRectDisplayFill(d))
+      .attr("class", "group_rect")
+      .attr("fill-opacity", (d) => leafFillOpacity(d))
+      .attr("stroke", "rgba(32, 30, 28, 0.22)")
+      .attr("stroke-width", 0.1)
+      .style("cursor", "pointer")
+      .on("click", function (ev, d) {
+        ev.stopPropagation();
+        selectedDistBin = null;
+        selectedCountry = null;
+        syncDistanceLegend();
+        selectedInner = selectedInner === d ? null : d;
+        updateLeafOpacity();
+        if (typeof window._clearCountrySearch === "function") window._clearCountrySearch();
+      })
+      .on("mouseenter", function (ev, d) {
+        d3.select(this).attr("stroke-width", 1.05).attr("stroke", "rgba(48, 44, 40, 0.52)");
+        hoveredInner = d;
+        updateLeafOpacity();
+        if (setRoseCenter) {
+          const fmtShort = (s) => {
+            const dt = new Date(s);
+            if (isNaN(dt)) return s || "";
+            return `${String(dt.getMonth() + 1).padStart(2, "0")}/${String(dt.getDate()).padStart(2, "0")}`;
+          };
+          const fmtFull = (s) => {
+            const dt = new Date(s);
+            if (isNaN(dt)) return s || "";
+            return `${String(dt.getMonth() + 1).padStart(2, "0")}/${String(dt.getDate()).padStart(2, "0")}/${dt.getFullYear()}`;
+          };
+          const sorted = [...d.children].sort(
+            (a, b) => a.data.group_order - b.data.group_order || a.data.index_num - b.data.index_num
+          );
+          const lastEnd = sorted[sorted.length - 1]?.data?.end;
+          const firstStart = d3.min(sorted, c => c.data.start);
+          const endDt = new Date(lastEnd);
+          const dateRange = `${fmtShort(firstStart)} – ${fmtShort(lastEnd)}`;
+          const dateYear = isNaN(endDt) ? "" : String(endDt.getFullYear());
+          setRoseCenter({ mode: "tour", leader: d.data.leader, office: d.data.office, stops: d.children.length, dateRange, dateYear });
+        }
+      })
+      .on("mouseleave", function () {
+        d3.select(this).attr("stroke-width", 0.38).attr("stroke", "rgba(32, 30, 28, 0.22)");
+        hoveredInner = null;
+        updateLeafOpacity();
+        if (setRoseCenter) setRoseCenter(null);
+      });
+
+    leafNodesSel
+      .append("circle")
+      .attr("class", "leaf-dot")
+      .attr("r", (d) => {
+        const dur = +d.data.duration;
+        const val = isNaN(dur) ? durationToInkVal(durMin) : durationToInkVal(dur);
+        const r = LEAF_INK_R_SCALE(val);
+        const s = r * LEAF_INK_HALO_RATIO;
+        return r + s + 5;
+      })
+      .attr("fill", "transparent")
+      .attr("stroke", "none")
+      .style("cursor", "pointer")
+      .on("click", function (ev, d) {
+        ev.stopPropagation();
+        selectedDistBin = null;
+        selectedCountry = null;
+        syncDistanceLegend();
+        selectedInner = selectedInner === d.parent ? null : d.parent;
+        updateLeafOpacity();
+        if (typeof window._clearCountrySearch === "function") window._clearCountrySearch();
+      })
+      .on("mouseenter", function (ev, d) {
+        clearTimeout(hoverClearT);
+        hoveredLeaf = d;
+        updateLeafOpacity();
+        const r = d.data;
+        const _meeting = (r.meeting || "").trim();
+        const _note    = (r.note    || "").trim();
+        const _meetingOk = _meeting && _meeting.toLowerCase() !== "na";
+        const _noteOk    = _note    && _note.toLowerCase()    !== "na";
+
+        /* ── Group stop visual ─────────────────────────────────────────────
+         * Sizes to tune:
+         *   DOT_R      — radius of each stop dot (px)
+         *   DOT_GAP    — center-to-center spacing between dots (px)
+         *   SVG_H      — total height of the SVG strip (px)
+         * ────────────────────────────────────────────────────────────────── */
+        const DOT_R   = 3;
+        const DOT_GAP = 14;
+        const SVG_H   = 14;
+
+        const siblings = d.parent
+          ? [...d.parent.children].sort(
+              (a, b) => a.data.group_order - b.data.group_order || a.data.index_num - b.data.index_num
+            )
+          : [d];
+        const n = siblings.length;
+        const myIdx = siblings.indexOf(d);
+
+        const ordinal = (i) => {
+          const s = ["1st","2nd","3rd"];
+          return i < s.length ? s[i] : `${i+1}th`;
+        };
+
+        let stopBlock = "";
+        if (n <= 1) {
+          stopBlock = `<div class="meta-extra" style="margin-top:0.45rem">solo trip</div>`;
+        } else {
+          const svgW = (n - 1) * DOT_GAP + DOT_R * 2 + 4;
+          const cy   = SVG_H / 2;
+          const cx   = (i) => DOT_R + 2 + i * DOT_GAP;
+
+          /* dashed connector line */
+          const lineEl = n > 1
+            ? `<line x1="${cx(0)}" y1="${cy}" x2="${cx(n-1)}" y2="${cy}"
+                 stroke="rgba(42,36,28,0.7)" stroke-width="0.65"
+                 stroke-dasharray="2 3.5" stroke-linecap="round"/>`
+            : "";
+
+          /* dots */
+          const dots = siblings.map((_, i) =>
+            `<circle cx="${cx(i)}" cy="${cy}" r="${DOT_R}"
+               fill="${i === myIdx ? "#8B4A32" : "rgba(42,36,28,0.35)"}"
+               stroke="none"/>`
+          ).join("");
+
+          const svg = `<svg xmlns="http://www.w3.org/2000/svg"
+            width="${svgW}" height="${SVG_H}"
+            style="display:block;overflow:visible">${lineEl}${dots}</svg>`;
+
+          stopBlock = `<div class="meta-extra" style="margin-top:0.45rem">
+            <div style="margin-bottom:3px">${ordinal(myIdx)} stop of ${n}</div>
+            ${svg}
+          </div>`;
+        }
+
+        showTipHtml(`
+                <strong>${r.country}</strong>${r.Continent ? " · " + r.Continent : ""}
+                <div class="meta">
+                  <div>${r.leader}</div>
+                  <div>${(() => { const d = new Date(r.start); return isNaN(d) ? r.start : `${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}/${d.getFullYear()}`; })()}</div>
+                  <div>Duration: ${r.duration} ${+r.duration === 1 ? "day" : "days"}</div>
+                </div>
+                ${stopBlock}
+                ${(_meetingOk || _noteOk) ? `<div class="meta-extra" style="margin-top:0.45rem">${_meetingOk ? `<div>${_meeting}</div>` : ""}${_noteOk ? `<div>${_note}</div>` : ""}</div>` : ""}
+              `);
+        tip.classList.add("visible");
+      })
+      .on("mousemove", moveTip)
+      .on("mouseleave", function (ev, d) {
+        hoverClearT = setTimeout(() => {
+          if (hoveredLeaf === d) hoveredLeaf = null;
+          updateLeafOpacity();
+        }, 10);
+        tip.classList.remove("visible");
+      });
+
+    function leafDotPointerEvents(d) {
+      if (selectedCountry) {
+        return (d.data.country || "").trim() === selectedCountry ? "all" : "none";
+      }
+      if (selectedInner) {
+        return d.parent === selectedInner ? "all" : "none";
+      }
+      if (selectedDistBin !== null) {
+        return d._distBin === selectedDistBin ? "all" : "none";
+      }
+      return "all";
+    }
+    function leafDotCursor(d) {
+      return leafDotPointerEvents(d) === "none" ? "default" : "pointer";
+    }
+
+    updateLeafOpacity = () => {
+      node
+        .selectAll("rect")
+        .attr("fill", (d) => groupRectDisplayFill(d))
+        .attr("fill-opacity", (d) => leafFillOpacity(d));
+      leafNodesSel
+        .select("circle.leaf-dot")
+        .style("pointer-events", leafDotPointerEvents)
+        .style("cursor", leafDotCursor);
+      // Drive SVG ink layer opacity + hover ring
+      leafInkLayer.selectAll("g.leaf-ink-g").each(function(leafNode) {
+        const glo = leafFillOpacity(leafNode);
+        const isHov = hoveredLeaf === leafNode;
+        d3.select(this).select("circle.li-halo").attr("opacity", glo);
+        d3.select(this).select("circle.li-ink").attr("opacity", glo);
+        d3.select(this).select("circle.li-ring").attr("opacity", isHov ? 1 : 0);
+      });
+      linkLayer.attr("stroke-opacity", (d) => linkStrokeOpacity(d));
+      groupConnectorLayer
+        .selectAll("path.group-connector")
+        .attr("stroke-opacity", ({ inner }) => {
+          const leaves = inner.children || [];
+          if (!leaves.length) return 0;
+          /* When a dot is hovered, keep its own group's connector unchanged;
+             other groups' connectors still dim as usual. */
+          if (hoveredLeaf && leaves.includes(hoveredLeaf)) return 0.32;
+          return leafFillOpacity(leaves[0]) * 0.32;
+        });
+    };
+    updateLeafOpacity();
+
+    // ── Country search widget ─────────────────────────────────────────
+    (function initCountrySearch() {
+      const searchInput   = document.getElementById("country-search-input");
+      const clearBtn      = document.getElementById("country-search-clear");
+      const suggestionBox = document.getElementById("country-search-suggestions");
+
+      if (!searchInput) return;
+
+      // Master list of country names (sorted A-Z); built from countryBars
+      const allCountries = countryBars.map((d) => d.country).sort((a, b) => a.localeCompare(b));
+
+      let activeIdx = -1; // keyboard navigation index within visible suggestions
+
+      // ── Helpers ───────────────────────────────────────────────────────
+      function getSuggestions(query) {
+        const q = query.trim().toLowerCase();
+        if (!q) return [];
+        return allCountries.filter((c) => c.toLowerCase().includes(q));
+      }
+
+      function renderSuggestions(matches) {
+        activeIdx = -1;
+        if (matches.length === 0 && searchInput.value.trim()) {
+          suggestionBox.innerHTML = '<li class="no-result" aria-disabled="true">No country found</li>';
+          suggestionBox.classList.remove("hidden");
+          searchInput.setAttribute("aria-expanded", "true");
+          return;
+        }
+        if (matches.length === 0) {
+          closeSuggestions();
+          return;
+        }
+        suggestionBox.innerHTML = matches
+          .map(
+            (c, i) =>
+              `<li role="option" data-country="${c}" data-idx="${i}">${c}</li>`
+          )
+          .join("");
+        suggestionBox.classList.remove("hidden");
+        searchInput.setAttribute("aria-expanded", "true");
+        // Attach hover listeners
+        suggestionBox.querySelectorAll("li[data-country]").forEach((li) => {
+          li.addEventListener("mouseenter", () => {
+            countryBarHover = li.dataset.country;
+            updateLeafOpacity();
+            setActiveLi(+li.dataset.idx);
+          });
+          li.addEventListener("mouseleave", () => {
+            countryBarHover = null;
+            updateLeafOpacity();
+          });
+          li.addEventListener("mousedown", (ev) => {
+            // mousedown so it fires before input blur
+            ev.preventDefault();
+            selectCountry(li.dataset.country);
+          });
+        });
+      }
+
+      function setActiveLi(idx) {
+        activeIdx = idx;
+        suggestionBox.querySelectorAll("li[data-country]").forEach((li, i) => {
+          li.classList.toggle("active", i === idx);
+        });
+      }
+
+      function closeSuggestions() {
+        suggestionBox.classList.add("hidden");
+        suggestionBox.innerHTML = "";
+        searchInput.setAttribute("aria-expanded", "false");
+        activeIdx = -1;
+        // Clear transient hover when list closes
+        countryBarHover = null;
+        updateLeafOpacity();
+      }
+
+      function selectCountry(name) {
+        selectedCountry = name;
+        selectedInner   = null;
+        selectedDistBin = null;
+        hoveredLeaf     = null;
+        countryBarHover = null;
+        updateLeafOpacity();
+        searchInput.value = name;
+        clearBtn.classList.remove("hidden");
+        closeSuggestions();
+        searchInput.blur();
+      }
+
+      // Exposed so the viz click-anywhere handler can also clear
+      window._clearCountrySearch = function () {
+        searchInput.value = "";
+        clearBtn.classList.add("hidden");
+        closeSuggestions();
+      };
+
+      // ── Input events ──────────────────────────────────────────────────
+      searchInput.addEventListener("input", () => {
+        // If a country was locked, typing new text releases the lock
+        if (selectedCountry) {
+          selectedCountry = null;
+          updateLeafOpacity();
+          clearBtn.classList.add("hidden");
+        }
+        renderSuggestions(getSuggestions(searchInput.value));
+      });
+
+      searchInput.addEventListener("keydown", (ev) => {
+        const visibleItems = [...suggestionBox.querySelectorAll("li[data-country]")];
+        if (!visibleItems.length) return;
+
+        if (ev.key === "ArrowDown") {
+          ev.preventDefault();
+          const next = Math.min(activeIdx + 1, visibleItems.length - 1);
+          setActiveLi(next);
+          countryBarHover = visibleItems[next].dataset.country;
+          updateLeafOpacity();
+        } else if (ev.key === "ArrowUp") {
+          ev.preventDefault();
+          const prev = Math.max(activeIdx - 1, 0);
+          setActiveLi(prev);
+          countryBarHover = visibleItems[prev].dataset.country;
+          updateLeafOpacity();
+        } else if (ev.key === "Enter") {
+          ev.preventDefault();
+          if (activeIdx >= 0 && visibleItems[activeIdx]) {
+            selectCountry(visibleItems[activeIdx].dataset.country);
+          } else if (visibleItems.length === 1) {
+            selectCountry(visibleItems[0].dataset.country);
+          }
+        } else if (ev.key === "Escape") {
+          closeSuggestions();
+          searchInput.blur();
+        }
+      });
+
+      searchInput.addEventListener("blur", () => {
+        // Slight delay so mousedown on a suggestion fires first
+        setTimeout(closeSuggestions, 150);
+      });
+
+      // ── Clear button ──────────────────────────────────────────────────
+      clearBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        selectedCountry = null;
+        updateLeafOpacity();
+        window._clearCountrySearch();
+      });
+    })();
+    // ── End country search ────────────────────────────────────────────
+
+    function syncDistanceLegend() {
+      /* legend-row removed: no #legend-distance DOM */
+    }
+
+    /* legend-row init disabled
+    const leaders = [...new Set(data.map((d) => d.leader))].sort();
+    const conts = [...new Set(data.map((d) => d.Continent.trim()))].sort();
+
+    document.getElementById("legend-leaders").innerHTML = leaders
+      .map(
+        (L) =>
+          `<span class="sw"><i style="background:${leaderColor(L)}"></i>${L}</span>`
+      )
+      .join("");
+    document.getElementById("legend-continents").innerHTML = conts
+      .map(
+        (c) =>
+          `<span class="sw"><i style="background:${continentColor(c)}"></i>${c}</span>`
+      )
+      .join("");
+
+    const binEdges = DIST_BIN_EDGES;
+    const fmtKm = (v) =>
+      v >= 1e4 ? `${Math.round(v / 1000)}k` : `${Math.round(v).toLocaleString()}`;
+    document.getElementById("legend-distance").innerHTML = d3
+      .range(N_DIST_BINS)
+      .map((i) => {
+        const lo = binEdges[i];
+        const hi = binEdges[i + 1];
+        return `<span class="legend-dist-sw sw" role="button" tabindex="0" data-bin-index="${i}" title="Ring ${i + 1} of ${N_DIST_BINS} — click to highlight">${fmtKm(lo)}–${fmtKm(hi)} km</span>`;
+      })
+      .join("");
+
+    document.querySelectorAll("#legend-distance .legend-dist-sw").forEach((el) => {
+      const onActivate = () => {
+        const i = +el.getAttribute("data-bin-index");
+        selectedDistBin = selectedDistBin === i ? null : i;
+        if (selectedDistBin !== null) {
+          selectedInner = null;
+          selectedCountry = null;
+        }
+        syncDistanceLegend();
+        updateLeafOpacity();
+      };
+      el.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        onActivate();
+      });
+      el.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          onActivate();
+        }
+      });
+    });
+    */
+
+    const zoomBehavior = d3
+      .zoom()
+      .scaleExtent([CHART_ZOOM_MIN_SCALE, CHART_ZOOM_MAX_SCALE])
+      .translateExtent([
+        [CHART_VIEWBOX.x, CHART_VIEWBOX.y],
+        [CHART_VIEWBOX.x + CHART_VIEWBOX.w, CHART_VIEWBOX.y + CHART_VIEWBOX.h],
+      ])
+      .on("zoom", (event) => {
+        zoomLayer.attr("transform", event.transform);
+        const k = event.transform.k;
+        const zoomed = Math.abs(k - 1) > 1e-6;
+        svg.style("cursor", zoomed ? "move" : "default");
+      });
+    svg.call(zoomBehavior);
+  }
+
+  d3.csv("../production/raw_data.csv", parseRow)
+    .then((raw) => {
+      const data = raw.filter((d) => d.office === "President" || d.office === "Premier");
+      if (!data.length || !data[0].global_id) {
+        document.querySelector(".panel").innerHTML =
+          "<p style=\"padding:2rem;color:#c6a756\">Need <code>global_id</code> on rows in raw_data.csv.</p>";
+        return;
+      }
+      render(data, raw);
+    })
+    .catch((err) => {
+      document.querySelector(".panel").innerHTML =
+        '<p style="padding:2rem;color:#c6a756">Load via local server: <code>/radial-cluster/</code></p>';
+      console.error(err);
+    });
+})();
+  </script>
+</body>
+</html>
