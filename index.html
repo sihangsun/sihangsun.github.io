@@ -16,11 +16,15 @@
             --grid-line: #1A1A1A; /* Solid Dark lines */
             --border-width: 1px;
             --sidebar-width: 220px;
+            --motion-duration: 1.2s;
+            --panel-duration: 0.5s;
+            --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         html {
-            scroll-behavior: smooth; /* Native smooth scrolling fallback */
+            scroll-behavior: auto;
             overflow-x: hidden; /* Prevent horizontal scroll on mobile */
+            scrollbar-gutter: stable; /* Prevent layout shift when scrollbar disappears */
         }
 
         * {
@@ -36,6 +40,15 @@
             color: var(--black);
             line-height: 1.4;
             overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Seamless background scroll lock */
+        html.lock-scroll {
+            overflow: hidden;
+            scrollbar-gutter: auto;
+        }
+        body.lock-scroll {
+            overflow: hidden;
         }
 
         button { background: none; border: none; cursor: pointer; font-family: inherit; color: inherit; }
@@ -237,20 +250,22 @@
             background: var(--white); 
             z-index: 200; 
             transform: translateX(100%); 
-            /* UPDATED: Faster, linear transition */
-            transition: transform 0.4s; 
+            transition: transform var(--panel-duration) var(--motion-ease), visibility 0s linear var(--panel-duration);
             /* Prevent off-canvas panel from intercepting hover/clicks when closed */
             visibility: hidden;
             pointer-events: none;
+            /* Stops scroll from leaking to background */
+            overscroll-behavior: contain;
         }
-        #detail-view.active { transform: translateX(0); visibility: visible; pointer-events: auto; }
+        #detail-view.active { transform: translateX(0); visibility: visible; pointer-events: auto; transition: transform var(--panel-duration) var(--motion-ease), visibility 0s linear 0s; }
         
         .detail-nav { position: sticky; top: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--grid-line); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
         .detail-hero-img { width: 100%; height: 70vh; object-fit: cover; border-bottom: 1px solid var(--grid-line); }
         .detail-header { display: grid; grid-template-columns: 8fr 4fr; border-bottom: 1px solid var(--grid-line); }
         .detail-title-block { padding: 4rem; border-right: 1px solid var(--grid-line); }
         .detail-title-block h1 { font-size: 4.5rem; font-weight: 800; line-height: 1; margin-bottom: 2rem; letter-spacing: -0.04em; }
-        .detail-title-block p { font-size: 1.5rem; color: #444; max-width: 800px; }
+        .detail-title-block p { font-size: 1.5rem; color: #444; max-width: 800px; margin-bottom: 1.5rem; }
+        .detail-title-block p:last-of-type { margin-bottom: 2rem; }
         
         .detail-description-link {
             font-size: 1.25rem;
@@ -513,6 +528,48 @@
     <script>
         // --- DATA --- 
         const PROJECTS = [
+    {
+        id: 7,
+        title: "China Visits",
+        category: "Data Visualization",
+        year: "2026",
+        roles: ["Data Viz Designer"],
+        ShortDescription: "A visualization of Chinese leaders' foreign visits around the globe.",
+        descriptionMain: ["A visualization of Chinese leaders' foreign visits around the globe.", "This work is an AI-assisted project built with Cursor, where AI mainly helped accelerate execution rather than drive the creative direction. "],
+        descriptionSecondary: "View this project, click here.",
+        externalLink: "http://www.sihangdataviz.com/China_Visits/app.html",
+        tools: [
+            { name: "Cursor", link: null },
+            { name: "ChatGPT", link: null },
+            { name: "d3.js", link: null }
+        ],
+        visual: "img/china-visits/china_visits_cover.jpg",
+        award: null,
+        awardImage: null,
+        process: [
+            // { 
+            //     step: "01", 
+            //     title: "Data Ingestion", 
+            //     image: "https://sihangsun.github.io/influence_industry/img/diagram.jpg", 
+            //     desc: [
+            //         "I started by normalizing 4TB of transit logs...", 
+            //         "The data was extremely noisy and required significant deduplication before any visualization could take place."
+            //     ] 
+            // },
+            // { 
+            //     step: "02", 
+            //     title: "Visual Prototyping", 
+            //     image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
+            //     desc: [
+            //         "Using D3.js, I experimented with particle systems...", 
+            //         {
+            //             text: "Early iterations focused too much on geographic accuracy, but the final version prioritized the 'pulse' of human movement.",
+            //             links: [{ phrase: "final version", url: "https://www.google.com" }]
+            //         }
+            //     ] 
+            // }
+        ]
+    },
     {
         id: 1,
         title: "Who Opens the Door for Whom?",
@@ -887,6 +944,7 @@
 ];
 
         const ARCHIVE_DATA = [
+            { year: "2026", name: "China Visits", tags: ["Diplomacy", "AI-assisted"], desc: "A visualization of Chinese leaders' foreign visits around the globe.", link: "https://sihangsun.github.io/China_Visits/app.html" },
             { year: "2025", name: "Who Opens the Door for Whom?", tags: ["Passport Index", "Svelte"], desc: "A visual essay explores Asia’s complex web of visa relationships from multiple angles.", link: "http://www.sihangdataviz.com/Passport_Project/index.html" },
             { year: "2024", name: "Exploring the Price of Living Across Major U.S. Cities", tags: ["Cost living", "d3.js"], desc: "An interactive tool for looking up and comparing the prices of 31 goods and services across 30 different U.S. cities.", link: "https://sihangsun.github.io/Price-of-Living/index.html" },
             { year: "2023", name: "The Industry Behind Your Vote", tags: ["Campaign data", "Scrollytelling"], desc: "This visual essay uses spending data from Donald Trump’s 2020 presidential campaign to trace investments in data-driven influence services and reveal the companies behind the influence industry.", link: "https://influenceindustry.org/en/explorer/case-studies/industry-behind-vote-visual-essay/" },
@@ -902,6 +960,10 @@
         ];
 
         // --- DOM ELEMENTS ---
+        const MOTION_DURATION = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--motion-duration')) * 1000;
+        const PANEL_DURATION = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--panel-duration')) * 1000;
+        const motionEase = (t) => 1 - Math.pow(1 - Math.min(Math.max(t, 0), 1), 3);
+
         const mainScrollView = document.getElementById('main-scroll-view');
         const detailView = document.getElementById('detail-view');
         const backToTopBtn = document.getElementById('back-to-top-btn');
@@ -1049,7 +1111,9 @@
                     <header class="detail-header">
                         <div class="detail-title-block">
                             <h1>${p.title}</h1>
-                            <p>${p.descriptionMain}</p>
+                            ${(Array.isArray(p.descriptionMain) ? p.descriptionMain : [p.descriptionMain])
+                                .map(text => `<p>${text}</p>`)
+                                .join('')}
                             <a href="${p.externalLink}" target="_blank" class="detail-description-link">
                                 ${p.descriptionSecondary} <i data-lucide="arrow-right"></i>
                             </a>
@@ -1088,13 +1152,22 @@
             
             detailView.scrollTop = 0;
             detailView.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            
+            // Seamless background lock
+            document.documentElement.classList.add('lock-scroll');
+            document.body.classList.add('lock-scroll');
+            
             lucide.createIcons();
         }
 
-        function closeProject() {
+        function closeProject(onClosed) {
             detailView.classList.remove('active');
-            document.body.style.overflow = '';
+
+            setTimeout(() => {
+                document.documentElement.classList.remove('lock-scroll');
+                document.body.classList.remove('lock-scroll');
+                if (onClosed) onClosed();
+            }, PANEL_DURATION);
         }
 
         // --- NAVIGATION & SCROLLSPY ---
@@ -1107,7 +1180,7 @@
             handleSidebarClick(hash.replace('#', ''));
         }
 
-        function smoothScrollTo(element, duration = 1200) {
+        function smoothScrollTo(element, duration = MOTION_DURATION) {
             const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
             const startPosition = window.pageYOffset;
             const distance = targetPosition - startPosition;
@@ -1116,15 +1189,15 @@
             function animation(currentTime) {
                 if (startTime === null) startTime = currentTime;
                 const timeElapsed = currentTime - startTime;
-                const ease = (t) => (--t)*t*t+1;
-                const run = ease(timeElapsed / duration) * distance + startPosition;
-                window.scrollTo(0, run);
+                const progress = timeElapsed / duration;
+                const run = motionEase(progress) * distance + startPosition;
+                window.scrollTo({ top: run, left: 0, behavior: 'instant' });
                 if (timeElapsed < duration) requestAnimationFrame(animation);
             }
             requestAnimationFrame(animation);
         }
 
-        function smoothScrollElementToTop(element, duration = 1000) {
+        function smoothScrollElementToTop(element, duration = MOTION_DURATION) {
             const startPosition = element.scrollTop;
             const distance = -startPosition;
             let startTime = null;
@@ -1132,33 +1205,37 @@
             function animation(currentTime) {
                 if (startTime === null) startTime = currentTime;
                 const timeElapsed = currentTime - startTime;
-                const ease = (t) => (--t)*t*t+1;
-                const run = ease(timeElapsed / duration) * distance + startPosition;
-                element.scrollTo(0, run);
+                const progress = timeElapsed / duration;
+                const run = motionEase(progress) * distance + startPosition;
+                element.scrollTo({ top: run, left: 0, behavior: 'instant' });
                 if (timeElapsed < duration) requestAnimationFrame(animation);
             }
             requestAnimationFrame(animation);
         }
 
         function handleSidebarClick(id) {
-            if (detailView.classList.contains('active')) {
-                closeProject();
-            }
             const element = document.getElementById(id);
-            if (element) {
-                setTimeout(() => {
-                    smoothScrollTo(element, 1500);
-                }, 50);
+            if (!element) return;
+
+            const scroll = () => smoothScrollTo(element);
+
+            if (detailView.classList.contains('active')) {
+                closeProject(scroll);
+            } else {
+                scroll();
             }
         }
 
         function handleLogoClick() {
-            if (detailView.classList.contains('active')) {
-                closeProject();
-            }
             const hero = document.getElementById('hero');
-            if (hero) {
-                smoothScrollTo(hero, 2000);
+            if (!hero) return;
+
+            const scroll = () => smoothScrollTo(hero);
+
+            if (detailView.classList.contains('active')) {
+                closeProject(scroll);
+            } else {
+                scroll();
             }
         }
 
@@ -1182,10 +1259,10 @@
 
         function handleBackToTop() {
             if (detailView.classList.contains('active')) {
-                smoothScrollElementToTop(detailView, 1000);
+                smoothScrollElementToTop(detailView);
             } else {
                 const hero = document.getElementById('hero');
-                if (hero) smoothScrollTo(hero, 1000);
+                if (hero) smoothScrollTo(hero);
             }
         }
 
