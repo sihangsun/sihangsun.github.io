@@ -547,27 +547,62 @@
         award: null,
         awardImage: null,
         process: [
-            // { 
-            //     step: "01", 
-            //     title: "Data Ingestion", 
-            //     image: "https://sihangsun.github.io/influence_industry/img/diagram.jpg", 
-            //     desc: [
-            //         "I started by normalizing 4TB of transit logs...", 
-            //         "The data was extremely noisy and required significant deduplication before any visualization could take place."
-            //     ] 
-            // },
-            // { 
-            //     step: "02", 
-            //     title: "Visual Prototyping", 
-            //     image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
-            //     desc: [
-            //         "Using D3.js, I experimented with particle systems...", 
-            //         {
-            //             text: "Early iterations focused too much on geographic accuracy, but the final version prioritized the 'pulse' of human movement.",
-            //             links: [{ phrase: "final version", url: "https://www.google.com" }]
-            //         }
-            //     ] 
-            // }
+            { 
+                step: "01", 
+                title: "", 
+                // image: "img/china-visits/process/img-1.jpg", 
+                desc: [
+                    // "This is an AI-assisted project built with Cursor, where AI mainly helped accelerate execution rather than drive the creative direction.", 
+                    "The reflection below explains how AI played different roles throughout my design and development process, sometimes as an augmenting thought partner and other times as a more agentic implementation partner.",
+                    { type: "image", src: "img/china-visits/process/img-1.jpg", caption: "A conventional data visualization design process, with AI playing different roles at each step."},
+                ] 
+            },
+            { 
+                step: "02", 
+                title: "Data Analysis", 
+                // image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
+                desc: [
+                    "At the beginning of the process, I intentionally kept AI out of much of the data analysis. I wanted my first interaction with the data to be slow and hands-on, giving myself time to understand its structure, texture, and possible stories. Reading through the raw data, examining patterns by eye, and creating quick & dirty exploratory charts in Tableau helped me build that foundation.", 
+                    { type: "image", src: "img/china-visits/process/img-2.jpg", caption: "Exploratory data visualization in Tableau helped me map the data at its most granular level and encode variables through different visual channels, allowing me to spot trends, patterns, and potential stories."},
+                    "I did use AI to generate an initial list of 5–10 potential insights. These outputs were usually basic starting points, but they sometimes pointed to directions worth exploring through deeper analysis.",
+
+                ] 
+            },
+            { 
+                step: "03", 
+                title: "Data Transformation & Preparation", 
+                // image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
+                desc: [
+                    "In steps like data transformation and preparation, the work is often more about implementation than ideation or design decision-making. This is where AI can take on a more agentic role by helping write code and perform data manipulation tasks efficiently.",
+                    "Still, the human should define the direction: what to transform, why it matters, and how it supports the final deliverable. For this project, I decided to add a continent column, prepare location data for Beijing and each country’s capital city, and use AI to calculate the distance between them. I believed these additional variables could provide useful context and strengthen the final visualization.",
+
+                ] 
+            },
+            { 
+                step: "04", 
+                title: "Viz Design", 
+                // image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
+                desc: [
+                "The design process still mostly started with me, a pen, and paper. But AI became a useful thought partner during the divergent stage, helping me explore a wider range of visual possibilities.",
+                {type: "image", src: "img/china-visits/process/img-3.jpg", caption: "Early sketches exploring different visual forms."},
+                {type: "image", src: "img/china-visits/process/img-4.jpg",},
+                {type: "image", src: "img/china-visits/process/img-5.jpg", caption: "At one point, I explored incorporating a yin-yang shape because it related to the topic. However, the result felt too literal, so I decided to drop the idea."},
+                "Compared with traditional inspiration-gathering, such as browsing Pinterest or design references, AI can generate project-specific prototypes based on the dataset, story, and constraints. In this project, I already knew the art direction I wanted: a bespoke, novel visualization rather than a conventional chart. So I asked AI to go wild and act as a creative data visualization designer specializing in non-traditional forms.",
+                "When I had fragmented visual ideas—such as using circular forms or incorporating a map—I added them to the prompt and asked AI to generate rough prototypes. The outputs offered interesting sparks, but none of them were strong enough to become the final direction on their own. Instead, they helped me see possibilities, test the edges of the concept, and refine my own design direction.",
+                ] 
+            },
+            {
+                step: "05",
+                title: "Development",
+                // image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
+                desc: [
+                    "AI played a major role in coding the project, but I did not rely on “magic spell” prompting to simply vibe-code the whole thing. I broke the project into smaller, manageable components and moved through a repeated workflow: prompt, prototype, refine, iterate, and ship, one component at a time.",
+                    {type: "image", src: "img/china-visits/process/img-6.jpg", caption: "Work in progress on the outer area chart ring component."},
+                    "This approach worked especially well for a bespoke and complex data visualization. For example, the traditional Chinese rice paper-inspired background took several rounds of iteration before it felt right.",
+                    {type: "image", src: "img/china-visits/process/img-7.jpg", caption: "A screenshot of the dot playground, where I test and refine various visual effects."},
+                    "My own understanding of the technical stack, especially D3.js, helped me keep control over the visual and interactive details. For example, the final size, opacity, and halo effect of the dots required a lot of manual tweaking and visual judgment. Being able to fine-tune code values directly, rather than relying only on the unpredictability of prompts, was essential to delivering a result that aligned with my creative vision as a designer.",
+                ] 
+            }
         ]
     },
     {
