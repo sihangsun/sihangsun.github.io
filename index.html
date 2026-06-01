@@ -504,7 +504,7 @@
                     
                 <p style="font-size: 1.1rem; color: #666; margin-bottom: 1.5rem; line-height: 1.7;">Years of study and professional practice in both journalism and design have shaped Sihang’s strengths in critical thinking, creativity, curiosity, and empathy. He brings a human-centered, editorial lens to data storytelling, using visualization as a tool to inform, clarify, and engage.</p>
                 <div>
-                    <a href="img/resume(102525).pdf"
+                    <a href="img/resume-sihang.pdf"
                     class="resume-btn"
                     target="_blank"
                     rel="noopener noreferrer">
@@ -624,27 +624,58 @@
         award: "The Pudding Cup Honorable 2025 mentions",
         awardImage: "img/pudding.png",
         process: [
-            // { 
-            //     step: "01", 
-            //     title: "Data Ingestion", 
-            //     image: "https://sihangsun.github.io/influence_industry/img/diagram.jpg", 
-            //     desc: [
-            //         "I started by normalizing 4TB of transit logs...", 
-            //         "The data was extremely noisy and required significant deduplication before any visualization could take place."
-            //     ] 
-            // },
-            // { 
-            //     step: "02", 
-            //     title: "Visual Prototyping", 
-            //     image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
-            //     desc: [
-            //         "Using D3.js, I experimented with particle systems...", 
-            //         {
-            //             text: "Early iterations focused too much on geographic accuracy, but the final version prioritized the 'pulse' of human movement.",
-            //             links: [{ phrase: "final version", url: "https://www.google.com" }]
-            //         }
-            //     ] 
-            // }
+            { 
+                step: "01", 
+                title: "", 
+                // image: "https://sihangsun.github.io/influence_industry/img/diagram.jpg", 
+                desc: [
+                    "This project was selected as a case study by students at Sogang University in South Korea for their data visualization class. Below is a selected Q&A about the project’s design process:", 
+                ] 
+            },
+            { 
+                step: "02", 
+                title: "Q: What were the most important design principles you followed to represent \"asymmetry\" in passport mobility?", 
+                // image: "https://sihangsun.github.io/influence_industry/img/red.jpg", 
+                desc: [
+                    "A: I see the \"asymmetry\" in this data as twofold: first, the difference in passport power, and second, the gap between how many countries a nation's citizens can visit versus how many it welcomes in return.",
+
+                    "Because this is the core of my visual essay, I wanted to ensure to represent that part of the data accurately. I chose to use the \"position\" visual variable along the circular axis to map this specific insight, as research suggests position is the most accurately perceived visual channel for users.",
+                    "While I didn't strictly adhere to any design principles, my decisions were heavily informed by Jacques Bertin’s visual variables and Jock D. Mackinlay’s research on ranking them according to their accuracy.",
+
+                    "Ultimately, I believe data visualization is about identifying the most important story and prioritizing it through the most efficient visual channel. While aesthetics are vital for keeping users engaged, they should always support, rather than overshadow, the accuracy of the data.",
+
+                ] 
+
+            },
+            {
+                step: "03",
+                title: "Q: Why did you specifically choose to focus on Asian passport mobility? ",
+                desc: [
+                    "A: That’s a great question, and I actually struggled with this a bit during the design process. Initially, I wanted to visualize the entire dataset, but once I plotted all the points, I quickly realized the design just couldn't accommodate that much information without becoming cluttered.",
+
+                    "When I went back to re-examine the data, I found the Asian subset to be particularly fascinating. Asia has the lowest percentage of mutual visa-free travel in the world. Given the region's incredible diversity in terms of economy, politics, and religion, I felt compelled to explore more about this low mobility rate. I eventually discovered patterns like higher mobility within specific sub-regions, which later became a core part of the final visual essay. Ultimately, those unique insights are what convinced me to focus exclusively on Asia.",
+                    {type: "image", src: "img/passport/process/Passport-Sketch.jpg", caption: "The design concept began with a traditional dumbbell chart, which revealed the key insight I wanted to explain in this visual essay."},
+                ] 
+            },
+            {
+                step: "04",
+                title: "Q: How did you balance \"social nuance\" with \"visual clarity\"?",
+                desc: [
+                    "A: I think balancing 'nuance' and 'clarity' is always tricky. To me, it’s all about the kind of story you want to tell to decide the level of detail you should present in your viz. When people talk about 'visual clarity,' some people default that to 'simplicity.' That’s not always the case. Because the purpose of data viz is to communicate the data and communicate it well, if the phenomenon itself in the data is complex, the visual form should preserve that complexity.",
+                    "But at the same time, using design techniques like interactivity, clear layout, and good use of color to keep everything else elegant and clean is another effort designers can make to achieve visual clarity.",
+                    "All in all, at least for this piece, I want the visual form that does enough to preserve the 'nuance' while using design elements to achieve the 'visual clarity.",
+                ] 
+            },
+            {
+                step: "05",
+                title: "Q: Why you choose use the circular arrangement? Are there any other advantages besides using the limited space more efficiently?",
+                desc: [
+                    "A: The circle is actually not from the consideration of using space more efficiently. It’s more inspired by the topic of the data. The data is about countries, and countries sit on our planet, which is a globe (a circle). It’s also inspired by the nature of the phenomenon I’m trying to visualize—the relationships. When I think of relationships, I often think of entities standing in a circle, with complex exchanges happening around it.",
+                    {type: "image", src: "img/passport/process/prototype.gif", caption: "A working prototype before shifting focus to visual details, interactivity, and narrative design."},
+                    "I think trying to find a visual form that speaks for itself about the data topic is always something I aim to achieve when designing data viz.",
+                ] 
+            }
+
         ]
     },
     {
