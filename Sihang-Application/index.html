@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sihang Sun - Junior Graphics Storyteller / Journalist</title>
+    
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS (via CDN to execute the Visual Design System Spec) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration & Custom Styles -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bauhaus: {
+                            bg: '#F0F0F0',
+                            fg: '#121212',
+                            red: '#D02020',
+                            blue: '#1040C0',
+                            yellow: '#F0C020',
+                            muted: '#E0E0E0'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'hard-sm': '4px 4px 0px 0px #121212',
+                        'hard-md': '6px 6px 0px 0px #121212',
+                        'hard-lg': '8px 8px 0px 0px #121212',
+                        'hard-white': '4px 4px 0px 0px #FFFFFF',
+                    }
+                }
+            }
+        }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const fades = document.querySelectorAll(".fade");
+
+    setTimeout(() => {
+        fades.forEach(el => {
+            el.classList.remove("opacity-0");
+        });
+    }, 100);
+});
+    </script>
+
+    <style>
+        /* Custom CSS to support the design system */
+        body {
+            background-color: #F0F0F0;
+            color: #121212;
+            overflow-x: hidden;
+        }
+
+        /* Bauhaus Patterns */
+        .pattern-dots {
+            background-image: radial-gradient(#121212 2px, transparent 2px);
+            background-size: 24px 24px;
+        }
+        
+        .pattern-dots-light {
+            background-image: radial-gradient(#ffffff 2px, transparent 2px);
+            background-size: 24px 24px;
+            opacity: 0.2;
+        }
+
+        /* Image Treatments */
+        /* .grayscale-wrapper img {
+            filter: grayscale(100%);
+            transition: filter 0.3s ease-out, transform 0.3s ease-out;
+        } */
+        
+        .grayscale-wrapper:hover img {
+            filter: grayscale(0%);
+        }
+
+        /* Hide scrollbar for cleaner look */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F0F0F0;
+            border-left: 2px solid #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #121212;
+            border: 2px solid #121212;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-bauhaus-red selection:text-white">
+
+    <!-- 
+    ========================================================================
+    SIDE NAVIGATION (Anchor Nav)
+    ======================================================================== 
+    -->
+    <nav class="fixed right-4 sm:right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
+        <!-- Nav items will be updated by JS IntersectionObserver -->
+        <a href="#cover-letter" class="nav-dot group relative flex items-center justify-end" aria-label="Cover Letter">
+            <span class="absolute right-8 px-3 py-1 bg-bauhaus-fg text-white text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border-2 border-black whitespace-nowrap shadow-hard-sm">Cover Letter</span>
+            <div class="indicator w-4 h-4 rounded-full border-2 border-black bg-white transition-colors duration-200"></div>
+        </a>
+        <a href="#resume-cta" class="nav-dot group relative flex items-center justify-end" aria-label="Resume CTA">
+            <span class="absolute right-8 px-3 py-1 bg-bauhaus-fg text-white text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border-2 border-black whitespace-nowrap shadow-hard-sm">Resume</span>
+            <div class="indicator w-4 h-4 rounded-full border-2 border-black bg-white transition-colors duration-200"></div>
+        </a>
+        <a href="#work-1" class="nav-dot group relative flex items-center justify-end" aria-label="Project 1">
+            <span class="absolute right-8 px-3 py-1 bg-bauhaus-fg text-white text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border-2 border-black whitespace-nowrap shadow-hard-sm">Project 1</span>
+            <div class="indicator w-4 h-4 rounded-[0px] border-2 border-black bg-white transition-colors duration-200"></div>
+        </a>
+        <a href="#work-2" class="nav-dot group relative flex items-center justify-end" aria-label="Project 2">
+            <span class="absolute right-8 px-3 py-1 bg-bauhaus-fg text-white text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border-2 border-black whitespace-nowrap shadow-hard-sm">Project 2</span>
+            <div class="indicator w-4 h-4 rounded-[0px] border-2 border-black bg-white transition-colors duration-200"></div>
+        </a>
+        <a href="#work-3" class="nav-dot group relative flex items-center justify-end" aria-label="Project 3">
+            <span class="absolute right-8 px-3 py-1 bg-bauhaus-fg text-white text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border-2 border-black whitespace-nowrap shadow-hard-sm">Project 3</span>
+            <div class="indicator w-4 h-4 rounded-[0px] border-2 border-black bg-white transition-colors duration-200"></div>
+        </a>
+        <a href="#work-4" class="nav-dot group relative flex items-center justify-end" aria-label="Project 4">
+            <span class="absolute right-8 px-3 py-1 bg-bauhaus-fg text-white text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border-2 border-black whitespace-nowrap shadow-hard-sm">Project 4</span>
+            <div class="indicator w-4 h-4 rounded-[0px] border-2 border-black bg-white transition-colors duration-200"></div>
+        </a>
+        <a href="#contact" class="nav-dot group relative flex items-center justify-end" aria-label="Contact">
+            <span class="absolute right-8 px-3 py-1 bg-bauhaus-fg text-white text-xs font-bold uppercase tracking-widest opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity border-2 border-black whitespace-nowrap shadow-hard-sm">Contact</span>
+            <div class="indicator w-4 h-4 rounded-full border-2 border-black bg-white transition-colors duration-200"></div>
+        </a>
+    </nav>
+
+    <main>
+        <!-- 
+        ========================================================================
+        SECTION 1: OPENING (COVER LETTER)
+        ======================================================================== 
+        -->
+        <section id="cover-letter" class="min-h-screen relative flex items-center py-24 px-6 sm:px-12 lg:px-24 border-b-4 border-black pattern-dots">
+            <div class="max-w-7xl mx-auto w-full relative z-10">
+                
+                <div class="w-full bg-white border-4 border-black p-8 sm:p-12 shadow-hard-lg">
+                    <!-- INSERT TARGET COMPANY NAME HERE -->
+                    <p class=" fade font-bold uppercase tracking-widest text-bauhaus-blue mb-4 opacity-0 transition-opacity duration-500 ">Application for Junior Graphics Storyteller / Journalist</p>
+                    
+                    <h1  class=" fade text-5xl sm:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.9] mb-8
+                    opacity-0 transition-opacity duration-1000 delay-300">
+                        Hello, Kontinentalist<br>
+                        I am <span class="text-bauhaus-red">Sihang Sun</span>
+                    </h1>
+                    
+                    <div class=" fade space-y-6 text-lg sm:text-xl font-medium leading-relaxed max-w-5xl opacity-0 transition-opacity duration-500 delay-500"
+                    >
+                        <!-- INSERT COVER LETTER PARAGRAPH 1 HERE -->
+                        <p>
+                            I am excited to apply for the Junior Graphics Storyteller / Journalist position at Kontinentalist. As a data visualization designer and former journalist, I bring a rare combination of newsroom experience, analytical thinking, visualization design, and front-end development skills to create data-driven stories that are clear, engaging, and accessible to broad audiences.
+                        </p>
+                        <!-- INSERT COVER LETTER PARAGRAPH 2 HERE -->
+                        <p>
+                            In my current role as a Data Visualization Designer/BI Analyst at the Massachusetts Department of Transportation, I turn complex transit data into accessible public-facing products through data visualization, web design, and storytelling. Most recently, I led the redesign of <a class="text-bauhaus-blue hover:underline" href="https://www.massdottracker.com" target="_blank">MassDOT’s Annual Performance Report</a>, transforming a traditional scorecard into an interactive website with scrollytelling and a data explorer. 
+                        </p>
+
+                        <p>
+                            Driven by a desire to help readers understand the world around them, I launched <a href="#work-3" class="text-bauhaus-blue hover:underline italic">Chicago by the Numbers</a>, a recurring data column for Chicago’s Chinese-speaking audience. For each issue, I manage the full project lifecycle, collaborating with editors to define the narrative angle and translating raw data into compelling storytelling charts.
+                        </p>
+
+                        <p>
+                            What draws me most to Kontinentalist is its mission to grow Asia’s voice in global conversations through data storytelling. As a first-generation Chinese immigrant now based in Boston, I have experienced firsthand what it means to navigate different cultures and recognize the importance of making Asian stories more visible and accessible to broader audiences. That perspective has shaped both my professional work and personal projects—from <a class="text-bauhaus-blue hover:underline" href="https://www.sihangdataviz.com/China_Visits/app.html" target="_blank">visualizing Chinese leaders' foreign visits around the globe</a> to launching a recurring data journalism column for Chicago’s Chinese-speaking community. I am excited by the opportunity to contribute to a team where reporting, design, and code come together to tell thoughtful, data-driven stories about Asia, while learning from a studio whose work has become a leading voice in the region’s data storytelling community.
+                        </p>
+
+                        <p>
+                            Thank you for your consideration. I would welcome the opportunity to discuss how my background and experience could contribute to Kontinentalist’s editorial and visual storytelling work.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 
+        ========================================================================
+        SECTION 2: CALL TO ACTION (RESUME)
+        ======================================================================== 
+        -->
+        <section id="resume-cta" class="py-24 px-6 sm:px-12 lg:px-24 border-b-4 border-black bg-bauhaus-yellow flex justify-center items-center">
+            <div class="text-center">
+                
+                <h2 class="text-4xl sm:text-6xl font-black uppercase tracking-tighter mb-8">Ready to see my background?</h2>
+                
+                <!-- UPDATE HREF TO YOUR ACTUAL RESUME PDF -->
+                <a href="img/resume-sihang.pdf" target="_blank" class="inline-flex items-center gap-4 bg-bauhaus-fg text-white px-10 py-5 text-xl font-bold uppercase tracking-widest border-4 border-black shadow-[6px_6px_0px_0px_white] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_white] hover:bg-bauhaus-red active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+                    Download Resume
+                    <!-- Inline SVG for Download Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- 
+        ========================================================================
+        SECTION 3: SELECTED WORK 1
+        ======================================================================== 
+        -->
+        <section id="work-1" class="min-h-screen py-24 px-6 sm:px-12 lg:px-24 border-b-4 border-black bg-white flex items-center relative overflow-hidden">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div class="order-2 lg:order-1 flex flex-col justify-center">
+                    <!-- UPDATE PROJECT 1 TITLE HERE -->
+                     <h3 class="text-lg sm:text-xl font-bold mb-4">PROJECT 1</h3>
+                    <h2 class="text-5xl sm:text-7xl font-black uppercase tracking-tighter mb-4">Who Opens the Door for Whom?</h2>
+                    
+                    <!-- ROLES & STACK METADATA -->
+                    <div class="flex flex-col gap-3 mb-6">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-widest text-bauhaus-red mr-1">Roles:</span>
+                            <span class="px-3 py-1 bg-bauhaus-bg border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Data Viz Designer & Developer</span>
+                            <span class="px-3 py-1 bg-bauhaus-bg border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Storyteller</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-widest text-bauhaus-blue mr-1">Stack:</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Svelte.js</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">D3.js</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">R</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 text-lg font-medium leading-relaxed mb-8">
+                        <!-- INSERT PROJECT 1 DESCRIPTION PARAGRAPHS HERE -->
+                        <!-- PROJECT 1 DESCRIPTION -->
+<p>I played multiple roles in this project from start to finish. I sourced and analyzed public datasets using BI tools to identify patterns, generate insights, and evaluate potential story angles. As someone passionate about data storytelling, my goal was not simply to visualize data, but to reveal the stories behind it.</p>
+<p>After exploring the full dataset, I found the Asian subset particularly compelling. Asia has the lowest rate of mutual visa-free travel in the world while encompassing extraordinary diversity in many aspects. The subset revealed numerous patterns that felt newsworthy, leading me to focus the project on Asian countries.</p>
+<p>One aspect I am especially proud of is the custom visualization developed for the story. Beyond being visually engaging, the design was intentionally shaped by the subject matter itself. The primary visual form is a circle. The data is about countries, and countries sit on our planet, which is a globe (a circle). It’s also inspired by the nature of the phenomenon I’m trying to visualize—the relationships. When I think of relationships, I often think of entities standing in a circle, with complex exchanges happening around them. This concept is both thematic and functional, helping readers understand complex mobility relationships and phenomenon.</p>
+
+<p>I believe this project demonstrates the type of interactive, data-driven storytelling that can contribute to Kontinentalist’s journalism. The project was also my first experience developing with Svelte, a modern JavaScript framework, which reflects both my technical skills and my enthusiasm for learning new tools and approaches.
+</p>
+
+<p>The project was recognized by <strong><a href="https://pudding.cool/pudding-cup/" target="_blank">the 2025 Pudding Cup</a></strong>.</p>
+
+                    </div>
+                    
+                    <!-- UPDATE PROJECT 1 LINK HERE -->
+                    <a href="https://www.sihangdataviz.com/Passport_Project/index.html" target="_blank" class="self-start px-8 py-4 bg-bauhaus-blue text-white font-bold uppercase tracking-widest border-2 border-black shadow-hard-md transition-all duration-200 hover:-translate-y-1 hover:shadow-hard-lg hover:bg-bauhaus-red active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+                        View This Project
+                    </a>
+                </div>
+
+                <a href="https://www.sihangdataviz.com/Passport_Project/index.html" target="_blank" class="order-1 lg:order-2 grayscale-wrapper group relative block cursor-pointer">
+                    <!-- Geometric accent -->
+                    <div class="absolute -right-4 -bottom-4 w-full h-full bg-bauhaus-yellow border-4 border-black"></div>
+                    <!-- INSERT PROJECT 1 HERO IMAGE HERE -->
+                    <img src="img/one-cover.jpg" alt="Project 1 Hero" class="relative z-10 w-full h-auto object-cover border-4 border-black group-hover:-translate-y-2 transition-transform duration-300">
+                </a>
+
+            </div>
+        </section>
+
+        <!-- 
+        ========================================================================
+        SECTION 4: SELECTED WORK 2 (Alt Layout)
+        ======================================================================== 
+        -->
+        <section id="work-2" class="min-h-screen py-24 px-6 sm:px-12 lg:px-24 border-b-4 border-black bg-bauhaus-blue text-white flex items-center relative overflow-hidden">
+            <!-- Background Decoration -->
+            <!-- <div class="absolute inset-0 pattern-dots-light"></div> -->
+
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+                
+                <a href="https://www.sihangdataviz.com/influence_industry/" target="_blank" class="grayscale-wrapper group relative block cursor-pointer">
+                    <div class="absolute -left-4 -top-4 w-full h-full bg-bauhaus-red border-4 border-black"></div>
+                    <!-- INSERT PROJECT 2 HERO IMAGE HERE -->
+                    <img src="img/two-cover.png" alt="Project 2 Hero" class="relative z-10 w-full h-auto object-cover border-4 border-black group-hover:-translate-y-2 transition-transform duration-300">
+                </a>
+
+                <div class="flex flex-col justify-center">
+                    <!-- UPDATE PROJECT 2 TITLE HERE -->
+                    <h3 class="text-lg sm:text-xl font-bold mb-4">PROJECT 2</h3>
+                    <h2 class="text-5xl sm:text-7xl font-black uppercase tracking-tighter mb-4 text-white">The Industry Behind Your Vote: A Visual Essay</h2>
+                    
+                    <!-- ROLES & STACK METADATA -->
+                    <div class="flex flex-col gap-3 mb-6">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-widest text-bauhaus-white mr-1">Roles:</span>
+                            <span class="px-3 py-1 bg-white text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-[4px_4px_0px_0px_black]">Designer & Developer</span>
+                            <span class="px-3 py-1 bg-white text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-[4px_4px_0px_0px_black]">Storyteller</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-widest text-bauhaus-yellow mr-1">Stack:</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">D3.js</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-[4px_4px_0px_0px_black]">R</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-[4px_4px_0px_0px_black]">Illustrator</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 text-lg font-medium leading-relaxed mb-8 text-bauhaus-bg">
+                        <!-- INSERT PROJECT 2 DESCRIPTION PARAGRAPHS HERE -->
+<p>This visual essay uses spending data from Donald Trump’s 2020 presidential campaign to trace investments in data-driven influence services and reveal the companies behind the influence industry. </p>
+
+<p>I led this project end-to-end, from data analysis and story development to visual design and interactive data visualization development. Following its publication by Tactical Tech, I collaborated with the editor to prepare accompanying story summaries and methodology documentation.</p>
+
+<p>What I am most proud of in this project is the coherence and clarity achieved through the consistent use of simple visual forms. Throughout the story, a circle serves multiple purposes—as a voter badge, a representation of money, a circle-packing chart element, and a data point. This visual consistency helps reduce readers’ cognitive load, allowing them to focus on the story rather than deciphering new visual encodings. At the same time, the changing states of the circle create a more engaging and dynamic reading experience.</p>
+
+<p>I am also pleased with the effective use of scrollytelling and the martini glass narrative structure. The author-driven section provides readers with the necessary context and background before guiding them into a reader-driven data exploration experience at the end. If I were to revisit the project, I would spend more time condensing the content and shortening parts of the narrative to create a tighter reading experience.</p>
+
+<p>I believe this project demonstrates the kind of creative web storytelling and visual communication skills that align well with Kontinentalist’s approach to explanatory and investigative journalism.</p>
+                    </div>
+                    
+                    <!-- UPDATE PROJECT 2 LINK HERE -->
+                    <a href="https://www.sihangdataviz.com/influence_industry/" target="_blank" class="self-start px-8 py-4 bg-white text-black font-bold uppercase tracking-widest border-2 border-black shadow-[6px_6px_0px_0px_black] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_black] hover:bg-bauhaus-yellow active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+                        View This Project
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 
+        ========================================================================
+        SECTION 5: SELECTED WORK 3
+        ======================================================================== 
+        -->
+        <section id="work-3" class="min-h-screen py-24 px-6 sm:px-12 lg:px-24 border-b-4 border-black bg-white flex items-center relative overflow-hidden">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div class="order-2 lg:order-1 flex flex-col justify-center">
+                    <!-- UPDATE PROJECT 3 TITLE HERE -->
+                     <h3 class="text-lg sm:text-xl font-bold mb-4">PROJECT 3</h3>
+                    <h2 class="text-5xl sm:text-7xl font-black uppercase tracking-tighter mb-4">Chicago by the Numbers</h2>
+                    
+                    <!-- ROLES & STACK METADATA -->
+                    <div class="flex flex-col gap-3 mb-6">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-widest text-bauhaus-red mr-1">Roles:</span>
+                            <span class="px-3 py-1 bg-bauhaus-bg border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Data Journalist</span>
+                            <span class="px-3 py-1 bg-bauhaus-bg border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Visual Designer</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-widest text-bauhaus-blue mr-1">Stack:</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Tableau</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">RAWGraphs</span>
+                            <span class="px-3 py-1 bg-bauhaus-yellow text-black border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Illustrator</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 text-lg font-medium leading-relaxed mb-8">
+                        <!-- INSERT PROJECT 3 DESCRIPTION PARAGRAPHS HERE -->
+<p>The Google Drive folder contains a selection of infographics I created for “Chicago by the Numbers”, a recurring data journalism column serving Chicago’s Chinese-speaking community.</p>
+
+<p>Driven by a desire to help readers better understand the world around them, I launched the column last year with the goal of telling local stories through public data using accessible language and engaging visual storytelling. For each issue, I explore datasets from sources such as the Chicago Data Portal and the U.S. Census Bureau, identify meaningful patterns and insights, and develop potential story ideas. I then collaborate with editors to refine the story angle and translate the findings into clear and compelling visual narratives.</p>
+
+<p>Produced for a local community news outlet, many of the topics focus on issues that are directly related to residents' daily lives. Past stories have explored residential property tax trends, the City of Chicago’s payroll spending, and migration patterns among Illinois residents.</p>
+
+<p>I am particularly proud of the reusable design system I developed for the column. By standardizing chart styles, typography, color palettes, and layout patterns, I created a recognizable visual identity that remains consistent across stories. The system not only improves the quality and cohesion of the work, but also increases efficiency in a fast-paced newsroom environment.</p>
+
+<p>Systematic design and efficient workflows are principles I value highly in my work. I believe this experience would allow me to contribute effectively to Kontinentalist’s mission and future storytelling projects.</p>
+
+                    </div>
+                    
+                    <!-- UPDATE PROJECT 3 LINK HERE -->
+                    <a href="https://drive.google.com/drive/folders/1qwC3FjxLrMpN86iMyMbBi2lxhqYeLCW1?usp=share_link" target="_blank" class="self-start px-8 py-4 bg-bauhaus-red text-white font-bold uppercase tracking-widest border-2 border-black shadow-hard-md transition-all duration-200 hover:-translate-y-1 hover:shadow-hard-lg hover:bg-bauhaus-blue active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+                        View Infographics
+                    </a>
+                </div>
+
+                <a href="https://drive.google.com/drive/folders/1qwC3FjxLrMpN86iMyMbBi2lxhqYeLCW1?usp=share_link" target="_blank" class="order-1 lg:order-2 grayscale-wrapper group relative block cursor-pointer">
+                    <div class="absolute -right-4 -bottom-4 w-full h-full bg-bauhaus-fg border-4 border-black"></div>
+                    <!-- INSERT PROJECT 3 HERO IMAGE HERE -->
+                    <img src="img/third-cover.jpg" alt="Project 3 Hero" class="relative z-10 w-full h-auto object-cover border-4 border-black group-hover:-translate-y-2 transition-transform duration-300">
+                </a>
+
+            </div>
+        </section>
+
+        <!-- 
+        ========================================================================
+        SECTION 6: SELECTED WORK 4 (Alt Layout)
+        ======================================================================== 
+        -->
+        <section id="work-4" class="min-h-screen py-24 px-6 sm:px-12 lg:px-24 border-b-4 border-black bg-bauhaus-yellow flex items-center relative overflow-hidden">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <a href="https://www.sihangdataviz.com/bird_strikes/index.html" target="_blank" class="grayscale-wrapper group relative block cursor-pointer">
+                    <div class="absolute -left-4 -top-4 w-full h-full bg-bauhaus-blue border-4 border-black"></div>
+                    <!-- INSERT PROJECT 4 HERO IMAGE HERE -->
+                    <img src="img/four-cover.png" alt="Project 4 Hero" class="relative z-10 w-full h-auto object-cover border-4 border-black group-hover:-translate-y-2 transition-transform duration-300">
+                </a>
+
+                <div class="flex flex-col justify-center">
+                    <!-- UPDATE PROJECT 4 TITLE HERE -->
+                    <h3 class="text-lg sm:text-xl font-bold mb-4">PROJECT 4</h3>
+                    <h2 class="text-5xl sm:text-7xl font-black uppercase tracking-tighter mb-4">Bird Strikes</h2>
+                    
+                    <!-- ROLES & STACK METADATA -->
+                    <div class="flex flex-col gap-3 mb-6">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-widest text-bauhaus-red mr-1">Roles:</span>
+                            <span class="px-3 py-1 bg-white border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Information Designer</span>
+                            <span class="px-3 py-1 bg-white border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Data Analyst</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-black uppercase tracking-widest text-bauhaus-blue mr-1">Stack:</span>
+                            <span class="px-3 py-1 bg-bauhaus-fg text-white border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">R</span>
+                            <span class="px-3 py-1 bg-bauhaus-fg text-white border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">RAWGraphs</span>
+                            <span class="px-3 py-1 bg-bauhaus-fg text-white border-2 border-black font-bold uppercase text-xs tracking-widest shadow-hard-sm">Illustrator   </span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 text-lg font-medium leading-relaxed mb-8">
+                        <!-- INSERT PROJECT 4 DESCRIPTION PARAGRAPHS HERE -->
+<p>This infographic visualizes a subset of bird strikes data using a set of glyphs. The glyphs were designed to visualize 6 different dimensions of the data in one visual composite and facilitate user tasks that lead to meaningful insights.</p>
+
+<p>To firstly explore the relationships in the data set, a scatter plot was created using ggplot2 package in R. The 4 continuous numerical variables can be grouped into two groups (cost and speed) and two representative variables from each group are "Speed IAS in knots" and "Cost Total $".</p>
+
+<p>The scatter plot shows no correlation between aircraft's speed and incident's total cost in this data set. But some interesting insight worth to be revealed in the infographic.</p>
+
+<p>
+    <strong>Firstly</strong>, there are three most costly incidents on the top were all caused by large birds.<br>
+    <strong>Second</strong>, Medium bird strikes usually to occur on high-speed aircraft. <br>
+   <strong>Third</strong>, the costs of small bird strikes can also be high, despite the fact that large birds caused many costly strikes. <br>
+</p>
+
+<p>Later, annotations in the infographic were designed to help viewers find these insights.</p>
+
+<p>The main part of the glyph is a bird feather like element to make it visually appealing and fit the theme of the data set.</p>
+
+<p>This element serves as a human recognizable object. According to some researches, human recognizable objects allow a visualization to be retrieved from memory more effectively and help convey the message of the visualization.</p>
+
+<p>The second part of the glyph is a circle. As a commonly used visualization mark, circle is readily perceived visual element and its visual attributes are later used to encode many data variables.</p>
+
+<p>Moreover, the circle element also mimics the damage used to represent damage cost related data variables, as bird strikes produce bullseye type damages.</p>
+
+<p>To accurately encode the data, the circle part of the glyph came from a bubble chart of the data set made in RAWGraphs. Adobe Illustrator was used to design other visual elements, annotations, and the layout.</p>
+
+
+                    </div>
+                    
+                    <!-- UPDATE PROJECT 4 LINK HERE -->
+                    <a href="https://www.sihangdataviz.com/bird_strikes/index.html" target="_blank" class="self-start px-8 py-4 bg-bauhaus-yellow text-black font-bold uppercase tracking-widest border-2 border-black shadow-hard-md transition-all duration-200 hover:-translate-y-1 hover:shadow-hard-lg hover:bg-bauhaus-red hover:text-white active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+                        View The Infographic
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 
+        ========================================================================
+        SECTION 7: FOOTER / CONTACT
+        ======================================================================== 
+        -->
+        <section id="contact" class="py-24 px-6 sm:px-12 lg:px-24 bg-bauhaus-fg text-white flex flex-col justify-center items-center text-center">
+            <h2 class="text-4xl sm:text-6xl font-black uppercase tracking-tighter mb-12">Let's <span class="text-bauhaus-red">connect</span><br></h2>
+            
+            <div class="flex flex-col sm:flex-row gap-6 mb-16">
+                <!-- UPDATE CONTACT LINKS HERE -->
+
+                <a href="https://sihangdataviz.com" target="_blank" class="px-8 py-4 bg-transparent text-white font-bold uppercase tracking-widest border-4 border-white shadow-[6px_6px_0px_0px_#F0C020] hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#F0C020] hover:bg-white hover:text-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-200">
+                    Portfolio Website
+                </a>
+                <a href="mailto:sun.siha@northeastern.edu" class="px-8 py-4 bg-white text-black font-bold uppercase tracking-widest border-4 border-black shadow-[6px_6px_0px_0px_#D02020] transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#D02020] hover:bg-bauhaus-yellow hover:text-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none">
+                    Email Me
+                </a>
+                <a href="www.linkedin.com/in/sihang-sun" target="_blank" class="px-8 py-4 bg-transparent text-white font-bold uppercase tracking-widest border-4 border-white shadow-[6px_6px_0px_0px_#1040C0] hover:-translate-y-1 hover:shadow-[8px_8px_0px_0px_#1040C0] hover:bg-white hover:text-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-200">
+                    LinkedIn
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- 
+    ========================================================================
+    JAVASCRIPT FOR INTERSECTION OBSERVER (Scroll Spy)
+    ======================================================================== 
+    -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sections = document.querySelectorAll("section");
+            const navDots = document.querySelectorAll(".nav-dot");
+
+            // Intersection Observer configuration
+            const observerOptions = {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.4 // Triggers when 40% of the section is visible
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const currentId = entry.target.getAttribute("id");
+                        
+                        // Update active state on navigation dots
+                        navDots.forEach(dot => {
+                            const indicator = dot.querySelector('.indicator');
+                            const targetHref = dot.getAttribute("href");
+                            
+                            // Reset all indicators
+                            indicator.classList.remove("bg-bauhaus-red", "bg-bauhaus-blue", "bg-bauhaus-yellow");
+                            indicator.classList.add("bg-white");
+
+                            // Apply active state to current
+                            if (targetHref === `#${currentId}`) {
+                                indicator.classList.remove("bg-white");
+                                // Add a splash of color to the active dot
+                                if (currentId === 'cover-letter' || currentId === 'contact') {
+                                     indicator.classList.add("bg-bauhaus-red");
+                                } else if (currentId === 'resume-cta') {
+                                     indicator.classList.add("bg-bauhaus-red");
+                                } else {
+                                     indicator.classList.add("bg-bauhaus-blue");
+                                }
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all sections
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
