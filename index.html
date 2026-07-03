@@ -526,7 +526,7 @@
     </button>
 
     <script>
-        // --- DATA --- 
+        // --- Project Here --- 
         const PROJECTS = [
     {
         id: 7,
@@ -603,6 +603,74 @@
                     "My own understanding of the technical stack, especially D3.js, helped me keep control over the visual and interactive details. For example, the final size, opacity, and halo effect of the dots required a lot of manual tweaking and visual judgment. Being able to fine-tune code values directly, rather than relying only on the unpredictability of prompts, was essential to delivering a result that aligned with my creative vision as a designer.",
                 ] 
             }
+        ]
+    },
+    {
+        id: 8,
+        title: "Chicago by Numbers",
+        category: "Data Visualization",
+        year: "2025–Present",
+        roles: ["Data Journalist", "Visual Designer"],
+        ShortDescription: "A recurring data journalism column featuring visual storytelling.",
+        descriptionMain: ["A recurring data journalism column using local data to explain community-relevant issues through reporting, analysis, and visual storytelling for Chicago’s Chinese-speaking audience.", 
+        "A reusable design system was developed for the column, standardizing chart styles, typography, color palettes, annotations, and layout patterns.",
+        "Explore a selection of infographics from the series below."
+        ],
+        // descriptionSecondary: "View Selected Infographics Below",
+        // externalLink: "http://www.sihangdataviz.com/Passport_Project/index.html",
+        tools: [
+            { name: "Tableau", link: null },
+            { name: "RAWGraphs", link: null },
+            { name: "Adobe Illustrator", link: null }
+        ],
+        visual: "img/chicago/cover.jpg",
+        // award: "The Pudding Cup Honorable 2025 mentions",
+        // awardImage: "img/pudding.png",
+        processTitle: "SELECTED INFOGRAPHICS",
+        process: [
+            {
+                step: "01",
+                title: "Where Illinois Residents Moved in 2024",
+                desc: [                   
+                    {type: "image", src: "img/chicago/1.jpg"},
+                ] 
+            }
+            ,{
+                step: "02",
+                title: "Median Residential Property Tax Change by Chicago Community Area, 2024",
+                desc: [                   
+                    {type: "image", src: "img/chicago/2.jpg"},
+                ] 
+            }
+            ,{
+                step: "03",
+                title: "Median Salaries and Part-time Worker Share by Department, City of Chicago",
+                desc: [                   
+                    {type: "image", src: "img/chicago/3.jpg"},
+                ] 
+            }
+            ,{
+                step: "04",
+                title: "Top 10 Highest-Paid Chicago City Government Employees, 2025",
+                desc: [                   
+                    {type: "image", src: "img/chicago/4.jpg"},
+                ] 
+            }
+            ,{
+                step: "05",
+                title: "City of Chicago Employees by Department, 2025",
+                desc: [                   
+                    {type: "image", src: "img/chicago/5.jpg"},
+                ] 
+            }
+                        ,{
+                step: "06",
+                title: "Salary Share vs. Employee Share by Chicago City Department, 2025",
+                desc: [                   
+                    {type: "image", src: "img/chicago/6.jpg"},
+                ] 
+            }
+
         ]
     },
     {
@@ -1180,9 +1248,9 @@
                             ${(Array.isArray(p.descriptionMain) ? p.descriptionMain : [p.descriptionMain])
                                 .map(text => `<p>${text}</p>`)
                                 .join('')}
-                            <a href="${p.externalLink}" target="_blank" class="detail-description-link">
-                                ${p.descriptionSecondary} <i data-lucide="arrow-right"></i>
-                            </a>
+                            ${p.externalLink ? `<a href="${p.externalLink}" target="_blank" class="detail-description-link">
+                            ${p.descriptionSecondary} <i data-lucide="arrow-right"></i>
+                            </a>` : ''}
                         </div>
                         <div class="detail-meta-block">
                             <div style="margin-bottom: 2.5rem;">
@@ -1208,10 +1276,10 @@
                             ${p.award ? `<div class="award-box"><div class="award-badge-icon">${p.awardImage ? `<img src="${p.awardImage}" alt="Award Logo" style="width: 100%; height: 100%; object-fit: cover;">` : `<i data-lucide="award" size="28"></i>`}</div><div><div class="award-label">Recognition</div><div class="award-title">${p.award}</div></div></div>` : ''}
                         </div>
                     </header>
-                    <section class="process-section">
-                        <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 5rem; border-bottom: 4px solid var(--orange); display: inline-block;">THE PROCESS</h2>
+                    ${p.process && p.process.length > 0 ? `<section class="process-section">
+                        <h2 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 5rem; border-bottom: 4px solid var(--orange); display: inline-block;">${p.processTitle || "THE PROCESS"}</h2>
                         ${stepsHtml}
-                    </section>
+                    </section>` : ''}
                     <footer>© 2021 - 2026 SIHANG SUN | ALL RIGHTS RESERVED</footer>
                 </div>
             `;
